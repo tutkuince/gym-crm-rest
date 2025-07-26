@@ -1,4 +1,4 @@
-package com.epam.gymcrm.controller;
+package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.service.TrainingTypeService;

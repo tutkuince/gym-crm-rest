@@ -1,5 +1,6 @@
-package com.epam.gymcrm.controller;
+package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.controller.TrainerController;
 import com.epam.gymcrm.dto.TrainerDto;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.InvalidCredentialsException;

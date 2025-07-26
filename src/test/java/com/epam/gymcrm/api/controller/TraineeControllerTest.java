@@ -1,5 +1,6 @@
-package com.epam.gymcrm.controller;
+package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.controller.TraineeController;
 import com.epam.gymcrm.dto.TraineeDto;
 import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
