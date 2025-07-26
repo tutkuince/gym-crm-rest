@@ -1,11 +1,10 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.controller.TrainerController;
 import com.epam.gymcrm.dto.TrainerDto;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
-import com.epam.gymcrm.service.TrainerService;
+import com.epam.gymcrm.domain.service.TrainerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

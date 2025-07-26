@@ -1,8 +1,8 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.mapper.TrainingTypeMapper;
-import com.epam.gymcrm.repository.TrainingTypeRepository;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

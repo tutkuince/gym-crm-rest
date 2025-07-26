@@ -1,4 +1,4 @@
-package com.epam.gymcrm.domain;
+package com.epam.gymcrm.db.entity;
 
 import jakarta.persistence.*;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "training_types")
-public class TrainingType {
+public class TrainingTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class TrainingType {
     private String trainingTypeName;
 
     @OneToMany(mappedBy = "trainingType")
-    private Set<Training> trainings = new HashSet<>();
+    private Set<TrainingEntity> trainings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class TrainingType {
         this.trainingTypeName = trainingTypeName;
     }
 
-    public Set<Training> getTrainings() {
+    public Set<TrainingEntity> getTrainings() {
         return trainings;
     }
 
-    public void setTrainings(Set<Training> trainings) {
+    public void setTrainings(Set<TrainingEntity> trainings) {
         this.trainings = trainings;
     }
 
@@ -48,7 +48,7 @@ public class TrainingType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TrainingType that = (TrainingType) o;
+        TrainingTypeEntity that = (TrainingTypeEntity) o;
         return Objects.equals(id, that.id);
     }
 

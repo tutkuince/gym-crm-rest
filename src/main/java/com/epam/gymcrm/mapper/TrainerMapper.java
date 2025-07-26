@@ -1,8 +1,8 @@
 package com.epam.gymcrm.mapper;
 
-import com.epam.gymcrm.domain.Trainee;
-import com.epam.gymcrm.domain.Trainer;
-import com.epam.gymcrm.domain.User;
+import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.Trainer;
+import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.dto.TrainerDto;
 
 import java.util.Objects;

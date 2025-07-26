@@ -1,7 +1,7 @@
 package com.epam.gymcrm.util;
 
-import com.epam.gymcrm.domain.User;
-import com.epam.gymcrm.repository.UserRepository;
+import com.epam.gymcrm.domain.model.User;
+import com.epam.gymcrm.db.repository.UserRepository;
 
 import java.security.SecureRandom;
 

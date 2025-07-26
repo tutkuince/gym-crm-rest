@@ -4,11 +4,53 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="refactor: unify not found exceptions into generic NotFoundException">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="refactor: reorganize controllers under api.controller package for DDD compliance">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/mapper/TraineeResponseMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/payload/request/TraineeRegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/payload/response/TraineeRegisterResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainerEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainingEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainingTypeEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/UserEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TraineeDomainMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TrainerDomainMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TrainingDomainMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/UserDomainMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Trainee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/DateConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TraineeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TraineeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingTypeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingTypeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Trainee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TraineeEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Trainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Training.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Training.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/TrainingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/TrainingType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TraineeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TraineeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainerMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingTypeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingTypeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TraineeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TraineeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainingTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainingTypeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TraineeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TraineeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainingTypeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingTypeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/specification/TrainingSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/specification/TrainingSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/UserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/UserUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TraineeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TraineeControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainerControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingTypeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingTypeControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TraineeServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TraineeServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainerServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingTypeServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingTypeServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,72 +85,73 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GymCrmApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.docker-compose.yml.postgres: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.infrastructure: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.GymCrmApplicationTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.StorageTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeControllerTest.shouldChangePasswordWhenValidRequestWithBody.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeControllerTest.shouldCreateTrainee.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeControllerTest.shouldReturnBadRequestWhenValidationFails.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeControllerTest.shouldUpdateTrainee.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TraineeServiceTest.shouldThrowInvalidCredentialsExceptionWhenUserNotFound.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainerControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainerControllerTest.shouldCreateTrainer.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainerServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainerServiceTest.shouldReturnUnassignedTrainersForTrainee.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingControllerTest.shouldReturnTrainerTrainingsByCriteria.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingControllerTest.shouldUpdateTraining.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingSpecificationTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingTypeControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TrainingTypeServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.com.epam.gymcrm in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.com.epam.gymcrm.controller in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.com.epam.gymcrm.service in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.gymcrm in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.java in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.service in gym-crm.executor&quot;: &quot;Coverage&quot;,
-    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.gym-crm [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.gym-crm [package].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.GymCrmApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tutku/Documents/epam-java-specialization/task_3-git/gym-crm/api-requests&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GymCrmApplication.executor": "Debug",
+    "Docker.docker-compose.yml.postgres: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Docker.infrastructure: Compose Deployment.executor": "Run",
+    "JUnit.All in gym-crm.executor": "Coverage",
+    "JUnit.GymCrmApplicationTest.executor": "Run",
+    "JUnit.StorageTest.executor": "Run",
+    "JUnit.TraineeControllerTest.executor": "Run",
+    "JUnit.TraineeControllerTest.shouldChangePasswordWhenValidRequestWithBody.executor": "Run",
+    "JUnit.TraineeControllerTest.shouldCreateTrainee.executor": "Run",
+    "JUnit.TraineeControllerTest.shouldReturnBadRequestWhenValidationFails.executor": "Run",
+    "JUnit.TraineeControllerTest.shouldUpdateTrainee.executor": "Run",
+    "JUnit.TraineeServiceTest.executor": "Run",
+    "JUnit.TraineeServiceTest.shouldThrowInvalidCredentialsExceptionWhenUserNotFound.executor": "Run",
+    "JUnit.TrainerControllerTest.executor": "Run",
+    "JUnit.TrainerControllerTest.shouldCreateTrainer.executor": "Run",
+    "JUnit.TrainerServiceTest.executor": "Run",
+    "JUnit.TrainerServiceTest.shouldReturnUnassignedTrainersForTrainee.executor": "Run",
+    "JUnit.TrainingControllerTest.executor": "Run",
+    "JUnit.TrainingControllerTest.shouldReturnTrainerTrainingsByCriteria.executor": "Run",
+    "JUnit.TrainingControllerTest.shouldUpdateTraining.executor": "Run",
+    "JUnit.TrainingServiceTest.executor": "Run",
+    "JUnit.TrainingSpecificationTest.executor": "Run",
+    "JUnit.TrainingTypeControllerTest.executor": "Run",
+    "JUnit.TrainingTypeServiceTest.executor": "Run",
+    "JUnit.com.epam.gymcrm in gym-crm.executor": "Coverage",
+    "JUnit.com.epam.gymcrm.controller in gym-crm.executor": "Coverage",
+    "JUnit.com.epam.gymcrm.service in gym-crm.executor": "Coverage",
+    "JUnit.gymcrm in gym-crm.executor": "Coverage",
+    "JUnit.java in gym-crm.executor": "Coverage",
+    "JUnit.service in gym-crm.executor": "Coverage",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.gym-crm [clean].executor": "Run",
+    "Maven.gym-crm [package].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.GymCrmApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/tutku/Documents/epam-java-specialization/task_5-rest/gym-crm-rest/src/main/java/com/epam/gymcrm/db/entity",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\src\main\java\com\epam\gymcrm\db\entity" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_3-git\gym-crm\api-requests" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -250,14 +293,7 @@
       <workItem from="1753302105459" duration="12147000" />
       <workItem from="1753354162744" duration="1792000" />
       <workItem from="1753556936193" duration="3533000" />
-    </task>
-    <task id="LOCAL-00008" summary="fix: add @Service annotation to TrainerService">
-      <option name="closed" value="true" />
-      <created>1752428366295</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1752428366295</updated>
+      <workItem from="1753561040149" duration="6188000" />
     </task>
     <task id="LOCAL-00009" summary="feat: implement TrainerController for CRUD endpoints">
       <option name="closed" value="true" />
@@ -643,7 +679,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753559619480</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="refactor: reorganize controllers under api.controller package for DDD compliance">
+      <option name="closed" value="true" />
+      <created>1753561622230</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1753561622231</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -664,7 +708,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
-    <MESSAGE value="refactor: migrate from in-memory DAO to Spring Data JPA repositories&#10;&#10;- Remove old CrudDao interfaces and DAO implementations&#10;- Add repository interfaces for User, Trainee, Trainer, Training, and TrainingType&#10;- Prepare for service layer to use new repositories&#10;&#10;Fixes #3" />
     <MESSAGE value="refactor: migrate to spring data jpa and restructure project modules" />
     <MESSAGE value="feat: Update delete logic for Trainer and Trainee entities. Closes #5" />
     <MESSAGE value="chore: Update data.sql to use auto-generated IDs" />
@@ -689,13 +732,14 @@
     <MESSAGE value="refactor: postman collection has been updated" />
     <MESSAGE value="feat: optimize unassigned trainers query for trainee profile" />
     <MESSAGE value="refactor: unify not found exceptions into generic NotFoundException" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: unify not found exceptions into generic NotFoundException" />
+    <MESSAGE value="refactor: reorganize controllers under api.controller package for DDD compliance" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: reorganize controllers under api.controller package for DDD compliance" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainingTypeService.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingTypeService.java</url>
           <line>23</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>

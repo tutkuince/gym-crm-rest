@@ -1,9 +1,11 @@
 package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
+import com.epam.gymcrm.domain.service.TraineeService;
 import com.epam.gymcrm.dto.PasswordChangeRequestDto;
 import com.epam.gymcrm.dto.TraineeDto;
 import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
-import com.epam.gymcrm.service.TraineeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,11 @@ public class TraineeController {
     }
 
     @PostMapping
-    public ResponseEntity<TraineeDto> createTrainee(@RequestBody @Valid TraineeDto traineeDto) {
-        return new ResponseEntity<>(traineeService.createTrainee(traineeDto), HttpStatus.CREATED);
+    public ResponseEntity<TraineeRegisterResponse> createTrainee(@RequestBody @Valid TraineeRegisterRequest traineeRegisterRequest) {
+        return new ResponseEntity<>(traineeService.createTrainee(traineeRegisterRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}")
+    /*@GetMapping(value = "/{id}")
     public ResponseEntity<TraineeDto> getTraineeById(
             @PathVariable("id") Long id,
             @RequestHeader("X-Username") String username,
@@ -122,6 +124,6 @@ public class TraineeController {
         traineeService.isTraineeCredentialsValid(username, password);
         traineeService.updateTraineeTrainers(traineeId, request);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 }

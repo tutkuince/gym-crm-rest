@@ -1,4 +1,4 @@
-package com.epam.gymcrm.domain;
+package com.epam.gymcrm.db.entity;
 
 import jakarta.persistence.*;
 
@@ -9,14 +9,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "trainees")
-public class Trainee {
+public class TraineeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity user;
 
     @Column(nullable = false, name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -24,7 +24,7 @@ public class Trainee {
     private String address;
 
     @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Training> trainings = new HashSet<>();
+    private Set<TrainingEntity> trainings = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -32,9 +32,9 @@ public class Trainee {
             joinColumns = @JoinColumn(name = "trainee_id"),
             inverseJoinColumns = @JoinColumn(name = "trainer_id")
     )
-    private Set<Trainer> trainers = new HashSet<>();
+    private Set<TrainerEntity> trainers = new HashSet<>();
 
-    public Trainee() {
+    public TraineeEntity() {
     }
 
     public Long getId() {
@@ -45,11 +45,11 @@ public class Trainee {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
@@ -69,19 +69,19 @@ public class Trainee {
         this.address = address;
     }
 
-    public Set<Training> getTrainings() {
+    public Set<TrainingEntity> getTrainings() {
         return trainings;
     }
 
-    public void setTrainings(Set<Training> trainings) {
+    public void setTrainings(Set<TrainingEntity> trainings) {
         this.trainings = trainings;
     }
 
-    public Set<Trainer> getTrainers() {
+    public Set<TrainerEntity> getTrainers() {
         return trainers;
     }
 
-    public void setTrainers(Set<Trainer> trainers) {
+    public void setTrainers(Set<TrainerEntity> trainers) {
         this.trainers = trainers;
     }
 
@@ -89,7 +89,7 @@ public class Trainee {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Trainee trainee = (Trainee) o;
+        TraineeEntity trainee = (TraineeEntity) o;
         return Objects.equals(id, trainee.id);
     }
 

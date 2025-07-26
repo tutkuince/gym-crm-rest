@@ -1,37 +1,16 @@
-package com.epam.gymcrm.domain;
-
-import jakarta.persistence.*;
+package com.epam.gymcrm.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@Table(name = "trainings")
 public class Training {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "trainee_id", nullable = false)
     private Trainee trainee;
-
-    @ManyToOne
-    @JoinColumn(name = "trainer_Id", nullable = false)
     private Trainer trainer;
-
-    @Column(nullable = false, name = "training_name")
     private String trainingName;
-
-    @ManyToOne
-    @JoinColumn(name = "training_type_id", nullable = false)
     private TrainingType trainingType;
-
-    @Column(nullable = false, name = "training_date")
     private LocalDateTime trainingDate;
-
-    @Column(nullable = false, name = "training_duration")
     private int trainingDuration;
 
     public Training() {

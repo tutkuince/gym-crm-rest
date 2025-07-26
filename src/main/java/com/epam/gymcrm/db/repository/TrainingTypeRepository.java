@@ -1,6 +1,6 @@
-package com.epam.gymcrm.repository;
+package com.epam.gymcrm.db.repository;
 
-import com.epam.gymcrm.domain.TrainingType;
+import com.epam.gymcrm.domain.model.TrainingType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

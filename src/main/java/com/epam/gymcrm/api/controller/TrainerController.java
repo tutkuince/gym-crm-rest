@@ -2,7 +2,7 @@ package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.dto.PasswordChangeRequestDto;
 import com.epam.gymcrm.dto.TrainerDto;
-import com.epam.gymcrm.service.TrainerService;
+import com.epam.gymcrm.domain.service.TrainerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/trainers")
 public class TrainerController {
 
-    private final TrainerService trainerService;
+    /*private final TrainerService trainerService;
 
     public TrainerController(TrainerService trainerService) {
         this.trainerService = trainerService;
@@ -109,5 +109,5 @@ public class TrainerController {
         trainerService.isTrainerCredentialsValid(username, password);
         List<TrainerDto> trainers = trainerService.getUnassignedTrainersForTrainee(traineeUsername);
         return ResponseEntity.ok(trainers);
-    }
+    }*/
 }

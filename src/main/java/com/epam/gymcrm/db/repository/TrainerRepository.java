@@ -1,6 +1,6 @@
-package com.epam.gymcrm.repository;
+package com.epam.gymcrm.db.repository;
 
-import com.epam.gymcrm.domain.Trainer;
+import com.epam.gymcrm.domain.model.Trainer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,18 +12,18 @@ import java.util.Optional;
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
 
-    @Query("SELECT t FROM Trainer t LEFT JOIN FETCH t.trainees WHERE t.id = :id")
+    @Query("SELECT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees WHERE t.id = :id")
     Optional<Trainer> findByIdWithTrainees(@Param("id") Long id);
 
-    @Query("SELECT DISTINCT t FROM Trainer t LEFT JOIN FETCH t.trainees")
+    @Query("SELECT DISTINCT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees")
     List<Trainer> findAllWithTrainees();
 
     Optional<Trainer> findByUserUsername(String username);
 
-    @Query("SELECT t FROM Trainer t LEFT JOIN FETCH t.trainees WHERE t.user.username = :username")
+    @Query("SELECT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees WHERE t.user.username = :username")
     Optional<Trainer> findByUserUsernameWithTrainees(@Param("username") String username);
 
-    @Query("SELECT tr FROM Trainer tr WHERE tr.id NOT IN " +
-            "(SELECT ttr.id FROM Trainee trn JOIN trn.trainers ttr WHERE trn.id = :traineeId)")
+    @Query("SELECT tr FROM TrainerEntity tr WHERE tr.id NOT IN " +
+            "(SELECT ttr.id FROM TraineeEntity trn JOIN trn.trainers ttr WHERE trn.id = :traineeId)")
     List<Trainer> findUnassignedTrainersForTrainee(@Param("traineeId") Long traineeId);
 }

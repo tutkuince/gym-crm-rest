@@ -1,18 +1,18 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.domain.Trainee;
-import com.epam.gymcrm.domain.Trainer;
-import com.epam.gymcrm.domain.Training;
-import com.epam.gymcrm.domain.TrainingType;
+import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.Trainer;
+import com.epam.gymcrm.domain.model.Training;
+import com.epam.gymcrm.domain.model.TrainingType;
 import com.epam.gymcrm.dto.TrainingDto;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.exception.TrainerScheduleConflictException;
 import com.epam.gymcrm.mapper.TrainingMapper;
-import com.epam.gymcrm.repository.TraineeRepository;
-import com.epam.gymcrm.repository.TrainerRepository;
-import com.epam.gymcrm.repository.TrainingRepository;
-import com.epam.gymcrm.repository.TrainingTypeRepository;
-import com.epam.gymcrm.specification.TrainingSpecification;
+import com.epam.gymcrm.db.repository.TraineeRepository;
+import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.TrainingRepository;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
+import com.epam.gymcrm.db.repository.specification.TrainingSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,7 +43,7 @@ public class TrainingService {
         this.trainingTypeRepository = trainingTypeRepository;
     }
 
-    @Transactional
+    /*@Transactional
     public TrainingDto createTraining(TrainingDto dto) {
         logger.info("Creating new training: {}", dto.getTrainingName());
         Training training = TrainingMapper.toTraining(dto);
@@ -85,7 +85,7 @@ public class TrainingService {
         Training savedTraining = trainingRepository.save(training);
         logger.info("Training created: id={}, name={}", savedTraining.getId(), savedTraining.getTrainingName());
         return TrainingMapper.toTrainingDto(savedTraining);
-    }
+    }*/
 
     public TrainingDto findById(Long id) {
         logger.info("Finding training by id: {}", id);
@@ -105,7 +105,7 @@ public class TrainingService {
                 .toList();
     }
 
-    @Transactional
+    /*@Transactional
     public void update(TrainingDto dto) {
         Long id = dto.getId();
         Training existing = trainingRepository.findById(id)
@@ -163,7 +163,7 @@ public class TrainingService {
 
         trainingRepository.save(existing);
         logger.info("Training updated: id={}, name={}", existing.getId(), existing.getTrainingName());
-    }
+    }*/
 
     public List<Training> getTraineeTrainingsByCriteria(
             String traineeUsername,

@@ -1,15 +1,15 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.domain.Trainee;
-import com.epam.gymcrm.domain.Trainer;
-import com.epam.gymcrm.domain.User;
+import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.Trainer;
+import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.dto.TrainerDto;
 import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.mapper.TrainerMapper;
-import com.epam.gymcrm.repository.TraineeRepository;
-import com.epam.gymcrm.repository.TrainerRepository;
-import com.epam.gymcrm.repository.UserRepository;
+import com.epam.gymcrm.db.repository.TraineeRepository;
+import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,7 +204,7 @@ public class TrainerService {
         logger.info("Trainer deactivated successfully. id={}, username={}", id, trainer.getUser().getUsername());
     }
 
-    public List<TrainerDto> getUnassignedTrainersForTrainee(String traineeUsername) {
+    /*public List<TrainerDto> getUnassignedTrainersForTrainee(String traineeUsername) {
         logger.info("Request received to get unassigned trainers for trainee: username={}", traineeUsername);
 
         Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(traineeUsername)
@@ -220,5 +220,5 @@ public class TrainerService {
         return unassigned.stream()
                 .map(TrainerMapper::toTrainerDto)
                 .toList();
-    }
+    }*/
 }

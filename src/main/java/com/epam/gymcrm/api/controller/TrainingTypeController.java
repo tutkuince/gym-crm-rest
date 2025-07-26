@@ -1,7 +1,7 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.dto.TrainingTypeDto;
-import com.epam.gymcrm.service.TrainingTypeService;
+import com.epam.gymcrm.domain.service.TrainingTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

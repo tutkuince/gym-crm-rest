@@ -1,16 +1,15 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.domain.Trainee;
-import com.epam.gymcrm.domain.Trainer;
-import com.epam.gymcrm.domain.User;
-import com.epam.gymcrm.dto.TraineeDto;
-import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
-import com.epam.gymcrm.exception.InvalidCredentialsException;
-import com.epam.gymcrm.exception.NotFoundException;
-import com.epam.gymcrm.mapper.TraineeMapper;
-import com.epam.gymcrm.repository.TraineeRepository;
-import com.epam.gymcrm.repository.TrainerRepository;
-import com.epam.gymcrm.repository.UserRepository;
+import com.epam.gymcrm.api.mapper.TraineeResponseMapper;
+import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
+import com.epam.gymcrm.db.entity.TraineeEntity;
+import com.epam.gymcrm.db.repository.TraineeRepository;
+import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
+import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
+import static com.epam.gymcrm.util.DateConstants.DEFAULT_DATE_FORMATTER;
 
 @Service
 public class TraineeService {
@@ -39,28 +37,34 @@ public class TraineeService {
     }
 
     @Transactional
-    public TraineeDto createTrainee(TraineeDto traineeDto) {
-        logger.info("Creating new trainee: {} {}", traineeDto.getFirstName(), traineeDto.getLastName());
-        Trainee trainee = TraineeMapper.toTrainee(traineeDto);
+    public TraineeRegisterResponse createTrainee(TraineeRegisterRequest traineeRegisterRequest) {
+        logger.info("Creating new trainee: {} {}", traineeRegisterRequest.getFirstName(), traineeRegisterRequest.getLastName());
 
-        User user = UserUtils.createUser(traineeDto.getFirstName(), traineeDto.getLastName(), userRepository);
+        User user = UserUtils.createUser(traineeRegisterRequest.getFirstName(), traineeRegisterRequest.getLastName(), userRepository);
 
+        Trainee trainee = new Trainee();
+        String dateOfBirth = traineeRegisterRequest.getDateOfBirth();
+        String address = traineeRegisterRequest.getAddress();
         trainee.setUser(user);
 
-        // Relationship: set Trainer (ManyToMany)
-        if (Objects.nonNull(traineeDto.getTrainerIds()) && !traineeDto.getTrainerIds().isEmpty()) {
-            Set<Trainer> trainers = new HashSet<>(trainerRepository.findAllById(traineeDto.getTrainerIds()));
-            trainee.setTrainers(trainers);
+        if (Objects.nonNull(dateOfBirth) && !dateOfBirth.isBlank()) {
+            trainee.setDateOfBirth(LocalDate.parse(dateOfBirth, DEFAULT_DATE_FORMATTER));
         }
 
-        // Save with DAO
-        Trainee savedTrainee = traineeRepository.save(trainee);
+        if (Objects.nonNull(address) && !address.isBlank()) {
+            trainee.setAddress(address);
+        }
 
-        logger.info("Trainee created: id={}, username={}", savedTrainee.getId(), savedTrainee.getUser().getUsername());
-        return TraineeMapper.toTraineeDto(savedTrainee);
+        TraineeEntity traineeEntity = TraineeDomainMapper.toTraineeEntity(trainee);
+
+        TraineeEntity savedTraineeEntity = traineeRepository.save(traineeEntity);
+
+
+        logger.info("Trainee created: id={}, username={}", savedTraineeEntity.getId(), savedTraineeEntity.getUser().getUsername());
+        return TraineeResponseMapper.toTraineeRegisterResponse(savedTraineeEntity);
     }
 
-    public TraineeDto findById(Long id) {
+    /*public TraineeDto findById(Long id) {
         logger.info("Finding trainee by id: {}", id);
         Trainee trainee = traineeRepository.findByIdWithTrainers(id)
                 .orElseThrow(() -> {
@@ -264,5 +268,5 @@ public class TraineeService {
 
         traineeRepository.save(trainee);
         logger.info("Updated trainers for trainee: id={}", traineeId);
-    }
+    }*/
 }

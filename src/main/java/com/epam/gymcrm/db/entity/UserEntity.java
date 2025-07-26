@@ -1,4 +1,4 @@
-package com.epam.gymcrm.domain;
+package com.epam.gymcrm.db.entity;
 
 import jakarta.persistence.*;
 
@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class User {
     @Column(nullable = false, name = "is_active")
     private Boolean isActive;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String firstName, String lastName, String username, String password, Boolean isActive) {
+    public UserEntity(String firstName, String lastName, String username, String password, Boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -90,7 +90,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserEntity user = (UserEntity) o;
         return Objects.equals(id, user.id);
     }
 

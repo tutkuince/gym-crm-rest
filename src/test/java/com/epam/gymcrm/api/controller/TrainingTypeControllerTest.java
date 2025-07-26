@@ -1,9 +1,8 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.controller.TrainingTypeController;
 import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
-import com.epam.gymcrm.service.TrainingTypeService;
+import com.epam.gymcrm.domain.service.TrainingTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

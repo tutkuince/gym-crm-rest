@@ -1,6 +1,6 @@
-package com.epam.gymcrm.specification;
+package com.epam.gymcrm.db.repository.specification;
 
-import com.epam.gymcrm.domain.Training;
+import com.epam.gymcrm.domain.model.Training;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 

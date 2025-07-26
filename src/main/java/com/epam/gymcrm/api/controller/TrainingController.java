@@ -1,9 +1,9 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.domain.Training;
+import com.epam.gymcrm.domain.model.Training;
 import com.epam.gymcrm.dto.TrainingDto;
 import com.epam.gymcrm.mapper.TrainingMapper;
-import com.epam.gymcrm.service.TrainingService;
+import com.epam.gymcrm.domain.service.TrainingService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/trainings")
 public class TrainingController {
 
-    private final TrainingService trainingService;
+    /*private final TrainingService trainingService;
 
     public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
@@ -78,6 +78,6 @@ public class TrainingController {
                 .map(TrainingMapper::toTrainingDto)
                 .toList();
         return ResponseEntity.ok(result);
-    }
+    }*/
 
 }

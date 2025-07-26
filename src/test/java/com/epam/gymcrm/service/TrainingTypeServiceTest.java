@@ -1,8 +1,9 @@
 package com.epam.gymcrm.service;
 
-import com.epam.gymcrm.domain.TrainingType;
+import com.epam.gymcrm.domain.model.TrainingType;
+import com.epam.gymcrm.domain.service.TrainingTypeService;
 import com.epam.gymcrm.dto.TrainingTypeDto;
-import com.epam.gymcrm.repository.TrainingTypeRepository;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

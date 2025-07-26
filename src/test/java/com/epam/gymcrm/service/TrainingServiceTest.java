@@ -1,17 +1,18 @@
 package com.epam.gymcrm.service;
 
-import com.epam.gymcrm.domain.Trainee;
-import com.epam.gymcrm.domain.Trainer;
-import com.epam.gymcrm.domain.Training;
-import com.epam.gymcrm.domain.TrainingType;
+import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.Trainer;
+import com.epam.gymcrm.domain.model.Training;
+import com.epam.gymcrm.domain.model.TrainingType;
+import com.epam.gymcrm.domain.service.TrainingService;
 import com.epam.gymcrm.dto.TrainingDto;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.exception.TrainerScheduleConflictException;
 import com.epam.gymcrm.mapper.TrainingMapper;
-import com.epam.gymcrm.repository.TraineeRepository;
-import com.epam.gymcrm.repository.TrainerRepository;
-import com.epam.gymcrm.repository.TrainingRepository;
-import com.epam.gymcrm.repository.TrainingTypeRepository;
+import com.epam.gymcrm.db.repository.TraineeRepository;
+import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.TrainingRepository;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,12 +1,13 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.controller.TraineeController;
+import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
 import com.epam.gymcrm.dto.TraineeDto;
 import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
-import com.epam.gymcrm.service.TraineeService;
+import com.epam.gymcrm.domain.service.TraineeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,15 +64,11 @@ class TraineeControllerTest {
         request.setDateOfBirth("1990-01-01");
         request.setAddress("Some Address");
 
-        TraineeDto response = new TraineeDto();
-        response.setId(1L);
-        response.setFirstName("John");
-        response.setLastName("Doe");
+        TraineeRegisterResponse response = new TraineeRegisterResponse();
         response.setUsername(USERNAME);
-        response.setDateOfBirth("1990-01-01");
-        response.setAddress("Some Address");
+        response.setPassword(PASSWORD);
 
-        when(traineeService.createTrainee(any(TraineeDto.class))).thenReturn(response);
+        when(traineeService.createTrainee(any(TraineeRegisterRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/trainees")
                         .contentType(MediaType.APPLICATION_JSON)

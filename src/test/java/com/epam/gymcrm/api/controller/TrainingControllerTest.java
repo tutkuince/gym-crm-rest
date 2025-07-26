@@ -1,11 +1,10 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.controller.TrainingController;
-import com.epam.gymcrm.domain.Training;
+import com.epam.gymcrm.domain.model.Training;
 import com.epam.gymcrm.dto.TrainingDto;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.NotFoundException;
-import com.epam.gymcrm.service.TrainingService;
+import com.epam.gymcrm.domain.service.TrainingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;

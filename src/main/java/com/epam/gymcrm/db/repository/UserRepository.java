@@ -1,6 +1,6 @@
-package com.epam.gymcrm.repository;
+package com.epam.gymcrm.db.repository;
 
-import com.epam.gymcrm.domain.User;
+import com.epam.gymcrm.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

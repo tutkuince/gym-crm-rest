@@ -1,30 +1,15 @@
-package com.epam.gymcrm.domain;
-
-import jakarta.persistence.*;
+package com.epam.gymcrm.domain.model;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "trainers")
 public class Trainer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(nullable = false)
     private String specialization;
-
-    @OneToMany(mappedBy = "trainer")
     private Set<Training> trainings = new HashSet<>();
-
-    @ManyToMany(mappedBy = "trainers")
     private Set<Trainee> trainees = new HashSet<>();
 
     public Trainer() {
