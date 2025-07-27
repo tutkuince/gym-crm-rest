@@ -1,10 +1,12 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
 import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
 import com.epam.gymcrm.domain.service.TraineeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,13 @@ public class TraineeController {
     public ResponseEntity<Void> deleteTraineeByUsername(@PathVariable(name = "username") String username) {
         traineeService.deleteTraineeByUsername(username);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/trainers")
+    public ResponseEntity<TraineeTrainerUpdateResponse> updateTraineeTrainers(
+            @RequestBody @Valid TraineeTrainerUpdateRequest request
+    ) {
+        return ResponseEntity.ok(traineeService.updateTraineeTrainers(request));
     }
 
     /*
@@ -89,27 +98,6 @@ public class TraineeController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteTraineeByUsername(
-            @RequestParam(name = "username") String username,
-            @RequestHeader("X-Username") String authUsername,
-            @RequestHeader("X-Password") String authPassword
-    ) {
-        traineeService.isTraineeCredentialsValid(authUsername, authPassword);
-        traineeService.deleteTraineeByUsername(username);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}/trainers")
-    public ResponseEntity<Void> updateTraineeTrainers(
-            @PathVariable("id") Long traineeId,
-            @RequestBody UpdateTraineeTrainersRequest request,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        traineeService.isTraineeCredentialsValid(username, password);
-        traineeService.updateTraineeTrainers(traineeId, request);
-        return ResponseEntity.noContent().build();
-    }*/
+    */
 
 }

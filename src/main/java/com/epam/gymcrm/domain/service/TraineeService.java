@@ -3,12 +3,17 @@ package com.epam.gymcrm.domain.service;
 import com.epam.gymcrm.api.mapper.TraineeProfileMapper;
 import com.epam.gymcrm.api.mapper.TraineeProfileUpdateMapper;
 import com.epam.gymcrm.api.mapper.TraineeResponseMapper;
+import com.epam.gymcrm.api.mapper.TraineeTrainerUpdateMapper;
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
+import com.epam.gymcrm.api.payload.request.TrainerUsernameRequest;
 import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
+import com.epam.gymcrm.db.entity.TrainerEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
@@ -16,6 +21,7 @@ import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.model.Trainee;
+import com.epam.gymcrm.domain.model.Trainer;
 import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
@@ -26,7 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.epam.gymcrm.util.DateConstants.DEFAULT_DATE_FORMATTER;
 
@@ -159,6 +168,43 @@ public class TraineeService {
         logger.info("Trainee deleted successfully. username={}", username);
     }
 
+    @Transactional
+    public TraineeTrainerUpdateResponse updateTraineeTrainers(TraineeTrainerUpdateRequest request) {
+        String traineeUsername = request.traineeUsername();
+        logger.info("Updating trainers for trainee: id={}, newTrainers={}", traineeUsername, request.trainers());
+
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsernameWithTrainers(traineeUsername)
+                .orElseThrow(() -> {
+                    logger.warn("Trainee to update trainers not found: username={}", traineeUsername);
+                    return new NotFoundException("Trainee not found with username: " + traineeUsername);
+                });
+
+        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
+
+        List<String> trainerUsernames = request.trainers().stream()
+                .map(TrainerUsernameRequest::trainerUsername)
+                .toList();
+
+        List<TrainerEntity> trainerEntities = trainerUsernames.isEmpty()
+                ? List.of()
+                : trainerRepository.findAllByUserUsernameIn(trainerUsernames);
+
+        Set<Trainer> domainTrainers = trainerEntities.stream()
+                .map(TrainerDomainMapper::toTrainer)
+                .collect(Collectors.toSet());
+        trainee.setTrainers(domainTrainers);
+
+        TraineeEntity updatedEntity = TraineeDomainMapper.toTraineeEntity(trainee);
+        updatedEntity.setId(traineeEntity.getId());
+        updatedEntity.setTrainings(traineeEntity.getTrainings());
+
+        TraineeEntity saved = traineeRepository.save(updatedEntity);
+
+        logger.info("Updated trainers for trainee: id={}", saved.getId());
+
+        return TraineeTrainerUpdateMapper.toResponse(trainerEntities);
+    }
+
     /*public TraineeDto findByUsername(String username) {
         logger.info("Request to find trainee by username received. Username: {}", username);
         Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(username)
@@ -276,20 +322,5 @@ public class TraineeService {
         logger.info("Trainee deleted successfully. username={}", username);
     }
 
-    @Transactional
-    public void updateTraineeTrainers(Long traineeId, UpdateTraineeTrainersRequest request) {
-        logger.info("Updating trainers for trainee: id={}, newTrainers={}", traineeId, request.getTrainerIds());
-
-        Trainee trainee = traineeRepository.findByIdWithTrainers(traineeId)
-                .orElseThrow(() -> {
-                    logger.warn("Trainee to update trainers not found: id={}", traineeId);
-                    return new NotFoundException("Trainee not found with id: " + traineeId);
-                });
-
-        Set<Trainer> trainers = new HashSet<>(trainerRepository.findAllById(request.getTrainerIds()));
-        trainee.setTrainers(trainers);
-
-        traineeRepository.save(trainee);
-        logger.info("Updated trainers for trainee: id={}", traineeId);
-    }*/
+    */
 }

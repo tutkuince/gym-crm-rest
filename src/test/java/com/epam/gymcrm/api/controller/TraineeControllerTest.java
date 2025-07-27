@@ -1,10 +1,9 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
-import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TraineeService;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
@@ -20,11 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -182,5 +181,55 @@ class TraineeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void updateTraineeTrainers_shouldReturn200AndTrainersList() throws Exception {
+        List<TrainerSummaryResponse> trainers = List.of(
+                new TrainerSummaryResponse("trainer1", "Ahmet", "Yılmaz", "Cardio"),
+                new TrainerSummaryResponse("trainer2", "Ayşe", "Kara", "Fitness")
+        );
+        TraineeTrainerUpdateResponse response = new TraineeTrainerUpdateResponse(trainers);
 
+        when(traineeService.updateTraineeTrainers(any(TraineeTrainerUpdateRequest.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/v1/trainees/trainers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                    {
+                        "traineeUsername": "ali.veli",
+                        "trainers": [
+                            { "trainerUsername": "trainer1" },
+                            { "trainerUsername": "trainer2" }
+                        ]
+                    }
+                """)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.trainers.length()").value(2))
+                .andExpect(jsonPath("$.trainers[0].trainerUsername").value("trainer1"))
+                .andExpect(jsonPath("$.trainers[0].trainerFirstName").value("Ahmet"))
+                .andExpect(jsonPath("$.trainers[1].trainerUsername").value("trainer2"))
+                .andExpect(jsonPath("$.trainers[1].trainerFirstName").value("Ayşe"));
+
+        verify(traineeService).updateTraineeTrainers(any(TraineeTrainerUpdateRequest.class));
+    }
+
+    @Test
+    void updateTraineeTrainers_shouldReturn404_whenTraineeNotFound() throws Exception {
+        when(traineeService.updateTraineeTrainers(any(TraineeTrainerUpdateRequest.class)))
+                .thenThrow(new NotFoundException("Trainee not found with username: ali.veli"));
+
+        mockMvc.perform(put("/api/v1/trainees/trainers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                    {
+                        "traineeUsername": "ali.veli",
+                        "trainers": [
+                            { "trainerUsername": "trainer1" }
+                        ]
+                    }
+                """)
+                )
+                .andExpect(status().isNotFound());
+    }
 }

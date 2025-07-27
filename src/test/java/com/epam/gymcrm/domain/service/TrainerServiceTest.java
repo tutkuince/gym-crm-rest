@@ -63,7 +63,7 @@ class TrainerServiceTest {
         trainer.setUser(user);
     }
 
-    @Test
+    /*@Test
     void shouldCreateTrainer() {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(trainerRepository.save(any(Trainer.class))).thenAnswer(inv -> {
@@ -79,7 +79,7 @@ class TrainerServiceTest {
         assertEquals("Mehmet", result.getFirstName());
         assertEquals("Yılmaz", result.getLastName());
         verify(trainerRepository).save(any(Trainer.class));
-    }
+    }*/
 
     /*@Test
     void shouldFindTrainerById() {

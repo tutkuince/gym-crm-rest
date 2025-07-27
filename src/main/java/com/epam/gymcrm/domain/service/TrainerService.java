@@ -34,7 +34,7 @@ public class TrainerService {
         this.traineeRepository = traineeRepository;
     }
 
-    @Transactional
+    /*@Transactional
     public TrainerDto createTrainer(TrainerDto trainerDto) {
         logger.info("Creating new trainer: {} {}", trainerDto.getFirstName(), trainerDto.getLastName());
         Trainer trainer = TrainerMapper.toTrainer(trainerDto);
@@ -204,7 +204,7 @@ public class TrainerService {
         logger.info("Trainer deactivated successfully. id={}, username={}", id, trainer.getUser().getUsername());
     }
 
-    /*public List<TrainerDto> getUnassignedTrainersForTrainee(String traineeUsername) {
+    *//*public List<TrainerDto> getUnassignedTrainersForTrainee(String traineeUsername) {
         logger.info("Request received to get unassigned trainers for trainee: username={}", traineeUsername);
 
         Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(traineeUsername)

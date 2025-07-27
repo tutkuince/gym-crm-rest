@@ -1,13 +1,18 @@
 package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
+import com.epam.gymcrm.api.payload.request.TrainerUsernameRequest;
 import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
+import com.epam.gymcrm.db.entity.TrainerEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
+import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
@@ -19,12 +24,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TraineeServiceTest {
@@ -33,6 +39,8 @@ class TraineeServiceTest {
     private TraineeRepository traineeRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private TrainerRepository trainerRepository;
 
     @InjectMocks
     private TraineeService traineeService;
@@ -261,4 +269,76 @@ class TraineeServiceTest {
         assertTrue(ex.getMessage().contains("not found"));
     }
 
+    @Test
+    void updateTraineeTrainers_shouldUpdateTrainersAndReturnResponse_whenValidRequest() {
+        String traineeUsername = "ali.veli";
+        TraineeTrainerUpdateRequest request = new TraineeTrainerUpdateRequest(
+                traineeUsername,
+                List.of(
+                        new TrainerUsernameRequest("trainer1"),
+                        new TrainerUsernameRequest("trainer2")
+                )
+        );
+
+        UserEntity traineeUser = new UserEntity();
+        traineeUser.setUsername(traineeUsername);
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setId(10L);
+        traineeEntity.setUser(traineeUser);
+        traineeEntity.setTrainers(new HashSet<>());
+
+        TrainerEntity trainer1 = new TrainerEntity();
+        UserEntity trainerUser1 = new UserEntity();
+        trainerUser1.setUsername("trainer1");
+        trainerUser1.setFirstName("Ahmet");
+        trainerUser1.setLastName("Yılmaz");
+        trainer1.setUser(trainerUser1);
+        trainer1.setSpecialization("Cardio");
+
+        TrainerEntity trainer2 = new TrainerEntity();
+        UserEntity trainerUser2 = new UserEntity();
+        trainerUser2.setUsername("trainer2");
+        trainerUser2.setFirstName("Ayşe");
+        trainerUser2.setLastName("Kara");
+        trainer2.setUser(trainerUser2);
+        trainer2.setSpecialization("Fitness");
+
+        List<TrainerEntity> trainers = List.of(trainer1, trainer2);
+
+        when(traineeRepository.findByUserUsernameWithTrainers(traineeUsername)).thenReturn(Optional.of(traineeEntity));
+        when(trainerRepository.findAllByUserUsernameIn(any())).thenReturn(trainers);
+        when(traineeRepository.save(any(TraineeEntity.class))).thenReturn(traineeEntity);
+
+        TraineeTrainerUpdateResponse response = traineeService.updateTraineeTrainers(request);
+
+        assertNotNull(response);
+        assertEquals(2, response.trainers().size());
+        assertEquals("trainer1", response.trainers().get(0).trainerUsername());
+        assertEquals("Ahmet", response.trainers().get(0).trainerFirstName());
+        assertEquals("trainer2", response.trainers().get(1).trainerUsername());
+        assertEquals("Ayşe", response.trainers().get(1).trainerFirstName());
+
+        verify(traineeRepository).findByUserUsernameWithTrainers(traineeUsername);
+        verify(trainerRepository).findAllByUserUsernameIn(List.of("trainer1", "trainer2"));
+        verify(traineeRepository).save(any(TraineeEntity.class));
+    }
+
+    @Test
+    void updateTraineeTrainers_shouldThrowNotFoundException_whenTraineeNotFound() {
+        String traineeUsername = "not.found";
+        TraineeTrainerUpdateRequest request = new TraineeTrainerUpdateRequest(
+                traineeUsername,
+                List.of(new TrainerUsernameRequest("trainer1"))
+        );
+
+        when(traineeRepository.findByUserUsernameWithTrainers(traineeUsername)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () ->
+                traineeService.updateTraineeTrainers(request));
+        assertTrue(ex.getMessage().contains("Trainee not found with username"));
+
+        verify(traineeRepository).findByUserUsernameWithTrainers(traineeUsername);
+        verifyNoMoreInteractions(trainerRepository);
+    }
 }
