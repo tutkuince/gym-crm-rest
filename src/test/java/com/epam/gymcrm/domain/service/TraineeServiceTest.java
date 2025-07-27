@@ -8,7 +8,6 @@ import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
-import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
@@ -32,8 +31,6 @@ class TraineeServiceTest {
 
     @Mock
     private TraineeRepository traineeRepository;
-    @Mock
-    private TrainerRepository trainerRepository;
     @Mock
     private UserRepository userRepository;
 
@@ -69,7 +66,6 @@ class TraineeServiceTest {
 
     @Test
     void createTrainee_shouldReturnRegisterResponse_whenRequestIsValid() {
-        // Arrange
         TraineeRegistrationRequest request = new TraineeRegistrationRequest(
                 "Ali", "Veli", "1999-01-01", "İstanbul"
         );
@@ -107,9 +103,7 @@ class TraineeServiceTest {
         when(traineeRepository.findByUserUsernameWithTrainers(username))
                 .thenReturn(Optional.empty());
 
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> {
-            traineeService.findByUsername(username);
-        });
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> traineeService.findByUsername(username));
 
         assertTrue(ex.getMessage().contains("No trainee found with username"));
         verify(traineeRepository).findByUserUsernameWithTrainers(username);
@@ -161,9 +155,7 @@ class TraineeServiceTest {
         when(traineeRepository.findByUserUsernameWithTrainers("notfound"))
                 .thenReturn(Optional.empty());
 
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> {
-            traineeService.update(request);
-        });
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> traineeService.update(request));
 
         assertTrue(ex.getMessage().contains("Trainee to update not found"));
         verify(traineeRepository).findByUserUsernameWithTrainers("notfound");
@@ -181,9 +173,7 @@ class TraineeServiceTest {
         when(traineeRepository.findByUserUsernameWithTrainers("ali.veli"))
                 .thenReturn(Optional.of(traineeEntity));
 
-        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> {
-            traineeService.update(request);
-        });
+        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> traineeService.update(request));
 
         assertTrue(ex.getMessage().contains("User entity is null"));
     }
@@ -205,9 +195,7 @@ class TraineeServiceTest {
         when(traineeRepository.findByUserUsernameWithTrainers("ali.veli"))
                 .thenReturn(Optional.of(traineeEntity));
 
-        BadRequestException ex = assertThrows(BadRequestException.class, () -> {
-            traineeService.update(request);
-        });
+        BadRequestException ex = assertThrows(BadRequestException.class, () -> traineeService.update(request));
 
         assertTrue(ex.getMessage().contains("Invalid dateOfBirth format"));
     }
@@ -248,4 +236,29 @@ class TraineeServiceTest {
         verify(traineeRepository).findByUserUsernameWithTrainers("ali.veli");
         verify(traineeRepository).save(any(TraineeEntity.class));
     }
+
+    @Test
+    void delete_shouldDeleteTrainee_whenExists() {
+        String username = "ali.veli";
+        TraineeEntity trainee = new TraineeEntity();
+        UserEntity user = new UserEntity();
+        user.setUsername(username);
+        trainee.setUser(user);
+
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.of(trainee));
+
+        traineeService.deleteTraineeByUsername(username);
+
+        verify(traineeRepository).delete(trainee);
+    }
+
+    @Test
+    void delete_shouldThrowNotFoundException_whenTraineeDoesNotExist() {
+        String username = "unknown";
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> traineeService.deleteTraineeByUsername(username));
+        assertTrue(ex.getMessage().contains("not found"));
+    }
+
 }

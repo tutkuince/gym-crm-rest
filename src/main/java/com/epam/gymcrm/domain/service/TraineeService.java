@@ -147,6 +147,18 @@ public class TraineeService {
         return TraineeProfileUpdateMapper.toTraineeProfileUpdateResponse(saved);
     }
 
+    @Transactional
+    public void deleteTraineeByUsername(String username) {
+        logger.info("Delete request received for trainee. username={}", username);
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsername(username)
+                .orElseThrow(() -> {
+                    logger.warn("Trainee not found for deletion. username={}", username);
+                    return new NotFoundException("Trainee not found with username: " + username);
+                });
+        traineeRepository.delete(traineeEntity);
+        logger.info("Trainee deleted successfully. username={}", username);
+    }
+
     /*public TraineeDto findByUsername(String username) {
         logger.info("Request to find trainee by username received. Username: {}", username);
         Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(username)
@@ -158,90 +170,7 @@ public class TraineeService {
         return TraineeMapper.toTraineeDto(trainee);
     }*/
 
-    /*public TraineeDto findById(Long id) {
-        logger.info("Finding trainee by id: {}", id);
-        Trainee trainee = traineeRepository.findByIdWithTrainers(id)
-                .orElseThrow(() -> {
-                    logger.warn("Trainee not found for id: {}", id);
-                    return new NotFoundException("Trainee not found with id: " + id);
-                });
-        logger.info("Trainee found by Id: id={}, username={}", trainee.getId(), trainee.getUser().getUsername());
-        return TraineeMapper.toTraineeDto(trainee);
-    }
-
-    public List<TraineeDto> findAll() {
-        logger.info("Retrieving all trainees");
-        return traineeRepository.findAllWithTrainers().stream()
-                .map(TraineeMapper::toTraineeDto)
-                .toList();
-    }
-
-    @Transactional
-    public void update(TraineeDto traineeDto) {
-        Long id = traineeDto.getId();
-        logger.info("Update requested for trainee. ID: {}", id);
-
-        Trainee trainee = traineeRepository.findByIdWithTrainers(id)
-                .orElseThrow(() -> {
-                    logger.warn("Update failed: Trainee not found. ID: {}", id);
-                    return new NotFoundException("Trainee to update not found with id: " + id);
-                });
-
-        logger.info("Updating trainee profile. ID: {}, Username: {}", id, trainee.getUser().getUsername());
-
-        String oldFirstName = trainee.getUser().getFirstName();
-        String oldLastName = trainee.getUser().getLastName();
-
-        if (Objects.nonNull(traineeDto.getFirstName())) {
-            logger.info("Updating first name: '{}' -> '{}'", oldFirstName, traineeDto.getFirstName());
-            trainee.getUser().setFirstName(traineeDto.getFirstName());
-        }
-        if (Objects.nonNull(traineeDto.getLastName())) {
-            logger.info("Updating last name: '{}' -> '{}'", oldLastName, traineeDto.getLastName());
-            trainee.getUser().setLastName(traineeDto.getLastName());
-        }
-        if (Objects.nonNull(traineeDto.getActive())) {
-            logger.info("Updating active status: {} -> {}", trainee.getUser().getActive(), traineeDto.getActive());
-            trainee.getUser().setActive(traineeDto.getActive());
-        }
-
-        if (Objects.nonNull(traineeDto.getDateOfBirth())) {
-            try {
-                logger.info("Updating date of birth: {} -> {}", trainee.getDateOfBirth(), traineeDto.getDateOfBirth());
-                trainee.setDateOfBirth(LocalDate.parse(traineeDto.getDateOfBirth()));
-            } catch (Exception e) {
-                logger.warn("Invalid dateOfBirth provided: '{}'", traineeDto.getDateOfBirth());
-            }
-        }
-        if (Objects.nonNull(traineeDto.getAddress())) {
-            logger.info("Updating address: '{}' -> '{}'", trainee.getAddress(), traineeDto.getAddress());
-            trainee.setAddress(traineeDto.getAddress());
-        }
-
-        if (Objects.nonNull(traineeDto.getTrainerIds())) {
-            logger.info("Updating trainers for trainee ID: {}", id);
-            Set<Trainer> trainers = new HashSet<>(trainerRepository.findAllById(traineeDto.getTrainerIds()));
-            trainee.setTrainers(trainers);
-        }
-
-        boolean isNameChanged =
-                (Objects.nonNull(traineeDto.getFirstName()) && !Objects.equals(traineeDto.getFirstName(), oldFirstName)) ||
-                        (Objects.nonNull(traineeDto.getLastName()) && !Objects.equals(traineeDto.getLastName(), oldLastName));
-
-        if (isNameChanged) {
-            String newUsername = UserUtils.generateUniqueUsername(
-                    trainee.getUser().getFirstName(),
-                    trainee.getUser().getLastName(),
-                    userRepository
-            );
-            logger.info("Username change detected. Old: '{}', New: '{}'", trainee.getUser().getUsername(), newUsername);
-            trainee.getUser().setUsername(newUsername);
-        }
-
-        Trainee updatedTrainee = traineeRepository.save(trainee);
-
-        logger.info("Trainee profile updated successfully. ID: {}, Username: {}", updatedTrainee.getId(), updatedTrainee.getUser().getUsername());
-    }
+    /*
 
     public boolean isTraineeCredentialsValid(String username, String password) {
         logger.info("Login attempt for trainee. Username: {}", username);

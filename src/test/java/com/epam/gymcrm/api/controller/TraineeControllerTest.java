@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -165,5 +166,21 @@ class TraineeControllerTest {
                 )
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deleteTrainee_shouldReturn200_whenDeleted() throws Exception {
+        mockMvc.perform(delete("/api/v1/trainees/{username}", "ali.veli"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteTrainee_shouldReturn404_whenTraineeNotFound() throws Exception {
+        doThrow(new NotFoundException("not found"))
+                .when(traineeService).deleteTraineeByUsername("unknown");
+
+        mockMvc.perform(delete("/api/v1/trainees/{username}", "unknown"))
+                .andExpect(status().isNotFound());
+    }
+
 
 }

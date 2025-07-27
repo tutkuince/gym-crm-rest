@@ -39,11 +39,11 @@ public class TraineeController {
         return new ResponseEntity<>(traineeService.update(traineeUpdateRequest), HttpStatus.OK);
     }
 
-    /*@DeleteMapping("/{username}")
+    @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteTraineeByUsername(@PathVariable(name = "username") String username) {
         traineeService.deleteTraineeByUsername(username);
         return ResponseEntity.ok().build();
-    }*/
+    }
 
     /*
     @GetMapping("/search")
