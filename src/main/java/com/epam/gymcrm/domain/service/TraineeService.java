@@ -1,7 +1,9 @@
 package com.epam.gymcrm.domain.service;
 
+import com.epam.gymcrm.api.mapper.TraineeProfileMapper;
 import com.epam.gymcrm.api.mapper.TraineeResponseMapper;
 import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
@@ -10,6 +12,7 @@ import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
 import com.epam.gymcrm.domain.model.Trainee;
 import com.epam.gymcrm.domain.model.User;
+import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +41,13 @@ public class TraineeService {
 
     @Transactional
     public TraineeRegisterResponse createTrainee(TraineeRegisterRequest traineeRegisterRequest) {
-        logger.info("Creating new trainee: {} {}", traineeRegisterRequest.getFirstName(), traineeRegisterRequest.getLastName());
+        logger.info("Creating new trainee: {} {}", traineeRegisterRequest.firstName(), traineeRegisterRequest.lastName());
 
-        User user = UserUtils.createUser(traineeRegisterRequest.getFirstName(), traineeRegisterRequest.getLastName(), userRepository);
+        User user = UserUtils.createUser(traineeRegisterRequest.firstName(), traineeRegisterRequest.lastName(), userRepository);
 
         Trainee trainee = new Trainee();
-        String dateOfBirth = traineeRegisterRequest.getDateOfBirth();
-        String address = traineeRegisterRequest.getAddress();
+        String dateOfBirth = traineeRegisterRequest.dateOfBirth();
+        String address = traineeRegisterRequest.address();
         trainee.setUser(user);
 
         if (Objects.nonNull(dateOfBirth) && !dateOfBirth.isBlank()) {
@@ -63,6 +66,28 @@ public class TraineeService {
         logger.info("Trainee created: id={}, username={}", savedTraineeEntity.getId(), savedTraineeEntity.getUser().getUsername());
         return TraineeResponseMapper.toTraineeRegisterResponse(savedTraineeEntity);
     }
+
+    public TraineeProfileResponse findByUsername(String username) {
+        logger.info("Request to find trainee by username received. Username: {}", username);
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsernameWithTrainers(username)
+                .orElseThrow(() -> {
+                    logger.warn("Find trainee by username failed: No trainee found with username: {}", username);
+                    return new NotFoundException("Find trainee by username failed: No trainee found with username: " + username);
+                });
+        logger.info("Trainee found successfully. id={}, username={}", traineeEntity.getId(), traineeEntity.getUser().getUsername());
+        return TraineeProfileMapper.toTraineeProfileResponse(traineeEntity);
+    }
+
+    /*public TraineeDto findByUsername(String username) {
+        logger.info("Request to find trainee by username received. Username: {}", username);
+        Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(username)
+                .orElseThrow(() -> {
+                    logger.warn("Find trainee by username failed: No trainee found with username: {}", username);
+                    return new NotFoundException("Find trainee by username failed: No trainee found with username: " + username);
+                });
+        logger.info("Trainee found successfully. id={}, username={}", trainee.getId(), trainee.getUser().getUsername());
+        return TraineeMapper.toTraineeDto(trainee);
+    }*/
 
     /*public TraineeDto findById(Long id) {
         logger.info("Finding trainee by id: {}", id);

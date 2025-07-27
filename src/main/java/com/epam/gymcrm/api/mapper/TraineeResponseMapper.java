@@ -6,9 +6,6 @@ import com.epam.gymcrm.db.entity.TraineeEntity;
 public class TraineeResponseMapper {
 
     public static TraineeRegisterResponse toTraineeRegisterResponse(TraineeEntity traineeEntity) {
-        TraineeRegisterResponse response = new TraineeRegisterResponse();
-        response.setUsername(traineeEntity.getUser().getUsername());
-        response.setPassword(traineeEntity.getUser().getPassword());
-        return response;
+        return new TraineeRegisterResponse(traineeEntity.getUser().getUsername(), traineeEntity.getUser().getPassword());
     }
 }

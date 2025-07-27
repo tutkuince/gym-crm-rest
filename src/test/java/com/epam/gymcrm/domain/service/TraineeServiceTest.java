@@ -1,19 +1,15 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
-import com.epam.gymcrm.domain.model.Trainee;
-import com.epam.gymcrm.domain.model.Trainer;
-import com.epam.gymcrm.domain.model.User;
-import com.epam.gymcrm.domain.service.TraineeService;
-import com.epam.gymcrm.dto.TraineeDto;
-import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
-import com.epam.gymcrm.exception.InvalidCredentialsException;
-import com.epam.gymcrm.exception.NotFoundException;
+import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.domain.service.TraineeService;
+import com.epam.gymcrm.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,14 +18,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TraineeServiceTest {
@@ -44,55 +38,80 @@ class TraineeServiceTest {
     @InjectMocks
     private TraineeService traineeService;
 
-    private TraineeDto traineeDto;
-    private Trainee trainee;
+    private UserEntity userEntity;
+    private TraineeEntity traineeEntity;
+    private TraineeEntity savedTraineeEntity;
 
     @BeforeEach
     void setUp() {
-        traineeDto = new TraineeDto();
-        traineeDto.setId(1L);
-        traineeDto.setFirstName("Ali");
-        traineeDto.setLastName("Veli");
-        traineeDto.setAddress("Istanbul");
-        traineeDto.setDateOfBirth("1990-01-01");
+        userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("ali.veli");
+        userEntity.setPassword("12345");
+        userEntity.setFirstName("Ali");
+        userEntity.setLastName("Veli");
+        userEntity.setActive(true);
 
-        User user = new User();
-        user.setId(10L);
-        user.setFirstName("Ali");
-        user.setLastName("Veli");
-        user.setUsername("ali.veli");
-        user.setActive(true);
+        traineeEntity = new TraineeEntity();
+        traineeEntity.setId(1L);
+        traineeEntity.setUser(userEntity);
+        traineeEntity.setDateOfBirth(LocalDate.of(1999, 1, 1));
+        traineeEntity.setAddress("İstanbul");
 
-        trainee = new Trainee();
-        trainee.setId(1L);
-        trainee.setUser(user);
-        trainee.setAddress("Istanbul");
-        trainee.setDateOfBirth(LocalDate.parse("1990-01-01"));
+        savedTraineeEntity = new TraineeEntity();
+        savedTraineeEntity.setId(1L);
+        savedTraineeEntity.setUser(userEntity);
+        savedTraineeEntity.setDateOfBirth(LocalDate.of(1999, 1, 1));
+        savedTraineeEntity.setAddress("İstanbul");
+    }
+
+
+    @Test
+    void createTrainee_shouldReturnRegisterResponse_whenRequestIsValid() {
+        // Arrange
+        TraineeRegisterRequest request = new TraineeRegisterRequest(
+                "Ali", "Veli", "1999-01-01", "İstanbul"
+        );
+
+        when(traineeRepository.save(any(TraineeEntity.class)))
+                .thenReturn(savedTraineeEntity);
+
+        TraineeRegisterResponse result = traineeService.createTrainee(request);
+
+        assertNotNull(result);
+        assertEquals("ali.veli", result.username());
+        assertEquals("12345", result.password());
+
+        verify(traineeRepository).save(any(TraineeEntity.class));
     }
 
     @Test
-    void shouldCreateTrainee() {
-        when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        when(traineeRepository.save(any(TraineeEntity.class))).thenAnswer(invocation -> {
-            Trainee t = invocation.getArgument(0);
-            t.setId(99L);
-            t.getUser().setId(100L);
-            return t;
-        });
+    void findByUsername_shouldReturnTraineeProfileResponse_whenTraineeExists() {
+        String username = "ali.veli";
+        when(traineeRepository.findByUserUsernameWithTrainers(username))
+                .thenReturn(Optional.of(traineeEntity));
 
-        TraineeRegisterRequest request = new TraineeRegisterRequest();
-        request.setFirstName("Ali");
-        request.setLastName("Veli");
-        request.setAddress("Istanbul");
-        request.setDateOfBirth("1990-01-01");
-
-        TraineeRegisterResponse response = traineeService.createTrainee(request);
-
+        TraineeProfileResponse response = traineeService.findByUsername(username);
 
         assertNotNull(response);
-        assertNotNull(response.getUsername());
-        assertEquals("ali.veli", response.getUsername());
-        verify(traineeRepository).save(any(TraineeEntity.class));
+        assertEquals("Ali", response.firstName());
+        assertEquals("Veli", response.lastName());
+
+        verify(traineeRepository).findByUserUsernameWithTrainers(username);
+    }
+
+    @Test
+    void findByUsername_shouldThrowNotFoundException_whenTraineeDoesNotExist() {
+        String username = "nonexistent";
+        when(traineeRepository.findByUserUsernameWithTrainers(username))
+                .thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> {
+            traineeService.findByUsername(username);
+        });
+
+        assertTrue(ex.getMessage().contains("No trainee found with username"));
+        verify(traineeRepository).findByUserUsernameWithTrainers(username);
     }
 
     /*@Test

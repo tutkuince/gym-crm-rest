@@ -1,6 +1,7 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
 import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
 import com.epam.gymcrm.domain.service.TraineeService;
 import com.epam.gymcrm.dto.PasswordChangeRequestDto;
@@ -26,6 +27,14 @@ public class TraineeController {
     @PostMapping
     public ResponseEntity<TraineeRegisterResponse> createTrainee(@RequestBody @Valid TraineeRegisterRequest traineeRegisterRequest) {
         return new ResponseEntity<>(traineeService.createTrainee(traineeRegisterRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<TraineeProfileResponse> getTraineeByUsername(
+            @RequestParam(name = "username") String username
+    ) {
+        //traineeService.isTraineeCredentialsValid(username, password);
+        return ResponseEntity.ok(traineeService.findByUsername(username));
     }
 
     /*@GetMapping(value = "/{id}")

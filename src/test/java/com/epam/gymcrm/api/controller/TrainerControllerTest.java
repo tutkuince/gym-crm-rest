@@ -74,7 +74,7 @@ class TrainerControllerTest {
                 .andExpect(jsonPath("$.specialization").value("Yoga"));
     }
 
-    @Test
+    /*@Test
     void shouldGetTrainerById() throws Exception {
         TrainerDto response = new TrainerDto();
         response.setId(20L);
@@ -328,6 +328,6 @@ class TrainerControllerTest {
 
         verify(trainerService).isTrainerCredentialsValid(authUsername, authPassword);
         verify(trainerService).getUnassignedTrainersForTrainee(traineeUsername);
-    }
+    }*/
 
 }

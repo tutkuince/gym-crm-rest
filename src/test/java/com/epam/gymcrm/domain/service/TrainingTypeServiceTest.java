@@ -1,4 +1,4 @@
-package com.epam.gymcrm.service;
+package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.domain.model.TrainingType;
 import com.epam.gymcrm.domain.service.TrainingTypeService;
