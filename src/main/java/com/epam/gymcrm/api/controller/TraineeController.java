@@ -1,18 +1,15 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
 import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
+import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
+import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
 import com.epam.gymcrm.domain.service.TraineeService;
-import com.epam.gymcrm.dto.PasswordChangeRequestDto;
-import com.epam.gymcrm.dto.TraineeDto;
-import com.epam.gymcrm.dto.UpdateTraineeTrainersRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/trainees", produces = "application/json")
@@ -25,8 +22,8 @@ public class TraineeController {
     }
 
     @PostMapping
-    public ResponseEntity<TraineeRegisterResponse> createTrainee(@RequestBody @Valid TraineeRegisterRequest traineeRegisterRequest) {
-        return new ResponseEntity<>(traineeService.createTrainee(traineeRegisterRequest), HttpStatus.CREATED);
+    public ResponseEntity<TraineeRegistrationResponse> createTrainee(@RequestBody @Valid TraineeRegistrationRequest traineeRegistrationRequest) {
+        return new ResponseEntity<>(traineeService.createTrainee(traineeRegistrationRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/profile")
@@ -37,38 +34,18 @@ public class TraineeController {
         return ResponseEntity.ok(traineeService.findByUsername(username));
     }
 
-    /*@GetMapping(value = "/{id}")
-    public ResponseEntity<TraineeDto> getTraineeById(
-            @PathVariable("id") Long id,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        traineeService.isTraineeCredentialsValid(username, password);
-        return ResponseEntity.ok(traineeService.findById(id));
+    @PutMapping
+    public ResponseEntity<TraineeProfileUpdateResponse> updateTrainee(@RequestBody @Valid TraineeUpdateRequest traineeUpdateRequest) {
+        return new ResponseEntity<>(traineeService.update(traineeUpdateRequest), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<TraineeDto>> getAllTrainees(
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        traineeService.isTraineeCredentialsValid(username, password);
-        return ResponseEntity.ok(traineeService.findAll());
-    }
+    /*@DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteTraineeByUsername(@PathVariable(name = "username") String username) {
+        traineeService.deleteTraineeByUsername(username);
+        return ResponseEntity.ok().build();
+    }*/
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTrainee(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid TraineeDto traineeDto,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        traineeService.isTraineeCredentialsValid(username, password);
-        traineeDto.setId(id);
-        traineeService.update(traineeDto);
-        return ResponseEntity.noContent().build();
-    }
-
+    /*
     @GetMapping("/search")
     public ResponseEntity<TraineeDto> getTraineeByUsername(
             @RequestParam(name = "username") String uname,

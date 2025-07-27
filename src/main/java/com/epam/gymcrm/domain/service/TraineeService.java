@@ -1,17 +1,23 @@
 package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.mapper.TraineeProfileMapper;
+import com.epam.gymcrm.api.mapper.TraineeProfileUpdateMapper;
 import com.epam.gymcrm.api.mapper.TraineeResponseMapper;
-import com.epam.gymcrm.api.payload.request.TraineeRegisterRequest;
+import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
 import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegisterResponse;
+import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
+import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
+import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
+import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.model.Trainee;
 import com.epam.gymcrm.domain.model.User;
+import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
@@ -40,14 +46,14 @@ public class TraineeService {
     }
 
     @Transactional
-    public TraineeRegisterResponse createTrainee(TraineeRegisterRequest traineeRegisterRequest) {
-        logger.info("Creating new trainee: {} {}", traineeRegisterRequest.firstName(), traineeRegisterRequest.lastName());
+    public TraineeRegistrationResponse createTrainee(TraineeRegistrationRequest traineeRegistrationRequest) {
+        logger.info("Creating new trainee: {} {}", traineeRegistrationRequest.firstName(), traineeRegistrationRequest.lastName());
 
-        User user = UserUtils.createUser(traineeRegisterRequest.firstName(), traineeRegisterRequest.lastName(), userRepository);
+        User user = UserUtils.createUser(traineeRegistrationRequest.firstName(), traineeRegistrationRequest.lastName(), userRepository);
 
         Trainee trainee = new Trainee();
-        String dateOfBirth = traineeRegisterRequest.dateOfBirth();
-        String address = traineeRegisterRequest.address();
+        String dateOfBirth = traineeRegistrationRequest.dateOfBirth();
+        String address = traineeRegistrationRequest.address();
         trainee.setUser(user);
 
         if (Objects.nonNull(dateOfBirth) && !dateOfBirth.isBlank()) {
@@ -76,6 +82,69 @@ public class TraineeService {
                 });
         logger.info("Trainee found successfully. id={}, username={}", traineeEntity.getId(), traineeEntity.getUser().getUsername());
         return TraineeProfileMapper.toTraineeProfileResponse(traineeEntity);
+    }
+
+    @Transactional
+    public TraineeProfileUpdateResponse update(TraineeUpdateRequest traineeUpdateRequest) {
+        String username = traineeUpdateRequest.username();
+        logger.info("Update requested for trainee. Username: {}", username);
+
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsernameWithTrainers(username)
+                .orElseThrow(() -> {
+                    logger.warn("Update failed: Trainee not found. Username: {}", username);
+                    return new NotFoundException("Trainee to update not found with Username: " + username);
+                });
+
+        UserEntity userEntity = traineeEntity.getUser();
+        if (Objects.isNull(userEntity)) {
+            throw new IllegalStateException(
+                    String.format("User entity is null while updating Trainee (username=%s). Data integrity violation during update!", username)
+            );
+        }
+
+        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
+        User oldUser = trainee.getUser();
+
+        User updatedUser = new User();
+        updatedUser.setId(oldUser.getId());
+        updatedUser.setUsername(oldUser.getUsername());
+        updatedUser.setPassword(oldUser.getPassword());
+
+        // Mandatory Fields
+        updatedUser.setFirstName(traineeUpdateRequest.firstName());
+        updatedUser.setLastName(traineeUpdateRequest.lastName());
+        updatedUser.setActive(traineeUpdateRequest.isActive());
+
+        trainee.setUser(updatedUser);
+
+
+        // Optional Fields
+        if (Objects.nonNull(traineeUpdateRequest.dateOfBirth()) && !traineeUpdateRequest.dateOfBirth().isBlank()) {
+            try {
+                trainee.setDateOfBirth(LocalDate.parse(traineeUpdateRequest.dateOfBirth(), DEFAULT_DATE_FORMATTER));
+            } catch (Exception e) {
+                logger.warn("Invalid dateOfBirth provided during updateTraineeProfile: '{}'", traineeUpdateRequest.dateOfBirth());
+                throw new BadRequestException(
+                        String.format("Invalid dateOfBirth format: %s. Expected format: yyyy-MM-dd", traineeUpdateRequest.dateOfBirth())
+                );
+            }
+        }
+
+        if (Objects.nonNull(traineeUpdateRequest.address()) && !traineeUpdateRequest.address().isBlank()) {
+            trainee.setAddress(traineeUpdateRequest.address());
+        }
+
+        TraineeEntity updatedTraineeEntity = TraineeDomainMapper.toTraineeEntity(trainee);
+        updatedTraineeEntity.setId(traineeEntity.getId());
+        updatedTraineeEntity.setTrainers(traineeEntity.getTrainers());
+        updatedTraineeEntity.setTrainings(traineeEntity.getTrainings());
+
+        // Save
+        TraineeEntity saved = traineeRepository.save(updatedTraineeEntity);
+
+
+        logger.info("Trainee profile updated successfully. ID: {}, Username: {}", saved.getId(), saved.getUser().getUsername());
+        return TraineeProfileUpdateMapper.toTraineeProfileUpdateResponse(saved);
     }
 
     /*public TraineeDto findByUsername(String username) {

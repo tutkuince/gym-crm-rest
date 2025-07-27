@@ -1,6 +1,6 @@
 package com.epam.gymcrm.api.payload.response;
 
-public record TraineeRegisterResponse(
+public record TraineeRegistrationResponse(
         String username,
         String password
 ) {

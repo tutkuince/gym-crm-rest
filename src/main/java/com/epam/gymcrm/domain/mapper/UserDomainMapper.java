@@ -15,4 +15,15 @@ public class UserDomainMapper {
         entity.setActive(user.getActive());
         return entity;
     }
+
+    public static User toUser(UserEntity userEntity) {
+        User user = new User();
+        user.setId(userEntity.getId());
+        user.setFirstName(userEntity.getFirstName());
+        user.setLastName(userEntity.getLastName());
+        user.setUsername(userEntity.getUsername());
+        user.setPassword(userEntity.getPassword());
+        user.setActive(userEntity.getActive());
+        return user;
+    }
 }
