@@ -1,18 +1,14 @@
 package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
-import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
-import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
-import com.epam.gymcrm.api.payload.request.TrainerUsernameRequest;
-import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
-import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
+import com.epam.gymcrm.api.payload.request.*;
+import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.db.entity.TraineeEntity;
 import com.epam.gymcrm.db.entity.TrainerEntity;
+import com.epam.gymcrm.db.entity.TrainingEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.TrainingRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
@@ -22,8 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +39,8 @@ class TraineeServiceTest {
     private UserRepository userRepository;
     @Mock
     private TrainerRepository trainerRepository;
+    @Mock
+    private TrainingRepository trainingRepository;
 
     @InjectMocks
     private TraineeService traineeService;
@@ -340,5 +340,53 @@ class TraineeServiceTest {
 
         verify(traineeRepository).findByUserUsernameWithTrainers(traineeUsername);
         verifyNoMoreInteractions(trainerRepository);
+    }
+
+    @Test
+    void getTraineeTrainings_shouldReturnList_whenTraineeExists() {
+        String username = "ali.veli";
+        TraineeEntity traineeEntity = new TraineeEntity();
+        when(traineeRepository.findByUserUsernameWithTrainers(username))
+                .thenReturn(Optional.of(traineeEntity));
+
+        // Filter
+        TraineeTrainingsFilter filter = new TraineeTrainingsFilter(
+                username, "2024-01-01", "2024-07-31", "Ahmet", "Strength"
+        );
+
+        TrainingEntity training = new TrainingEntity();
+        training.setTrainingName("Push Day");
+        training.setTrainingDate(LocalDateTime.of(2024, 6, 20, 0, 0, 0));
+
+        List<TrainingEntity> trainingEntities = List.of(training);
+        when(trainingRepository.findAll(any(Specification.class)))
+                .thenReturn(trainingEntities);
+
+        TraineeTrainingsListResponse response = traineeService.getTraineeTrainings(filter);
+
+        assertNotNull(response);
+        assertEquals(1, response.trainings().size());
+        assertEquals("Push Day", response.trainings().get(0).trainingName());
+
+        verify(traineeRepository).findByUserUsernameWithTrainers(username);
+        verify(trainingRepository).findAll(any(Specification.class));
+    }
+
+    @Test
+    void getTraineeTrainings_shouldThrowNotFoundException_whenTraineeNotExists() {
+        String username = "notfound.user";
+        when(traineeRepository.findByUserUsernameWithTrainers(username))
+                .thenReturn(Optional.empty());
+
+        TraineeTrainingsFilter filter = new TraineeTrainingsFilter(
+                username, null, null, null, null
+        );
+
+        assertThrows(NotFoundException.class, () -> {
+            traineeService.getTraineeTrainings(filter);
+        });
+
+        verify(traineeRepository).findByUserUsernameWithTrainers(username);
+        verifyNoInteractions(trainingRepository);
     }
 }

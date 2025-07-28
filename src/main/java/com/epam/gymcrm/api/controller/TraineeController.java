@@ -2,11 +2,9 @@ package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
+import com.epam.gymcrm.api.payload.request.TraineeTrainingsFilter;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
-import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
-import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
+import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TraineeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -53,6 +51,21 @@ public class TraineeController {
     ) {
         return ResponseEntity.ok(traineeService.updateTraineeTrainers(request));
     }
+
+    @GetMapping("/trainings")
+    public ResponseEntity<TraineeTrainingsListResponse> getTraineeTrainings(
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "periodFrom", required = false) String periodFrom,
+            @RequestParam(name = "periodTo", required = false) String periodTo,
+            @RequestParam(name = "trainerName", required = false) String trainerName,
+            @RequestParam(name = "trainingType", required = false) String trainingType
+    ) {
+        TraineeTrainingsFilter filter = new TraineeTrainingsFilter(
+                username, periodFrom, periodTo, trainerName, trainingType
+        );
+        return ResponseEntity.ok(traineeService.getTraineeTrainings(filter));
+    }
+
 
     /*
     @GetMapping("/search")

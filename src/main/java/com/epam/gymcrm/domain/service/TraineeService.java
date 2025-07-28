@@ -1,23 +1,17 @@
 package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.api.mapper.TraineeProfileMapper;
-import com.epam.gymcrm.api.mapper.TraineeProfileUpdateMapper;
-import com.epam.gymcrm.api.mapper.TraineeResponseMapper;
-import com.epam.gymcrm.api.mapper.TraineeTrainerUpdateMapper;
-import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
-import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
-import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
-import com.epam.gymcrm.api.payload.request.TrainerUsernameRequest;
-import com.epam.gymcrm.api.payload.response.TraineeProfileResponse;
-import com.epam.gymcrm.api.payload.response.TraineeProfileUpdateResponse;
-import com.epam.gymcrm.api.payload.response.TraineeRegistrationResponse;
-import com.epam.gymcrm.api.payload.response.TraineeTrainerUpdateResponse;
+import com.epam.gymcrm.api.mapper.*;
+import com.epam.gymcrm.api.payload.request.*;
+import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.db.entity.TraineeEntity;
 import com.epam.gymcrm.db.entity.TrainerEntity;
+import com.epam.gymcrm.db.entity.TrainingEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.TrainingRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.db.repository.specification.TrainingSpecification;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.model.Trainee;
@@ -28,6 +22,7 @@ import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,13 +40,20 @@ public class TraineeService {
     private final TraineeRepository traineeRepository;
     private final TrainerRepository trainerRepository;
     private final UserRepository userRepository;
+    private final TrainingRepository trainingRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerRepository trainerRepository, UserRepository userRepository) {
+    public TraineeService(
+            TraineeRepository traineeRepository,
+            TrainerRepository trainerRepository,
+            UserRepository userRepository,
+            TrainingRepository trainingRepository,
+            TrainingRepository trainingRepository1) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
         this.userRepository = userRepository;
+        this.trainingRepository = trainingRepository1;
     }
 
     @Transactional
@@ -203,6 +205,39 @@ public class TraineeService {
         logger.info("Updated trainers for trainee: id={}", saved.getId());
 
         return TraineeTrainerUpdateMapper.toResponse(trainerEntities);
+    }
+
+    public TraineeTrainingsListResponse getTraineeTrainings(TraineeTrainingsFilter filter) {
+        logger.info("Trainee trainings requested. username={}, periodFrom={}, periodTo={}, trainerName={}, trainingType={}",
+                filter.username(), filter.periodFrom(), filter.periodTo(), filter.trainerName(), filter.trainingType());
+
+        traineeRepository.findByUserUsernameWithTrainers(filter.username())
+                .orElseThrow(() -> {
+                    logger.warn("Trainee not found while fetching trainings: username={}", filter.username());
+                    return new NotFoundException("Trainee not found: " + filter.username());
+                });
+
+        LocalDate from = null, to = null;
+        if (Objects.nonNull(filter.periodFrom()) && !filter.periodFrom().isBlank()) {
+            logger.debug("Filtering from date: {}", filter.periodFrom());
+            from = LocalDate.parse(filter.periodFrom(), DEFAULT_DATE_FORMATTER);
+        }
+        if (Objects.nonNull(filter.periodTo()) && !filter.periodTo().isBlank()) {
+            logger.debug("Filtering to date: {}", filter.periodTo());
+            to = LocalDate.parse(filter.periodTo(), DEFAULT_DATE_FORMATTER);
+        }
+
+        Specification<TrainingEntity> specification = TrainingSpecification.traineeUsername(filter.username())
+                .and(TrainingSpecification.fromDate(from))
+                .and(TrainingSpecification.toDate(to))
+                .and(TrainingSpecification.trainerName(filter.trainerName()))
+                .and(TrainingSpecification.trainingType(filter.trainingType()));
+
+        List<TrainingEntity> trainings = trainingRepository.findAll(specification);
+
+        logger.info("Trainee trainings fetch completed. username={}, trainingsCount={}", filter.username(), trainings.size());
+
+        return TraineeTrainingsListResponseMapper.toTraineeTrainingsListResponse(trainings);
     }
 
     /*public TraineeDto findByUsername(String username) {

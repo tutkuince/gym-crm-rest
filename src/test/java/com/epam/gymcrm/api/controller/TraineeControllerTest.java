@@ -135,13 +135,13 @@ class TraineeControllerTest {
         mockMvc.perform(put("/api/v1/trainees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                            "username": "ali.veli",
-                            "firstName": "Ali",
-                            "lastName": "Veli",
-                            "isActive": true
-                        }
-                        """)
+                                {
+                                    "username": "ali.veli",
+                                    "firstName": "Ali",
+                                    "lastName": "Veli",
+                                    "isActive": true
+                                }
+                                """)
                 )
                 .andExpect(status().isNotFound());
     }
@@ -154,14 +154,14 @@ class TraineeControllerTest {
         mockMvc.perform(put("/api/v1/trainees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                            "username": "ali.veli",
-                            "firstName": "Ali",
-                            "lastName": "Veli",
-                            "dateOfBirth": "not-a-date",
-                            "isActive": true
-                        }
-                        """)
+                                {
+                                    "username": "ali.veli",
+                                    "firstName": "Ali",
+                                    "lastName": "Veli",
+                                    "dateOfBirth": "not-a-date",
+                                    "isActive": true
+                                }
+                                """)
                 )
                 .andExpect(status().isBadRequest());
     }
@@ -195,14 +195,14 @@ class TraineeControllerTest {
         mockMvc.perform(put("/api/v1/trainees/trainers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                    {
-                        "traineeUsername": "ali.veli",
-                        "trainers": [
-                            { "trainerUsername": "trainer1" },
-                            { "trainerUsername": "trainer2" }
-                        ]
-                    }
-                """)
+                                    {
+                                        "traineeUsername": "ali.veli",
+                                        "trainers": [
+                                            { "trainerUsername": "trainer1" },
+                                            { "trainerUsername": "trainer2" }
+                                        ]
+                                    }
+                                """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.trainers.length()").value(2))
@@ -222,14 +222,54 @@ class TraineeControllerTest {
         mockMvc.perform(put("/api/v1/trainees/trainers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                    {
-                        "traineeUsername": "ali.veli",
-                        "trainers": [
-                            { "trainerUsername": "trainer1" }
-                        ]
-                    }
-                """)
+                                    {
+                                        "traineeUsername": "ali.veli",
+                                        "trainers": [
+                                            { "trainerUsername": "trainer1" }
+                                        ]
+                                    }
+                                """)
                 )
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getTraineeTrainings_shouldReturn200AndTrainingsList() throws Exception {
+        TraineeTrainingInfo trainingInfo = new TraineeTrainingInfo(
+                "Push Day", "2024-06-20T00:00:00", "Strength", 0, null
+        );
+        TraineeTrainingsListResponse response = new TraineeTrainingsListResponse(
+                List.of(trainingInfo)
+        );
+
+        when(traineeService.getTraineeTrainings(any())).thenReturn(response);
+
+        mockMvc.perform(get("/api/v1/trainees/trainings")
+                        .param("username", "ali.veli")
+                        .param("periodFrom", "2024-01-01")
+                        .param("periodTo", "2024-07-31")
+                        .param("trainerName", "Ahmet")
+                        .param("trainingType", "Strength")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.trainings.length()").value(1))
+                .andExpect(jsonPath("$.trainings[0].trainingName").value("Push Day"))
+                .andExpect(jsonPath("$.trainings[0].trainingDate").value("2024-06-20T00:00:00"))
+                .andExpect(jsonPath("$.trainings[0].trainingType").value("Strength"));
+
+        verify(traineeService).getTraineeTrainings(any());
+    }
+
+    @Test
+    void getTraineeTrainings_shouldReturn404_whenTraineeNotFound() throws Exception {
+        when(traineeService.getTraineeTrainings(any()))
+                .thenThrow(new NotFoundException("Trainee not found: notfound.user"));
+
+        mockMvc.perform(get("/api/v1/trainees/trainings")
+                        .param("username", "notfound.user")
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Trainee not found")));
     }
 }

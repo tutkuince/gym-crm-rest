@@ -86,7 +86,7 @@ public class TrainingService {
         logger.info("Training created: id={}, name={}", savedTraining.getId(), savedTraining.getTrainingName());
         return TrainingMapper.toTrainingDto(savedTraining);
     }*/
-
+/*
     public TrainingDto findById(Long id) {
         logger.info("Finding training by id: {}", id);
         Training training = trainingRepository.findById(id)
@@ -103,7 +103,7 @@ public class TrainingService {
         return trainingRepository.findAll().stream()
                 .map(TrainingMapper::toTrainingDto)
                 .toList();
-    }
+    }*/
 
     /*@Transactional
     public void update(TrainingDto dto) {
@@ -165,7 +165,7 @@ public class TrainingService {
         logger.info("Training updated: id={}, name={}", existing.getId(), existing.getTrainingName());
     }*/
 
-    public List<Training> getTraineeTrainingsByCriteria(
+    /*public List<Training> getTraineeTrainingsByCriteria(
             String traineeUsername,
             LocalDate from,
             LocalDate to,
@@ -192,6 +192,6 @@ public class TrainingService {
                 .and(TrainingSpecification.toDate(to))
                 .and(TrainingSpecification.traineeName(traineeName));
         return trainingRepository.findAll(spec);
-    }
+    }*/
 
 }
