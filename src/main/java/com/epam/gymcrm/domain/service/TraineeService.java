@@ -113,19 +113,14 @@ public class TraineeService {
         }
 
         Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
-        User oldUser = trainee.getUser();
-
-        User updatedUser = new User();
-        updatedUser.setId(oldUser.getId());
-        updatedUser.setUsername(oldUser.getUsername());
-        updatedUser.setPassword(oldUser.getPassword());
+        User user = trainee.getUser();
 
         // Mandatory Fields
-        updatedUser.setFirstName(traineeUpdateRequest.firstName());
-        updatedUser.setLastName(traineeUpdateRequest.lastName());
-        updatedUser.setActive(traineeUpdateRequest.isActive());
+        user.setFirstName(traineeUpdateRequest.firstName());
+        user.setLastName(traineeUpdateRequest.lastName());
+        user.setActive(traineeUpdateRequest.isActive());
 
-        trainee.setUser(updatedUser);
+        trainee.setUser(user);
 
 
         // Optional Fields
@@ -267,123 +262,4 @@ public class TraineeService {
 
         logger.info("Trainee activated successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
     }
-
-    /*public TraineeDto findByUsername(String username) {
-        logger.info("Request to find trainee by username received. Username: {}", username);
-        Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(username)
-                .orElseThrow(() -> {
-                    logger.warn("Find trainee by username failed: No trainee found with username: {}", username);
-                    return new NotFoundException("Find trainee by username failed: No trainee found with username: " + username);
-                });
-        logger.info("Trainee found successfully. id={}, username={}", trainee.getId(), trainee.getUser().getUsername());
-        return TraineeMapper.toTraineeDto(trainee);
-    }*/
-
-    /*
-
-    public boolean isTraineeCredentialsValid(String username, String password) {
-        logger.info("Login attempt for trainee. Username: {}", username);
-        Trainee trainee = traineeRepository.findByUserUsername(username)
-                .orElseThrow(() -> {
-                    logger.warn("Login failed: No Trainee found with username '{}'. Credentials: [username='{}', password='***']", username, username);
-                    return new NotFoundException("Login failed: No Trainee found with username '" + username + "'");
-                });
-
-        if (!trainee.getUser().getPassword().equals(password)) {
-            logger.warn("Login failed: Invalid password for Trainee with username '{}'. Provided password: '***'", username);
-            throw new InvalidCredentialsException("Login failed: Invalid password for Trainee with username '" + username + "'");
-        }
-
-        logger.info("Login success: Trainee '{}' authenticated successfully.", username);
-        return Boolean.TRUE;
-    }
-
-    public TraineeDto findByUsername(String username) {
-        logger.info("Request to find trainee by username received. Username: {}", username);
-        Trainee trainee = traineeRepository.findByUserUsernameWithTrainers(username)
-                .orElseThrow(() -> {
-                    logger.warn("Find trainee by username failed: No trainee found with username: {}", username);
-                    return new NotFoundException("Find trainee by username failed: No trainee found with username: " + username);
-                });
-        logger.info("Trainee found successfully. id={}, username={}", trainee.getId(), trainee.getUser().getUsername());
-        return TraineeMapper.toTraineeDto(trainee);
-    }
-
-    @Transactional
-    public void changeTraineePassword(String username, String oldPassword, String newPassword) {
-        logger.info("Request to change password received for trainee. Username: {}", username);
-
-        // Find trainee by username
-        Trainee trainee = traineeRepository.findByUserUsername(username)
-                .orElseThrow(() -> {
-                    logger.warn("Password change failed: Trainee not found. Username: {}", username);
-                    return new NotFoundException("Password change failed: Trainee not found with username: " + username);
-                });
-
-        // Check if old password matches
-        if (!trainee.getUser().getPassword().equals(oldPassword)) {
-            logger.warn("Password change failed: Invalid old password provided. Username: {}", username);
-            throw new InvalidCredentialsException("Password change failed: Invalid old password for trainee with username: " + username);
-        }
-
-        // Set new password
-        trainee.getUser().setPassword(newPassword);
-
-        // Save trainee
-        traineeRepository.save(trainee);
-        logger.info("Password changed successfully for trainee. Username: {}", username);
-    }
-
-    @Transactional
-    public void activateTrainee(Long id) {
-        logger.info("Received request to activate trainee. id={}", id);
-
-        Trainee trainee = traineeRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.warn("Cannot activate trainee. Trainee not found for activation. id={}", id);
-                    return new NotFoundException("Trainee to activate not found. id=" + id);
-                });
-
-        if (Boolean.TRUE.equals(trainee.getUser().getActive())) {
-            logger.warn("Trainee activation skipped. Trainee already active. id={}, username={}", id, trainee.getUser().getUsername());
-            throw new IllegalStateException("Trainee is already active.");
-        }
-
-        trainee.getUser().setActive(Boolean.TRUE);
-        traineeRepository.save(trainee);
-        logger.info("Trainee activated successfully. id={}, username={}", id, trainee.getUser().getUsername());
-    }
-
-    @Transactional
-    public void deactivateTrainee(Long id) {
-        logger.info("Received request to deactivate trainee. id={}", id);
-
-        Trainee trainee = traineeRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.warn("Cannot deactivate trainee. Trainee not found for deactivation. id={}", id);
-                    return new NotFoundException("Trainee to deactivate not found. id=" + id);
-                });
-
-        if (Boolean.FALSE.equals(trainee.getUser().getActive())) {
-            logger.warn("Trainee deactivation skipped. Trainee already inactive. id={}, username={}", id, trainee.getUser().getUsername());
-            throw new IllegalStateException("Trainee is already inactive.");
-        }
-        trainee.getUser().setActive(Boolean.FALSE);
-        traineeRepository.save(trainee);
-        logger.info("Trainee deactivated successfully. id={}, username={}", id, trainee.getUser().getUsername());
-    }
-
-    @Transactional
-    public void deleteTraineeByUsername(String username) {
-        logger.info("Delete request received for trainee. username={}", username);
-        Trainee trainee = traineeRepository.findByUserUsername(username)
-                .orElseThrow(() -> {
-                    logger.warn("Trainee not found for deletion. username={}", username);
-                    return new NotFoundException("Trainee not found with username: " + username);
-                });
-        traineeRepository.delete(trainee);
-        logger.info("Trainee deleted successfully. username={}", username);
-    }
-
-    */
 }
