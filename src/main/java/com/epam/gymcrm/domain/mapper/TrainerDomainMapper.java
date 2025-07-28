@@ -1,5 +1,6 @@
 package com.epam.gymcrm.domain.mapper;
 
+import com.epam.gymcrm.api.payload.response.UnassignedActiveTrainerResponse;
 import com.epam.gymcrm.db.entity.TraineeEntity;
 import com.epam.gymcrm.db.entity.TrainerEntity;
 import com.epam.gymcrm.db.entity.TrainingEntity;
@@ -70,4 +71,12 @@ public class TrainerDomainMapper {
         return trainer;
     }
 
+    public static UnassignedActiveTrainerResponse toUnassignedActiveTrainerResponse(TrainerEntity trainerEntity) {
+        return new UnassignedActiveTrainerResponse(
+                trainerEntity.getUser().getUsername(),
+                trainerEntity.getUser().getFirstName(),
+                trainerEntity.getUser().getLastName(),
+                trainerEntity.getSpecialization()
+        );
+    }
 }

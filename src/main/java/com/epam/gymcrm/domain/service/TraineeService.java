@@ -262,4 +262,26 @@ public class TraineeService {
 
         logger.info("Trainee activated successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
     }
+
+    public UnassignedActiveTrainerListResponse getUnassignedActiveTrainersForTrainee(String username) {
+        logger.info("Fetching unassigned active trainers for trainee. username={}", username);
+
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsername(username)
+                .orElseThrow(() -> {
+                    logger.warn("Unassigned active trainers fetch failed: Trainee not found. username={}", username);
+                    return new NotFoundException("Trainee not found: " + username);
+                });
+
+        Long traineeEntityId = traineeEntity.getId();
+        List<TrainerEntity> unassignedTrainers = trainerRepository.findUnassignedTrainersForTrainee(traineeEntityId);
+        logger.info("Unassigned trainers count for trainee: {}", unassignedTrainers.size());
+
+        List<UnassignedActiveTrainerResponse> responses = unassignedTrainers.stream()
+                .map(TrainerDomainMapper::toUnassignedActiveTrainerResponse)
+                .toList();
+
+        logger.info("Unassigned active trainers fetched for trainee: id={}, unassignedCount={}", traineeEntityId, responses.size());
+
+        return UnassignedActiveTrainerListResponseMapper.toResponse(responses);
+    }
 }

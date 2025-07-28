@@ -313,4 +313,42 @@ class TraineeControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void getUnassignedActiveTrainersForTrainee_shouldReturnTrainerList() throws Exception {
+        // Arrange
+        String username = "ali.veli";
+        List<UnassignedActiveTrainerResponse> trainers = List.of(
+                new UnassignedActiveTrainerResponse("mehmet.kaya", "Mehmet", "Kaya", "Cardio"),
+                new UnassignedActiveTrainerResponse("ayse.dogan", "Ayşe", "Doğan", "Yoga")
+        );
+        UnassignedActiveTrainerListResponse response = new UnassignedActiveTrainerListResponse(trainers);
+
+        when(traineeService.getUnassignedActiveTrainersForTrainee(username)).thenReturn(response);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/trainees/unassigned-trainers")
+                        .param("username", username))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.trainers.length()").value(2))
+                .andExpect(jsonPath("$.trainers[0].username").value("mehmet.kaya"))
+                .andExpect(jsonPath("$.trainers[0].firstName").value("Mehmet"))
+                .andExpect(jsonPath("$.trainers[1].username").value("ayse.dogan"))
+                .andExpect(jsonPath("$.trainers[1].specialization").value("Yoga"));
+
+        verify(traineeService).getUnassignedActiveTrainersForTrainee(username);
+    }
+
+    @Test
+    void getUnassignedActiveTrainersForTrainee_shouldReturn404_whenTraineeNotFound() throws Exception {
+        // Arrange
+        String username = "not.found";
+        when(traineeService.getUnassignedActiveTrainersForTrainee(username))
+                .thenThrow(new NotFoundException("Trainee not found: " + username));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/trainees/unassigned-trainers")
+                        .param("username", username))
+                .andExpect(status().isNotFound());
+    }
 }

@@ -68,4 +68,11 @@ public class TraineeController {
         traineeService.updateActivateStatus(updateActiveStatusRequest);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/unassigned-trainers")
+    public ResponseEntity<UnassignedActiveTrainerListResponse> getUnassignedTrainersForTrainee(
+            @RequestParam(name = "username") String username
+    ) {
+        return ResponseEntity.ok(traineeService.getUnassignedActiveTrainersForTrainee(username));
+    }
 }

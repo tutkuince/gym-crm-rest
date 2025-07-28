@@ -490,4 +490,52 @@ class TraineeServiceTest {
         verify(traineeRepository).findByUserUsername(username);
         verify(traineeRepository, never()).save(any());
     }
+
+    @Test
+    void getUnassignedActiveTrainersForTrainee_shouldReturnList_whenTraineeExists() {
+        String username = "ali.veli";
+        Long traineeId = 1L;
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setId(traineeId);
+
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.of(traineeEntity));
+
+        TrainerEntity trainer1 = new TrainerEntity();
+        UserEntity user1 = new UserEntity();
+        user1.setUsername("mehmet.kaya");
+        user1.setFirstName("Mehmet");
+        user1.setLastName("Kaya");
+        user1.setActive(true);
+        trainer1.setUser(user1);
+        trainer1.setSpecialization("Cardio");
+
+        List<TrainerEntity> trainers = List.of(trainer1);
+        when(trainerRepository.findUnassignedTrainersForTrainee(traineeId)).thenReturn(trainers);
+
+        UnassignedActiveTrainerListResponse response =
+                traineeService.getUnassignedActiveTrainersForTrainee(username);
+
+        assertNotNull(response);
+        assertEquals(1, response.trainers().size());
+        assertEquals("mehmet.kaya", response.trainers().get(0).username());
+        assertEquals("Cardio", response.trainers().get(0).specialization());
+
+        verify(traineeRepository).findByUserUsername(username);
+        verify(trainerRepository).findUnassignedTrainersForTrainee(traineeId);
+    }
+
+    @Test
+    void getUnassignedActiveTrainersForTrainee_shouldThrowNotFound_whenTraineeNotExists() {
+        String username = "notfound.user";
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> {
+            traineeService.getUnassignedActiveTrainersForTrainee(username);
+        });
+
+        verify(traineeRepository).findByUserUsername(username);
+        verifyNoInteractions(trainerRepository);
+    }
+
 }
