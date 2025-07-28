@@ -48,12 +48,11 @@ public class TraineeService {
             TraineeRepository traineeRepository,
             TrainerRepository trainerRepository,
             UserRepository userRepository,
-            TrainingRepository trainingRepository,
-            TrainingRepository trainingRepository1) {
+            TrainingRepository trainingRepository) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
         this.userRepository = userRepository;
-        this.trainingRepository = trainingRepository1;
+        this.trainingRepository = trainingRepository;
     }
 
     @Transactional
@@ -238,6 +237,35 @@ public class TraineeService {
         logger.info("Trainee trainings fetch completed. username={}, trainingsCount={}", filter.username(), trainings.size());
 
         return TraineeTrainingsListResponseMapper.toTraineeTrainingsListResponse(trainings);
+    }
+
+    @Transactional
+    public void updateActivateStatus(UpdateActiveStatusRequest updateActiveStatusRequest) {
+        String username = updateActiveStatusRequest.username();
+        logger.info("Received request to activate trainee. username={}", username);
+
+        TraineeEntity traineeEntity = traineeRepository.findByUserUsername(username)
+                .orElseThrow(() -> {
+                    logger.warn("Cannot activate trainee. Trainee not found for activation. username={}", username);
+                    return new NotFoundException("Trainee to activate not found. username=" + username);
+                });
+
+        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
+
+        try {
+            trainee.getUser().setActive(updateActiveStatusRequest.isActive());
+        } catch (IllegalStateException e) {
+            logger.warn("Activation SKIPPED: Trainee already active. username={}", username);
+            throw e;
+        }
+        TraineeEntity updated = TraineeDomainMapper.toTraineeEntity(trainee);
+        updated.setId(traineeEntity.getId());
+        updated.setTrainers(traineeEntity.getTrainers());
+        updated.setTrainings(traineeEntity.getTrainings());
+
+        TraineeEntity saved = traineeRepository.save(updated);
+
+        logger.info("Trainee activated successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
     }
 
     /*public TraineeDto findByUsername(String username) {

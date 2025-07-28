@@ -3,6 +3,7 @@ package com.epam.gymcrm.api.controller;
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
+import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TraineeService;
 import com.epam.gymcrm.exception.BadRequestException;
@@ -271,5 +272,45 @@ class TraineeControllerTest {
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Trainee not found")));
+    }
+
+    @Test
+    void updateActiveStatus_shouldReturn200_whenSuccess() throws Exception {
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("ali.veli", true);
+
+        doNothing().when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+
+        mockMvc.perform(patch("/api/v1/trainees/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        verify(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+    }
+
+    @Test
+    void updateActiveStatus_shouldReturn404_whenNotFound() throws Exception {
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("notfound.user", true);
+
+        doThrow(new com.epam.gymcrm.exception.NotFoundException("Trainee not found"))
+                .when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+
+        mockMvc.perform(patch("/api/v1/trainees/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateActiveStatus_shouldReturn400_whenAlreadyActiveOrInactive() throws Exception {
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("ali.veli", false);
+
+        doThrow(new IllegalStateException("User is already inactive."))
+                .when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+
+        mockMvc.perform(patch("/api/v1/trainees/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict());
     }
 }

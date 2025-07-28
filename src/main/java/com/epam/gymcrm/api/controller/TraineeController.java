@@ -1,9 +1,6 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
-import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
-import com.epam.gymcrm.api.payload.request.TraineeTrainingsFilter;
-import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
+import com.epam.gymcrm.api.payload.request.*;
 import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TraineeService;
 import jakarta.validation.Valid;
@@ -66,6 +63,11 @@ public class TraineeController {
         return ResponseEntity.ok(traineeService.getTraineeTrainings(filter));
     }
 
+    @PatchMapping("/status")
+    public ResponseEntity<Void> activateTrainee(@RequestBody @Valid UpdateActiveStatusRequest updateActiveStatusRequest) {
+        traineeService.updateActivateStatus(updateActiveStatusRequest);
+        return ResponseEntity.ok().build();
+    }
 
     /*
     @GetMapping("/search")

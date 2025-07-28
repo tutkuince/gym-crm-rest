@@ -389,4 +389,105 @@ class TraineeServiceTest {
         verify(traineeRepository).findByUserUsernameWithTrainers(username);
         verifyNoInteractions(trainingRepository);
     }
+
+    @Test
+    void updateActiveStatus_shouldActivate_whenInactive() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, true);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setActive(false);
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setUser(userEntity);
+
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.of(traineeEntity));
+        when(traineeRepository.save(any(TraineeEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // act & assert
+        assertDoesNotThrow(() -> traineeService.updateActivateStatus(request));
+        verify(traineeRepository).findByUserUsername(username);
+        verify(traineeRepository).save(any(TraineeEntity.class));
+    }
+
+    @Test
+    void updateActiveStatus_shouldDeactivate_whenActive() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, false);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setActive(true);
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setUser(userEntity);
+
+        when(traineeRepository.findByUserUsername(username))
+                .thenReturn(Optional.of(traineeEntity));
+        when(traineeRepository.save(any(TraineeEntity.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        assertDoesNotThrow(() -> traineeService.updateActivateStatus(request));
+
+        verify(traineeRepository).findByUserUsername(username);
+        verify(traineeRepository).save(any(TraineeEntity.class));
+    }
+
+    @Test
+    void updateActiveStatus_shouldThrowNotFound_whenTraineeNotFound() {
+        String username = "nonexistent";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, true);
+
+        when(traineeRepository.findByUserUsername(username)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () ->
+                traineeService.updateActivateStatus(request)
+        );
+        assertTrue(ex.getMessage().toLowerCase().contains("not found"));
+        verify(traineeRepository).findByUserUsername(username);
+        verify(traineeRepository, never()).save(any());
+    }
+
+    @Test
+    void updateActiveStatus_shouldThrowIllegalState_whenAlreadyActive() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, true);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setActive(true);
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setUser(userEntity);
+
+        when(traineeRepository.findByUserUsername(username))
+                .thenReturn(Optional.of(traineeEntity));
+
+        IllegalStateException ex = assertThrows(IllegalStateException.class, () ->
+                traineeService.updateActivateStatus(request)
+        );
+        assertTrue(ex.getMessage().toLowerCase().contains("already active"));
+        verify(traineeRepository).findByUserUsername(username);
+        verify(traineeRepository, never()).save(any());
+    }
+
+    @Test
+    void updateActiveStatus_shouldThrowIllegalState_whenAlreadyInactive() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, false);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setActive(false);
+
+        TraineeEntity traineeEntity = new TraineeEntity();
+        traineeEntity.setUser(userEntity);
+
+        when(traineeRepository.findByUserUsername(username))
+                .thenReturn(Optional.of(traineeEntity));
+
+        IllegalStateException ex = assertThrows(IllegalStateException.class, () ->
+                traineeService.updateActivateStatus(request)
+        );
+        assertTrue(ex.getMessage().toLowerCase().contains("already inactive"));
+        verify(traineeRepository).findByUserUsername(username);
+        verify(traineeRepository, never()).save(any());
+    }
 }

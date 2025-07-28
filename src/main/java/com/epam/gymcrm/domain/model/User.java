@@ -59,7 +59,11 @@ public class User {
     }
 
     public void setActive(Boolean active) {
-        isActive = active;
+        if (Boolean.TRUE.equals(this.isActive) && active)
+            throw new IllegalStateException("User is already active.");
+        if (Boolean.FALSE.equals(this.isActive) && !active)
+            throw new IllegalStateException("User is already inactive.");
+        this.isActive = active;
     }
 
     @Override
