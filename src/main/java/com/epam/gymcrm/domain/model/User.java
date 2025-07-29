@@ -74,6 +74,13 @@ public class User {
         return Boolean.TRUE.equals(this.isActive);
     }
 
+    public void changePassword(String newPassword) {
+        if (Objects.isNull(newPassword) || newPassword.isBlank()) {
+            throw new IllegalArgumentException("New password cannot be blank");
+        }
+        this.password = newPassword;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

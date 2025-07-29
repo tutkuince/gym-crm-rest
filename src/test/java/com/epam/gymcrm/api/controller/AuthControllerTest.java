@@ -1,23 +1,29 @@
 package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.payload.request.ChangePasswordRequest;
 import com.epam.gymcrm.api.payload.request.LoginRequest;
 import com.epam.gymcrm.domain.service.AuthService;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
+import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +37,8 @@ class AuthControllerTest {
 
     @InjectMocks
     private AuthController authController;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -91,5 +99,51 @@ class AuthControllerTest {
                         .param("password", "pass1123")
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void changePassword_shouldReturn200_whenSuccessful() throws Exception {
+        ChangePasswordRequest request = new ChangePasswordRequest("ali.veli", "old-pass", "new-pass");
+        doNothing().when(authService).changePassword(any(ChangePasswordRequest.class));
+
+        mockMvc.perform(put("/api/v1/auth/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void changePassword_shouldReturn404_whenUserNotFound() throws Exception {
+        ChangePasswordRequest request = new ChangePasswordRequest("notfound", "old-pass", "new-pass");
+        doThrow(new NotFoundException("User not found")).when(authService).changePassword(any(ChangePasswordRequest.class));
+
+        mockMvc.perform(put("/api/v1/auth/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(containsString("User not found")));
+    }
+
+    @Test
+    void changePassword_shouldReturn400_whenOldPasswordInvalid() throws Exception {
+        ChangePasswordRequest request = new ChangePasswordRequest("ali.veli", "wrong-old", "new-pass");
+        doThrow(new BadRequestException("Invalid old password")).when(authService).changePassword(any(ChangePasswordRequest.class));
+
+        mockMvc.perform(put("/api/v1/auth/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(containsString("Invalid old password")));
+    }
+
+    @Test
+    void changePassword_shouldReturn400_whenNewPasswordBlank() throws Exception {
+        ChangePasswordRequest request = new ChangePasswordRequest("ali.veli", "old-pass", " ");
+
+        mockMvc.perform(put("/api/v1/auth/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(containsString("New password cannot be blank")));
     }
 }
