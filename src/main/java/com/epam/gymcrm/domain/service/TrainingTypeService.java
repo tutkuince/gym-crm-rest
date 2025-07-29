@@ -2,13 +2,10 @@ package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.mapper.TrainingTypeResponseMapper;
 import com.epam.gymcrm.api.payload.response.TrainingTypeListResponse;
-import com.epam.gymcrm.api.payload.response.TrainingTypeResponse;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import com.epam.gymcrm.domain.mapper.TrainingTypeDomainMapper;
 import com.epam.gymcrm.domain.model.TrainingType;
-import com.epam.gymcrm.dto.TrainingTypeDto;
-import com.epam.gymcrm.mapper.TrainingTypeMapper;
-import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

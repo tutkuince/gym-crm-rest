@@ -2,11 +2,7 @@ package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.response.TrainingTypeListResponse;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
-import com.epam.gymcrm.domain.model.TrainingType;
-import com.epam.gymcrm.domain.service.TrainingTypeService;
-import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.db.repository.TrainingTypeRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +35,7 @@ class TrainingTypeServiceTest {
         entity2.setTrainingTypeName("Strength");
 
         List<TrainingTypeEntity> entities = List.of(
-               entity1, entity2
+                entity1, entity2
         );
         when(trainingTypeRepository.findAll()).thenReturn(entities);
 

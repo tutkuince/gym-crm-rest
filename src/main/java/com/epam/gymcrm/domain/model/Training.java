@@ -16,6 +16,15 @@ public class Training {
     public Training() {
     }
 
+    public Training(Trainee trainee, Trainer trainer, String trainingName, TrainingType trainingType, LocalDateTime trainingDate, int trainingDuration) {
+        this.trainee = trainee;
+        this.trainer = trainer;
+        this.trainingName = trainingName;
+        this.trainingType = trainingType;
+        this.trainingDate = trainingDate;
+        this.trainingDuration = trainingDuration;
+    }
+
     public Long getId() {
         return id;
     }

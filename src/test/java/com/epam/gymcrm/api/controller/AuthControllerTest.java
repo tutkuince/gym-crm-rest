@@ -5,7 +5,6 @@ import com.epam.gymcrm.api.payload.request.LoginRequest;
 import com.epam.gymcrm.domain.service.AuthService;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
-import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
