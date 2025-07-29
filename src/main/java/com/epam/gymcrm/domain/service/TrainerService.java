@@ -1,7 +1,9 @@
 package com.epam.gymcrm.domain.service;
 
+import com.epam.gymcrm.api.mapper.TrainerProfileResponseMapper;
 import com.epam.gymcrm.api.mapper.TrainerRegistrationResponseMapper;
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
 import com.epam.gymcrm.db.entity.TrainerEntity;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
@@ -66,6 +68,18 @@ public class TrainerService {
         logger.info("Trainer registered successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
 
         return TrainerRegistrationResponseMapper.toResponse(saved);
+    }
+
+    public TrainerProfileResponse getTrainerProfile(String username) {
+        logger.info("Trainer profile request received. username={}", username);
+
+        TrainerEntity trainerEntity = trainerRepository.findByUserUsernameWithTrainees(username)
+                .orElseThrow(() -> {
+                    logger.warn("Trainer not found for get trainee profile. username={}", username);
+                    return new NotFoundException("Trainer not found with username: " + username);
+                });
+
+        return TrainerProfileResponseMapper.toResponse(trainerEntity);
     }
 
     /*

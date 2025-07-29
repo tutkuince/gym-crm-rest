@@ -1,6 +1,7 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
 import com.epam.gymcrm.dto.PasswordChangeRequestDto;
 import com.epam.gymcrm.dto.TrainerDto;
@@ -26,6 +27,11 @@ public class TrainerController {
     public ResponseEntity<TrainerRegistrationResponse> registerTrainer(
             @Valid @RequestBody TrainerRegistrationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(trainerService.createTrainer(request));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<TrainerProfileResponse> getTrainerProfile(@RequestParam(name = "username") String username) {
+        return ResponseEntity.ok(trainerService.getTrainerProfile(username));
     }
 
     /*
