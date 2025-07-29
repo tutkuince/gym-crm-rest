@@ -56,6 +56,13 @@ public class Trainer {
         this.trainees = trainees;
     }
 
+    public void updateProfile(String firstName, String lastName, boolean isActive) {
+        if (Objects.isNull(this.user)) {
+            throw new IllegalStateException("Trainer: User is null. Cannot update profile.");
+        }
+        this.user.updateProfile(firstName, lastName, isActive);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

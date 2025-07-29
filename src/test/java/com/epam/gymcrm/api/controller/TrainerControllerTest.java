@@ -1,8 +1,10 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.domain.service.TrainerService;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
@@ -19,12 +21,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
+import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -78,7 +81,7 @@ class TrainerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Specialization")));
+                .andExpect(jsonPath("$.message").value(containsString("Specialization")));
     }
 
     @Test
@@ -92,7 +95,7 @@ class TrainerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("User cannot be both trainer and trainee")));
+                .andExpect(jsonPath("$.message").value(containsString("User cannot be both trainer and trainee")));
     }
 
     @Test
@@ -125,7 +128,77 @@ class TrainerControllerTest {
         mockMvc.perform(get("/api/v1/trainers/profile")
                         .param("username", "notfound"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Trainer not found")));
+                .andExpect(jsonPath("$.message").value(containsString("Trainer not found")));
     }
 
+    @Test
+    void updateTrainerProfile_shouldReturn200AndUpdatedProfile() throws Exception {
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("ali.veli");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        UpdateTrainerProfileResponse response = new UpdateTrainerProfileResponse(
+                "ali.veli", "Mehmet", "Kaya", 1L, true, List.of() // trainees boş, detayını testten çıkar
+        );
+
+        when(trainerService.updateTrainerProfile(any(UpdateTrainerProfileRequest.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/v1/trainers/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("ali.veli"))
+                .andExpect(jsonPath("$.firstName").value("Mehmet"))
+                .andExpect(jsonPath("$.lastName").value("Kaya"))
+                .andExpect(jsonPath("$.specialization").value(1L))
+                .andExpect(jsonPath("$.isActive").value(true));
+
+        verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
+    }
+
+    @Test
+    void updateTrainerProfile_shouldReturn404_whenTrainerNotFound() throws Exception {
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("notfound");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        when(trainerService.updateTrainerProfile(any(UpdateTrainerProfileRequest.class)))
+                .thenThrow(new NotFoundException("Trainer not found with username: notfound"));
+
+        mockMvc.perform(put("/api/v1/trainers/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Trainer not found")));
+
+        verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
+    }
+
+    @Test
+    void updateTrainerProfile_shouldReturn409_whenUserIsNull() throws Exception {
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("ali.veli");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        when(trainerService.updateTrainerProfile(any(UpdateTrainerProfileRequest.class)))
+                .thenThrow(new IllegalStateException("Trainer: User is null. Cannot update profile."));
+
+        mockMvc.perform(put("/api/v1/trainers/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("User is null")));
+
+        verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
+    }
 }

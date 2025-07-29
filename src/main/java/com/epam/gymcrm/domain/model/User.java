@@ -81,6 +81,12 @@ public class User {
         this.password = newPassword;
     }
 
+    public void updateProfile(String firstName, String lastName, boolean isActive) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isActive = isActive;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,20 +1,18 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
-import com.epam.gymcrm.dto.PasswordChangeRequestDto;
-import com.epam.gymcrm.dto.TrainerDto;
+import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.domain.service.TrainerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/trainers")
+@RequestMapping(value = "/api/v1/trainers", produces = "application/json")
 public class TrainerController {
 
     private final TrainerService trainerService;
@@ -32,6 +30,11 @@ public class TrainerController {
     @GetMapping("/profile")
     public ResponseEntity<TrainerProfileResponse> getTrainerProfile(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(trainerService.getTrainerProfile(username));
+    }
+
+    @PutMapping("/profile")
+    public UpdateTrainerProfileResponse updateTrainerProfile(@Valid @RequestBody UpdateTrainerProfileRequest request) {
+        return trainerService.updateTrainerProfile(request);
     }
 
     /*

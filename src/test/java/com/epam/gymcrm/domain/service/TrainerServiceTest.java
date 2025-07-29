@@ -1,8 +1,10 @@
 package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.db.entity.TrainerEntity;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
@@ -154,5 +156,73 @@ class TrainerServiceTest {
         assertTrue(ex.getMessage().contains("Trainer not found with username"));
 
         verify(trainerRepository).findByUserUsernameWithTrainees("nonexistent");
+    }
+
+    @Test
+    void updateTrainerProfile_shouldUpdateProfile_whenValidRequest() {
+        // Arrange
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername("ali.veli");
+        userEntity.setFirstName("Ali");
+        userEntity.setLastName("Veli");
+        userEntity.setActive(false);
+
+        TrainerEntity trainerEntity = new TrainerEntity();
+        trainerEntity.setId(1L);
+        trainerEntity.setUser(userEntity);
+
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("ali.veli");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        when(trainerRepository.findByUserUsernameWithTrainees("ali.veli"))
+                .thenReturn(Optional.of(trainerEntity));
+        when(trainerRepository.save(any())).thenReturn(trainerEntity);
+
+        UpdateTrainerProfileResponse response = trainerService.updateTrainerProfile(request);
+
+        assertNotNull(response);
+        verify(trainerRepository).findByUserUsernameWithTrainees("ali.veli");
+        verify(trainerRepository).save(any(TrainerEntity.class));
+    }
+
+    @Test
+    void updateTrainerProfile_shouldThrowNotFound_whenTrainerNotFound() {
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("notfound");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+        when(trainerRepository.findByUserUsernameWithTrainees("notfound"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> trainerService.updateTrainerProfile(request));
+        verify(trainerRepository).findByUserUsernameWithTrainees("notfound");
+        verify(trainerRepository, never()).save(any());
+    }
+
+    @Test
+    void updateTrainerProfile_shouldThrowIllegalState_whenUserIsNull() {
+        TrainerEntity trainerEntity = new TrainerEntity();
+        trainerEntity.setId(1L);
+        trainerEntity.setUser(null);
+
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("ali.veli");
+        request.setFirstName("Mehmet");
+        request.setLastName("Kaya");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        when(trainerRepository.findByUserUsernameWithTrainees("ali.veli"))
+                .thenReturn(Optional.of(trainerEntity));
+
+        assertThrows(IllegalStateException.class, () -> trainerService.updateTrainerProfile(request));
+        verify(trainerRepository).findByUserUsernameWithTrainees("ali.veli");
+        verify(trainerRepository, never()).save(any());
     }
 }
