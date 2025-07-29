@@ -1,5 +1,11 @@
 package com.epam.gymcrm.domain.service;
 
+import com.epam.gymcrm.api.mapper.TrainingTypeResponseMapper;
+import com.epam.gymcrm.api.payload.response.TrainingTypeListResponse;
+import com.epam.gymcrm.api.payload.response.TrainingTypeResponse;
+import com.epam.gymcrm.db.entity.TrainingTypeEntity;
+import com.epam.gymcrm.domain.mapper.TrainingTypeDomainMapper;
+import com.epam.gymcrm.domain.model.TrainingType;
 import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.mapper.TrainingTypeMapper;
 import com.epam.gymcrm.db.repository.TrainingTypeRepository;
@@ -19,10 +25,16 @@ public class TrainingTypeService {
         this.trainingTypeRepository = trainingTypeRepository;
     }
 
-    public List<TrainingTypeDto> findAll() {
-        logger.info("Retrieving all training types");
-        return trainingTypeRepository.findAll().stream()
-                .map(TrainingTypeMapper::toTrainingTypeDto)
+    public TrainingTypeListResponse findAllTrainingTypes() {
+        logger.info("Fetching all training types.");
+
+        List<TrainingTypeEntity> trainingTypeEntityList = trainingTypeRepository.findAll();
+
+        List<TrainingType> domainTypes = trainingTypeEntityList.stream()
+                .map(TrainingTypeDomainMapper::toDomain)
                 .toList();
+
+        logger.info("Training types fetched. Count={}", trainingTypeEntityList.size());
+        return TrainingTypeResponseMapper.toListResponse(domainTypes);
     }
 }

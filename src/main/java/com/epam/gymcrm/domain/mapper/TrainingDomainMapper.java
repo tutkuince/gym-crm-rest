@@ -23,7 +23,7 @@ public class TrainingDomainMapper {
         }
 
         if (Objects.nonNull(training.getTrainingType())) {
-            entity.setTrainingType(TrainingTypeDomainMapper.toTrainingTypeEntity(training.getTrainingType()));
+            entity.setTrainingType(TrainingTypeDomainMapper.toEntity(training.getTrainingType()));
         }
         return entity;
     }
@@ -44,7 +44,7 @@ public class TrainingDomainMapper {
         }
 
         if (Objects.nonNull(trainingEntity.getTrainingType())) {
-            training.setTrainingType(TrainingTypeDomainMapper.toTrainingType(trainingEntity.getTrainingType()));
+            training.setTrainingType(TrainingTypeDomainMapper.toDomain(trainingEntity.getTrainingType()));
         }
 
         return training;

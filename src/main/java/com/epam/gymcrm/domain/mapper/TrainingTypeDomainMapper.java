@@ -5,17 +5,17 @@ import com.epam.gymcrm.domain.model.TrainingType;
 
 public class TrainingTypeDomainMapper {
 
-    public static TrainingTypeEntity toTrainingTypeEntity(TrainingType trainingType) {
-        TrainingTypeEntity entity = new TrainingTypeEntity();
-        entity.setId(trainingType.getId());
-        entity.setTrainingTypeName(trainingType.getTrainingTypeName());
-        return entity;
-    }
-
-    public static TrainingType toTrainingType(TrainingTypeEntity entity) {
+    public static TrainingType toDomain(TrainingTypeEntity entity) {
         TrainingType trainingType = new TrainingType();
         trainingType.setId(entity.getId());
         trainingType.setTrainingTypeName(entity.getTrainingTypeName());
         return trainingType;
+    }
+
+    public static TrainingTypeEntity toEntity(TrainingType domain) {
+        TrainingTypeEntity entity = new TrainingTypeEntity();
+        entity.setId(domain.getId());
+        entity.setTrainingTypeName(domain.getTrainingTypeName());
+        return entity;
     }
 }

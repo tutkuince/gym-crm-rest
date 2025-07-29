@@ -20,6 +20,9 @@ public class TrainingTypeEntity {
     @OneToMany(mappedBy = "trainingType")
     private Set<TrainingEntity> trainings = new HashSet<>();
 
+    public TrainingTypeEntity() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,5 +1,7 @@
 package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.payload.response.TrainingTypeListResponse;
+import com.epam.gymcrm.api.payload.response.TrainingTypeResponse;
 import com.epam.gymcrm.dto.TrainingTypeDto;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.domain.service.TrainingTypeService;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,18 +42,21 @@ class TrainingTypeControllerTest {
     }
 
     @Test
-    void shouldGetAllTrainingTypes() throws Exception {
-        TrainingTypeDto t1 = new TrainingTypeDto();
-        t1.setId(1L);
-        t1.setTrainingTypeName("TypeA");
-        TrainingTypeDto t2 = new TrainingTypeDto();
-        t2.setId(2L);
-        t2.setTrainingTypeName("TypeB");
+    void getAllTrainingTypes_shouldReturnTrainingTypes() throws Exception {
+        List<TrainingTypeResponse> types = List.of(
+                new TrainingTypeResponse(1L, "Cardio"),
+                new TrainingTypeResponse(2L, "Strength")
+        );
+        TrainingTypeListResponse response = new TrainingTypeListResponse(types);
 
-        when(trainingTypeService.findAll()).thenReturn(List.of(t1, t2));
+        when(trainingTypeService.findAllTrainingTypes()).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/training-types"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.trainingTypes.length()").value(2))
+                .andExpect(jsonPath("$.trainingTypes[0].name").value("Cardio"))
+                .andExpect(jsonPath("$.trainingTypes[1].id").value(2));
+
+        verify(trainingTypeService).findAllTrainingTypes();
     }
 }

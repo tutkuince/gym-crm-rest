@@ -1,5 +1,7 @@
 package com.epam.gymcrm.domain.service;
 
+import com.epam.gymcrm.api.payload.response.TrainingTypeListResponse;
+import com.epam.gymcrm.db.entity.TrainingTypeEntity;
 import com.epam.gymcrm.domain.model.TrainingType;
 import com.epam.gymcrm.domain.service.TrainingTypeService;
 import com.epam.gymcrm.dto.TrainingTypeDto;
@@ -27,33 +29,24 @@ class TrainingTypeServiceTest {
     @InjectMocks
     private TrainingTypeService trainingTypeService;
 
-    TrainingType type1, type2;
-    TrainingTypeDto updateDto;
-
-    @BeforeEach
-    void setUp() {
-        type1 = new TrainingType();
-        type1.setId(1L);
-        type1.setTrainingTypeName("Yoga");
-
-        type2 = new TrainingType();
-        type2.setId(2L);
-        type2.setTrainingTypeName("Pilates");
-
-        updateDto = new TrainingTypeDto();
-        updateDto.setId(1L);
-        updateDto.setTrainingTypeName("Updated Yoga");
-    }
-
     @Test
-    void shouldReturnAllTrainingTypes() {
-        when(trainingTypeRepository.findAll()).thenReturn(List.of(type1, type2));
-        List<TrainingTypeDto> result = trainingTypeService.findAll();
+    void getAllTrainingTypes_shouldReturnAllTypes() {
+        TrainingTypeEntity entity1 = new TrainingTypeEntity();
+        entity1.setId(1L);
+        entity1.setTrainingTypeName("Cardio");
 
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Yoga", result.get(0).getTrainingTypeName());
-        assertEquals("Pilates", result.get(1).getTrainingTypeName());
-        verify(trainingTypeRepository).findAll();
+        TrainingTypeEntity entity2 = new TrainingTypeEntity();
+        entity2.setId(2L);
+        entity2.setTrainingTypeName("Strength");
+
+        List<TrainingTypeEntity> entities = List.of(
+               entity1, entity2
+        );
+        when(trainingTypeRepository.findAll()).thenReturn(entities);
+
+        TrainingTypeListResponse response = trainingTypeService.findAllTrainingTypes();
+        assertNotNull(response);
+        assertEquals(2, response.trainingTypes().size());
+        assertEquals("Strength", response.trainingTypes().get(1).name());
     }
 }
