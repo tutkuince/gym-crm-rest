@@ -66,6 +66,14 @@ public class User {
         this.isActive = active;
     }
 
+    public boolean checkPassword(String inputPassword) {
+        return Objects.equals(this.password, inputPassword);
+    }
+
+    public boolean isActive() {
+        return Boolean.TRUE.equals(this.isActive);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

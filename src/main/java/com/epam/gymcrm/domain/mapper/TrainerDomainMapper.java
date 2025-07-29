@@ -19,55 +19,21 @@ public class TrainerDomainMapper {
         TrainerEntity entity = new TrainerEntity();
         entity.setId(trainer.getId());
         entity.setUser(UserDomainMapper.toUserEntity(trainer.getUser()));
-        entity.setSpecialization(trainer.getSpecialization());
-
-        if (Objects.nonNull(trainer.getTrainings())) {
-            Set<TrainingEntity> trainingEntities = trainer.getTrainings().stream()
-                    .map(TrainingDomainMapper::toTrainingEntity)
-                    .collect(Collectors.toSet());
-            entity.setTrainings(trainingEntities);
-        }
-
-        if (Objects.nonNull(trainer.getTrainees())) {
-            Set<TraineeEntity> traineeEntities = trainer.getTrainees().stream()
-                    .map(TraineeDomainMapper::toTraineeEntity)
-                    .collect(Collectors.toSet());
-            entity.setTrainees(traineeEntities);
-        }
+        /*entity.setSpecialization(
+                trainer.getSpecialization() != null ?
+                        TrainingTypeDomainMapper.toEntity(trainer.getSpecialization()) : null
+        );*/
         return entity;
     }
 
-    public static Trainer toTrainer(TrainerEntity trainerEntity) {
-        if (trainerEntity == null) return null;
-
-        UserEntity userEntity = trainerEntity.getUser();
-        if (userEntity == null) {
-            throw new IllegalStateException(
-                    String.format(
-                            "TrainerDomainMapper: Mapping failed for TrainerEntity (id=%d): Associated User entity is null. Data integrity violation!",
-                            trainerEntity.getId()
-                    )
-            );
-        }
-
+    public static Trainer toTrainer(TrainerEntity entity) {
         Trainer trainer = new Trainer();
-        trainer.setId(trainerEntity.getId());
-        trainer.setUser(UserDomainMapper.toUser(userEntity));
-        trainer.setSpecialization(trainerEntity.getSpecialization());
-
-        if (Objects.nonNull(trainerEntity.getTrainings()) && !trainerEntity.getTrainings().isEmpty()) {
-            Set<Training> trainings = trainerEntity.getTrainings().stream()
-                    .map(TrainingDomainMapper::toTraining)
-                    .collect(Collectors.toSet());
-            trainer.setTrainings(trainings);
-        }
-
-        if (Objects.nonNull(trainerEntity.getTrainees()) && !trainerEntity.getTrainees().isEmpty()) {
-            Set<Trainee> trainees = trainerEntity.getTrainees().stream()
-                    .map(TraineeDomainMapper::toTrainee)
-                    .collect(Collectors.toSet());
-            trainer.setTrainees(trainees);
-        }
+        trainer.setId(entity.getId());
+        trainer.setUser(UserDomainMapper.toUser(entity.getUser()));
+        /*trainer.setSpecialization(
+                entity.getSpecialization() != null ?
+                        TrainingTypeDomainMapper.toDomain(entity.getSpecialization()) : null
+        );*/
         return trainer;
     }
 

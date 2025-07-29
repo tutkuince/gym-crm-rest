@@ -24,7 +24,7 @@ public class TrainerMapper {
         user.setActive(trainerDto.getActive());
 
         trainer.setUser(user);
-        trainer.setSpecialization(trainerDto.getSpecialization());
+        // trainer.setSpecialization(trainerDto.getSpecialization());
 
         return trainer;
     }
@@ -39,7 +39,7 @@ public class TrainerMapper {
         trainerDto.setLastName(trainer.getUser().getLastName());
         trainerDto.setUsername(trainer.getUser().getUsername());
         trainerDto.setActive(trainer.getUser().getActive());
-        trainerDto.setSpecialization(trainer.getSpecialization());
+        // trainerDto.setSpecialization(trainer.getSpecialization());
 
         // Map ManyToMany trainees as traineeIds
         if (Objects.nonNull(trainer.getTrainees()) && !trainer.getTrainees().isEmpty()) {

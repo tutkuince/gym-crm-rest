@@ -8,7 +8,7 @@ public class Trainer {
 
     private Long id;
     private User user;
-    private String specialization;
+    private TrainingType specialization;
     private Set<Training> trainings = new HashSet<>();
     private Set<Trainee> trainees = new HashSet<>();
 
@@ -31,11 +31,11 @@ public class Trainer {
         this.user = user;
     }
 
-    public String getSpecialization() {
+    public TrainingType getSpecialization() {
         return specialization;
     }
 
-    public void setSpecialization(String specialization) {
+    public void setSpecialization(TrainingType specialization) {
         this.specialization = specialization;
     }
 
