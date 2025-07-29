@@ -2,6 +2,7 @@ package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
+import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
@@ -277,5 +278,63 @@ class TrainerServiceTest {
         assertTrue(ex.getMessage().contains("Trainer not found"));
 
         verify(trainerRepository).findByUserUsernameWithTrainees(username);
+    }
+
+    @Test
+    void updateActivateStatus_shouldUpdateStatus_whenValidRequest() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, true);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(username);
+        userEntity.setActive(false);
+
+        TrainerEntity trainerEntity = new TrainerEntity();
+        trainerEntity.setUser(userEntity);
+
+        when(trainerRepository.findByUserUsername(username)).thenReturn(Optional.of(trainerEntity));
+        when(trainerRepository.save(any(TrainerEntity.class))).thenReturn(trainerEntity);
+
+        assertDoesNotThrow(() -> trainerService.updateActivateStatus(request));
+
+        verify(trainerRepository).findByUserUsername(username);
+        verify(trainerRepository).save(any(TrainerEntity.class));
+    }
+
+    @Test
+    void updateActivateStatus_shouldThrowNotFoundException_whenTrainerNotFound() {
+        String username = "notfound";
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest(username, true);
+
+        when(trainerRepository.findByUserUsername(username)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> trainerService.updateActivateStatus(request));
+        verify(trainerRepository).findByUserUsername(username);
+        verify(trainerRepository, never()).save(any());
+    }
+
+    @Test
+    void updateActivateStatus_shouldThrowIllegalStateException_whenAlreadyActiveOrInactive() {
+        String username = "ali.veli";
+        UpdateActiveStatusRequest requestActive = new UpdateActiveStatusRequest(username, true);
+        UpdateActiveStatusRequest requestInactive = new UpdateActiveStatusRequest(username, false);
+
+        UserEntity userEntityActive = new UserEntity();
+        userEntityActive.setUsername(username);
+        userEntityActive.setActive(true);
+
+        TrainerEntity trainerEntityActive = new TrainerEntity();
+        trainerEntityActive.setUser(userEntityActive);
+
+        when(trainerRepository.findByUserUsername(username)).thenReturn(Optional.of(trainerEntityActive));
+
+        assertThrows(IllegalStateException.class, () -> trainerService.updateActivateStatus(requestActive));
+
+        userEntityActive.setActive(false);
+
+        assertThrows(IllegalStateException.class, () -> trainerService.updateActivateStatus(requestInactive));
+
+        verify(trainerRepository, times(2)).findByUserUsername(username);
+        verify(trainerRepository, never()).save(any());
     }
 }

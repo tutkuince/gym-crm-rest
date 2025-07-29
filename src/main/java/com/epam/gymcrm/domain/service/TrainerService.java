@@ -6,6 +6,7 @@ import com.epam.gymcrm.api.mapper.TrainerTrainingsListResponseMapper;
 import com.epam.gymcrm.api.mapper.UpdateTrainerProfileResponseMapper;
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
+import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
@@ -159,4 +160,37 @@ public class TrainerService {
 
         return TrainerTrainingsListResponseMapper.toTrainerTrainingsListResponse(trainings);
     }
+
+    @Transactional
+    public void updateActivateStatus(UpdateActiveStatusRequest updateActiveStatusRequest) {
+        String username = updateActiveStatusRequest.username();
+        logger.info("Received request to update trainer active status. username={}", username);
+
+        TrainerEntity trainerEntity = trainerRepository.findByUserUsername(username)
+                .orElseThrow(() -> {
+                    logger.warn("Cannot update trainer active status. Trainer not found for activation. username={}", username);
+                    return new NotFoundException("Trainer to activate/de-activate not found. username=" + username);
+                });
+
+        Trainer trainer = TrainerDomainMapper.toTrainer(trainerEntity);
+
+        try {
+            trainer.getUser().setActive(updateActiveStatusRequest.isActive());
+        } catch (IllegalStateException e) {
+            logger.warn("Activation SKIPPED: Trainer already in requested state. username={}", username);
+            throw e;
+        }
+
+        TrainerEntity updated = TrainerDomainMapper.toTrainerEntity(trainer);
+        updated.setId(trainerEntity.getId());
+        updated.setTrainees(trainerEntity.getTrainees());
+        updated.setTrainings(trainerEntity.getTrainings());
+        updated.setTrainingType(trainerEntity.getTrainingType());
+
+        trainerRepository.save(updated);
+
+        logger.info("Trainer active status updated successfully. username={}", username);
+    }
+
+
 }

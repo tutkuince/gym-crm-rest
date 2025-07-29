@@ -1,6 +1,7 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TrainerService;
@@ -24,8 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -139,7 +139,7 @@ class TrainerControllerTest {
         request.setActive(true);
 
         UpdateTrainerProfileResponse response = new UpdateTrainerProfileResponse(
-                "ali.veli", "Mehmet", "Kaya", 1L, true, List.of() // trainees boş, detayını testten çıkar
+                "ali.veli", "Mehmet", "Kaya", 1L, true, List.of()
         );
 
         when(trainerService.updateTrainerProfile(any(UpdateTrainerProfileRequest.class)))
@@ -251,5 +251,58 @@ class TrainerControllerTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", containsString("Invalid date format")));
+    }
+
+    @Test
+    void updateTrainerActiveStatus_shouldReturnOk_whenUpdateSucceeds() throws Exception {
+        String requestJson = """
+                    {
+                        "username": "ali.veli",
+                        "isActive": true
+                    }
+                """;
+
+        mockMvc.perform(patch("/api/v1/trainers/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk());
+
+        verify(trainerService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+    }
+
+    @Test
+    void updateTrainerActiveStatus_shouldReturn404_whenTrainerNotFound() throws Exception {
+        doThrow(new NotFoundException("Trainer not found"))
+                .when(trainerService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+
+        String requestJson = """
+                    {
+                        "username": "notfound.user",
+                        "isActive": false
+                    }
+                """;
+
+        mockMvc.perform(patch("/api/v1/trainers/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateTrainerActiveStatus_shouldReturn400_whenAlreadyActiveOrInactive() throws Exception {
+        doThrow(new IllegalStateException("Already active"))
+                .when(trainerService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
+
+        String requestJson = """
+                    {
+                        "username": "ali.veli",
+                        "isActive": true
+                    }
+                """;
+
+        mockMvc.perform(patch("/api/v1/trainers/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isConflict());
     }
 }

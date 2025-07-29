@@ -2,6 +2,7 @@ package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
+import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
@@ -51,5 +52,11 @@ public class TrainerController {
         );
         TrainerTrainingsListResponse response = trainerService.getTrainerTrainings(filter);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<Void> updateTrainerActiveStatus(@RequestBody @Valid UpdateActiveStatusRequest request) {
+        trainerService.updateActivateStatus(request);
+        return ResponseEntity.ok().build();
     }
 }

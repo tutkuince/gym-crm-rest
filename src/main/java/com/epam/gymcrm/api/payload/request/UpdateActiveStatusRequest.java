@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateActiveStatusRequest(
-        @NotBlank String username,
-        @NotNull boolean isActive
+        @NotBlank(message = "Username must not be blank")
+        String username,
+        @NotNull(message = "isActive must not be null")
+        Boolean isActive
 ) {
 }
