@@ -1,9 +1,11 @@
 package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TrainerTrainingsListResponse;
 import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.domain.service.TrainerService;
 import jakarta.validation.Valid;
@@ -37,95 +39,17 @@ public class TrainerController {
         return trainerService.updateTrainerProfile(request);
     }
 
-    /*
-    @PostMapping
-    public ResponseEntity<TrainerDto> createTrainer(@RequestBody @Valid TrainerDto trainerDto) {
-        return new ResponseEntity<>(trainerService.createTrainer(trainerDto), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<TrainerDto> getTrainerById(
-            @PathVariable("id") Long id,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
+    @GetMapping("/trainings")
+    public ResponseEntity<TrainerTrainingsListResponse> getTrainerTrainings(
+            @RequestParam("username") String username,
+            @RequestParam(value = "periodFrom", required = false) String periodFrom,
+            @RequestParam(value = "periodTo", required = false) String periodTo,
+            @RequestParam(value = "traineeName", required = false) String traineeName
     ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        return ResponseEntity.ok(trainerService.findById(id));
+        TrainerTrainingsFilter filter = new TrainerTrainingsFilter(
+                username, periodFrom, periodTo, traineeName
+        );
+        TrainerTrainingsListResponse response = trainerService.getTrainerTrainings(filter);
+        return ResponseEntity.ok(response);
     }
-
-    @GetMapping
-    public ResponseEntity<List<TrainerDto>> getAllTrainers(
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        return ResponseEntity.ok(trainerService.findAll());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTrainer(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid TrainerDto trainerDto,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        trainerDto.setId(id);
-        trainerService.update(trainerDto);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<TrainerDto> getTrainerByUsername(
-            @RequestParam(name = "username") String uname,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        return ResponseEntity.ok(trainerService.findByUsername(uname));
-    }
-
-    @PatchMapping("/password")
-    public ResponseEntity<Void> changeTrainerPassword(
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password,
-            @RequestBody PasswordChangeRequestDto passwordChangeRequest
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        trainerService.changeTrainerPassword(username, password, passwordChangeRequest.getNewPassword());
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}/activate")
-    public ResponseEntity<Void> activateTrainee(
-            @PathVariable("id") Long id,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        trainerService.activateTrainer(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateTrainee(
-            @PathVariable("id") Long id,
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        trainerService.deactivateTrainer(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/unassigned")
-    public ResponseEntity<List<TrainerDto>> getUnassignedTrainersForTrainee(
-            @RequestHeader("X-Username") String username,
-            @RequestHeader("X-Password") String password,
-            @RequestParam("traineeUsername") String traineeUsername
-    ) {
-        trainerService.isTrainerCredentialsValid(username, password);
-        List<TrainerDto> trainers = trainerService.getUnassignedTrainersForTrainee(traineeUsername);
-        return ResponseEntity.ok(trainers);
-    }*/
 }

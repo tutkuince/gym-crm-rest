@@ -3,7 +3,7 @@ package com.epam.gymcrm.api.payload.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record TraineeTrainingsFilter(
+public record TrainerTrainingsFilter(
         @NotBlank(message = "Username must not be blank")
         String username,
 
@@ -12,7 +12,6 @@ public record TraineeTrainingsFilter(
 
         @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "periodTo must be in the format yyyy-MM-dd")
         String periodTo,
-        String trainerName,
-        String trainingType
+        String traineeName
 ) {
 }

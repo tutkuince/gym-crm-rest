@@ -43,18 +43,4 @@ public class TrainingSpecification {
             return cb.equal(trainingTypeJoin.get("trainingTypeName"), trainingTypeName);
         };
     }
-
-
-    public static Specification<TrainingEntity> traineeName(String name) {
-        return (root, query, cb) ->
-                name == null ? null :
-                        cb.equal(root.get("trainee").get("user").get("firstName"), name);
-    }
-
-    public static Specification<TrainingEntity> trainerUsername(String username) {
-        return (root, query, cb) ->
-                username == null ? null : cb.equal(root.get("trainer").get("user").get("username"), username);
-    }
-
-
 }

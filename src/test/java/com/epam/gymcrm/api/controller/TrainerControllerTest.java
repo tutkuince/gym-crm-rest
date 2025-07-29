@@ -2,9 +2,7 @@ package com.epam.gymcrm.api.controller;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
-import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
-import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
-import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
+import com.epam.gymcrm.api.payload.response.*;
 import com.epam.gymcrm.domain.service.TrainerService;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
@@ -24,12 +22,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class TrainerControllerTest {
@@ -200,5 +198,58 @@ class TrainerControllerTest {
                 .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("User is null")));
 
         verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
+    }
+
+    @Test
+    void getTrainerTrainings_shouldReturn200AndList_whenValidRequest() throws Exception {
+        // Arrange
+        TrainerTrainingsListResponse mockResponse = new TrainerTrainingsListResponse(
+                List.of(
+                        new TrainerTrainingInfo("Push Day", "2024-07-30", "Ali Veli", 60, "ali.veli")
+                )
+        );
+        when(trainerService.getTrainerTrainings(any())).thenReturn(mockResponse);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/trainers/trainings")
+                        .param("username", "ali.veli")
+                        .param("periodFrom", "2024-07-01")
+                        .param("periodTo", "2024-07-31")
+                        .param("traineeName", "Ali Veli")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.trainings", hasSize(1)));
+    }
+
+    @Test
+    void getTrainerTrainings_shouldReturn404_whenTrainerNotFound() throws Exception {
+        when(trainerService.getTrainerTrainings(any()))
+                .thenThrow(new NotFoundException("Trainer not found"));
+
+        mockMvc.perform(get("/api/v1/trainers/trainings")
+                        .param("username", "notfound")
+                        .param("periodFrom", "2024-07-01")
+                        .param("periodTo", "2024-07-31")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", containsString("Trainer not found")));
+    }
+
+    @Test
+    void getTrainerTrainings_shouldReturn400_whenInvalidDate() throws Exception {
+        when(trainerService.getTrainerTrainings(any()))
+                .thenThrow(new BadRequestException("Invalid date format"));
+
+        mockMvc.perform(get("/api/v1/trainers/trainings")
+                        .param("username", "ali.veli")
+                        .param("periodFrom", "invalid-date")
+                        .param("periodTo", "2024-07-31")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("Invalid date format")));
     }
 }

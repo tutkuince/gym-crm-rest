@@ -2,18 +2,20 @@ package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.mapper.TrainerProfileResponseMapper;
 import com.epam.gymcrm.api.mapper.TrainerRegistrationResponseMapper;
+import com.epam.gymcrm.api.mapper.TrainerTrainingsListResponseMapper;
 import com.epam.gymcrm.api.mapper.UpdateTrainerProfileResponseMapper;
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TrainerTrainingsListResponse;
 import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.db.entity.TrainerEntity;
+import com.epam.gymcrm.db.entity.TrainingEntity;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
-import com.epam.gymcrm.db.repository.TraineeRepository;
-import com.epam.gymcrm.db.repository.TrainerRepository;
-import com.epam.gymcrm.db.repository.TrainingTypeRepository;
-import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.db.repository.*;
+import com.epam.gymcrm.db.repository.specification.TrainerTrainingSpecification;
 import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainingTypeDomainMapper;
 import com.epam.gymcrm.domain.model.Trainer;
@@ -23,8 +25,15 @@ import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+
+import static com.epam.gymcrm.util.DateConstants.DEFAULT_DATE_FORMATTER;
 
 @Service
 public class TrainerService {
@@ -32,14 +41,21 @@ public class TrainerService {
     private final TrainerRepository trainerRepository;
     private final UserRepository userRepository;
     private final TraineeRepository traineeRepository;
+    private final TrainingRepository trainingRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(TrainerService.class);
     private final TrainingTypeRepository trainingTypeRepository;
 
-    public TrainerService(TrainerRepository trainerRepository, UserRepository userRepository, TraineeRepository traineeRepository, TrainingTypeRepository trainingTypeRepository) {
+    public TrainerService(
+            TrainerRepository trainerRepository,
+            UserRepository userRepository,
+            TraineeRepository traineeRepository,
+            TrainingRepository trainingRepository,
+            TrainingTypeRepository trainingTypeRepository) {
         this.trainerRepository = trainerRepository;
         this.userRepository = userRepository;
         this.traineeRepository = traineeRepository;
+        this.trainingRepository = trainingRepository;
         this.trainingTypeRepository = trainingTypeRepository;
     }
 
@@ -110,5 +126,37 @@ public class TrainerService {
         logger.info("Trainer profile updated successfully. username={}", request.getUsername());
 
         return UpdateTrainerProfileResponseMapper.toResponse(updatedEntity);
+    }
+
+    public TrainerTrainingsListResponse getTrainerTrainings(TrainerTrainingsFilter filter) {
+        logger.info("Trainer trainings requested. username={}, periodFrom={}, periodTo={}, traineeName={}",
+                filter.username(), filter.periodFrom(), filter.periodTo(), filter.traineeName());
+
+        trainerRepository.findByUserUsernameWithTrainees(filter.username())
+                .orElseThrow(() -> {
+                    logger.warn("Trainer not found while fetching trainings: username={}", filter.username());
+                    return new NotFoundException("Trainer not found: " + filter.username());
+                });
+
+        LocalDate from = null, to = null;
+        if (Objects.nonNull(filter.periodFrom()) && !filter.periodFrom().isBlank()) {
+            logger.debug("Filtering from date: {}", filter.periodFrom());
+            from = LocalDate.parse(filter.periodFrom(), DEFAULT_DATE_FORMATTER);
+        }
+        if (Objects.nonNull(filter.periodTo()) && !filter.periodTo().isBlank()) {
+            logger.debug("Filtering to date: {}", filter.periodTo());
+            to = LocalDate.parse(filter.periodTo(), DEFAULT_DATE_FORMATTER);
+        }
+
+        Specification<TrainingEntity> specification = TrainerTrainingSpecification.trainerUsername(filter.username())
+                .and(TrainerTrainingSpecification.fromDate(from))
+                .and(TrainerTrainingSpecification.toDate(to))
+                .and(TrainerTrainingSpecification.traineeName(filter.traineeName()));
+
+        List<TrainingEntity> trainings = trainingRepository.findAll(specification);
+
+        logger.info("Trainer trainings fetch completed. username={}, trainingsCount={}", filter.username(), trainings.size());
+
+        return TrainerTrainingsListResponseMapper.toTrainerTrainingsListResponse(trainings);
     }
 }

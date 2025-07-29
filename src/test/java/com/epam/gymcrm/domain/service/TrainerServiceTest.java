@@ -1,17 +1,17 @@
 package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
 import com.epam.gymcrm.api.payload.response.TrainerProfileResponse;
 import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.api.payload.response.TrainerTrainingsListResponse;
 import com.epam.gymcrm.api.payload.response.UpdateTrainerProfileResponse;
 import com.epam.gymcrm.db.entity.TrainerEntity;
+import com.epam.gymcrm.db.entity.TrainingEntity;
 import com.epam.gymcrm.db.entity.TrainingTypeEntity;
 import com.epam.gymcrm.db.entity.UserEntity;
-import com.epam.gymcrm.db.repository.TraineeRepository;
-import com.epam.gymcrm.db.repository.TrainerRepository;
-import com.epam.gymcrm.db.repository.TrainingTypeRepository;
-import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.db.repository.*;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +20,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +45,9 @@ class TrainerServiceTest {
 
     @Mock
     private TraineeRepository traineeRepository;
+    @Mock
+    private TrainingRepository trainingRepository;
+
 
     @InjectMocks
     private TrainerService trainerService;
@@ -224,5 +230,52 @@ class TrainerServiceTest {
         assertThrows(IllegalStateException.class, () -> trainerService.updateTrainerProfile(request));
         verify(trainerRepository).findByUserUsernameWithTrainees("ali.veli");
         verify(trainerRepository, never()).save(any());
+    }
+
+    @Test
+    void getTrainerTrainings_shouldReturnResponse_whenTrainerExists() {
+        // Arrange
+        String username = "ali.veli";
+        TrainerTrainingsFilter filter = new TrainerTrainingsFilter(username, "2024-01-01", "2024-08-01", "Ahmet");
+
+        UserEntity user = new UserEntity();
+        user.setUsername(username);
+        TrainerEntity trainerEntity = new TrainerEntity();
+        trainerEntity.setUser(user);
+
+        TrainingEntity trainingEntity = new TrainingEntity();
+        trainingEntity.setId(100L);
+        trainingEntity.setTrainingName("Push Day");
+        trainingEntity.setTrainingDate(LocalDateTime.now());
+
+        when(trainerRepository.findByUserUsernameWithTrainees(username)).thenReturn(Optional.of(trainerEntity));
+        when(trainingRepository.findAll(any(Specification.class)))
+                .thenReturn(List.of(trainingEntity));
+
+        // Act
+        TrainerTrainingsListResponse response = trainerService.getTrainerTrainings(filter);
+
+        // Assert
+        assertNotNull(response);
+        assertFalse(response.trainings().isEmpty());
+        assertEquals("Push Day", response.trainings().getFirst().trainingName());
+
+        verify(trainerRepository).findByUserUsernameWithTrainees(username);
+        verify(trainingRepository).findAll(any(Specification.class));
+    }
+
+    @Test
+    void getTrainerTrainings_shouldThrowNotFoundException_whenTrainerNotExists() {
+        // Arrange
+        String username = "not.found";
+        TrainerTrainingsFilter filter = new TrainerTrainingsFilter(username, "2024-01-01", "2024-08-01", "Ahmet");
+
+        when(trainerRepository.findByUserUsernameWithTrainees(username)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> trainerService.getTrainerTrainings(filter));
+        assertTrue(ex.getMessage().contains("Trainer not found"));
+
+        verify(trainerRepository).findByUserUsernameWithTrainees(username);
     }
 }
