@@ -9,6 +9,7 @@ public class Trainer {
     private Long id;
     private User user;
     private TrainingType specialization;
+
     private Set<Training> trainings = new HashSet<>();
     private Set<Trainee> trainees = new HashSet<>();
 

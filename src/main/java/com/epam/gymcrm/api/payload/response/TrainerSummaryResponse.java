@@ -4,6 +4,6 @@ public record TrainerSummaryResponse(
         String trainerUsername,
         String trainerFirstName,
         String trainerLastName,
-        String trainerSpecialization
+        Long trainerSpecialization
 ) {
 }

@@ -41,7 +41,7 @@ public class TraineeProfileUpdateMapper {
                                 trainerUser.getUsername(),
                                 trainerUser.getFirstName(),
                                 trainerUser.getLastName(),
-                                trainerEntity.getSpecialization()
+                                trainerEntity.getTrainingType().getId()
                         );
                     })
                     .collect(Collectors.toSet());

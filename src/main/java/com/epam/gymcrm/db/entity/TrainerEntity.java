@@ -18,8 +18,9 @@ public class TrainerEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false)
-    private String specialization;
+    @ManyToOne
+    @JoinColumn(name = "specialization_id", nullable = false)
+    private TrainingTypeEntity trainingType;
 
     @OneToMany(mappedBy = "trainer")
     private Set<TrainingEntity> trainings = new HashSet<>();
@@ -46,12 +47,12 @@ public class TrainerEntity {
         this.user = user;
     }
 
-    public String getSpecialization() {
-        return specialization;
+    public TrainingTypeEntity getTrainingType() {
+        return trainingType;
     }
 
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
+    public void setTrainingType(TrainingTypeEntity trainingType) {
+        this.trainingType = trainingType;
     }
 
     public Set<TrainingEntity> getTrainings() {

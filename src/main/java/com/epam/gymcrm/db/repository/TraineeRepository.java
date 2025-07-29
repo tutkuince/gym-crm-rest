@@ -12,13 +12,9 @@ import java.util.Optional;
 @Repository
 public interface TraineeRepository extends JpaRepository<TraineeEntity, Long> {
 
-    @Query("SELECT t FROM TraineeEntity t LEFT JOIN FETCH t.trainers WHERE t.id = :id")
-    Optional<TraineeEntity> findByIdWithTrainers(@Param("id") Long id);
-
-    @Query("SELECT DISTINCT t FROM TraineeEntity t LEFT JOIN FETCH t.trainers")
-    List<TraineeEntity> findAllWithTrainers();
-
     Optional<TraineeEntity> findByUserUsername(String username);
+
+    Boolean existsByUserUsername(String username);
 
     @Query("SELECT t FROM TraineeEntity t LEFT JOIN FETCH t.trainers WHERE t.user.username = :username")
     Optional<TraineeEntity> findByUserUsernameWithTrainers(@Param("username") String username);

@@ -61,6 +61,12 @@ public class TraineeService {
 
         User user = UserUtils.createUser(traineeRegistrationRequest.firstName(), traineeRegistrationRequest.lastName(), userRepository);
 
+        // Check if user is already registered as a trainer
+        if (trainerRepository.existsByUserUsername(user.getUsername())) {
+            logger.warn("Registration failed: User cannot be both trainee and trainer. username={}", user.getUsername());
+            throw new BadRequestException("User cannot be both trainee and trainer.");
+        }
+
         Trainee trainee = new Trainee();
         String dateOfBirth = traineeRegistrationRequest.dateOfBirth();
         String address = traineeRegistrationRequest.address();

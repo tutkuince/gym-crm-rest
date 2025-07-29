@@ -13,12 +13,6 @@ import java.util.Optional;
 @Repository
 public interface TrainerRepository extends JpaRepository<TrainerEntity, Long> {
 
-    @Query("SELECT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees WHERE t.id = :id")
-    Optional<TrainerEntity> findByIdWithTrainees(@Param("id") Long id);
-
-    @Query("SELECT DISTINCT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees")
-    List<TrainerEntity> findAllWithTrainees();
-
     Optional<TrainerEntity> findByUserUsername(String username);
 
     @Query("SELECT t FROM TrainerEntity t LEFT JOIN FETCH t.trainees WHERE t.user.username = :username")
@@ -29,4 +23,6 @@ public interface TrainerRepository extends JpaRepository<TrainerEntity, Long> {
     List<TrainerEntity> findUnassignedTrainersForTrainee(@Param("traineeId") Long traineeId);
 
     List<TrainerEntity> findAllByUserUsernameIn(List<String> trainerUsernames);
+
+    Boolean existsByUserUsername(String username);
 }

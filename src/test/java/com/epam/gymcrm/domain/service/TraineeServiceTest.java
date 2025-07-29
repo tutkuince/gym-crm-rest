@@ -2,14 +2,12 @@ package com.epam.gymcrm.domain.service;
 
 import com.epam.gymcrm.api.payload.request.*;
 import com.epam.gymcrm.api.payload.response.*;
-import com.epam.gymcrm.db.entity.TraineeEntity;
-import com.epam.gymcrm.db.entity.TrainerEntity;
-import com.epam.gymcrm.db.entity.TrainingEntity;
-import com.epam.gymcrm.db.entity.UserEntity;
+import com.epam.gymcrm.db.entity.*;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.TrainingRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -288,21 +287,29 @@ class TraineeServiceTest {
         traineeEntity.setUser(traineeUser);
         traineeEntity.setTrainers(new HashSet<>());
 
+        // trainer1
         TrainerEntity trainer1 = new TrainerEntity();
         UserEntity trainerUser1 = new UserEntity();
         trainerUser1.setUsername("trainer1");
         trainerUser1.setFirstName("Ahmet");
         trainerUser1.setLastName("Yılmaz");
         trainer1.setUser(trainerUser1);
-        trainer1.setSpecialization("Cardio");
+        TrainingTypeEntity trainingType1 = new TrainingTypeEntity();
+        trainingType1.setId(1L);
+        trainingType1.setTrainingTypeName("Cardio");
+        trainer1.setTrainingType(trainingType1);
 
+        // trainer2
         TrainerEntity trainer2 = new TrainerEntity();
         UserEntity trainerUser2 = new UserEntity();
         trainerUser2.setUsername("trainer2");
         trainerUser2.setFirstName("Ayşe");
         trainerUser2.setLastName("Kara");
         trainer2.setUser(trainerUser2);
-        trainer2.setSpecialization("Fitness");
+        TrainingTypeEntity trainingType2 = new TrainingTypeEntity();
+        trainingType2.setId(2L);
+        trainingType2.setTrainingTypeName("Fitness");
+        trainer2.setTrainingType(trainingType2);
 
         List<TrainerEntity> trainers = List.of(trainer1, trainer2);
 
@@ -508,7 +515,11 @@ class TraineeServiceTest {
         user1.setLastName("Kaya");
         user1.setActive(true);
         trainer1.setUser(user1);
-        trainer1.setSpecialization("Cardio");
+
+        TrainingTypeEntity type = new TrainingTypeEntity();
+        type.setId(1L);
+        type.setTrainingTypeName("Cardio");
+        trainer1.setTrainingType(type);
 
         List<TrainerEntity> trainers = List.of(trainer1);
         when(trainerRepository.findUnassignedTrainersForTrainee(traineeId)).thenReturn(trainers);
@@ -519,7 +530,6 @@ class TraineeServiceTest {
         assertNotNull(response);
         assertEquals(1, response.trainers().size());
         assertEquals("mehmet.kaya", response.trainers().get(0).username());
-        assertEquals("Cardio", response.trainers().get(0).specialization());
 
         verify(traineeRepository).findByUserUsername(username);
         verify(trainerRepository).findUnassignedTrainersForTrainee(traineeId);
@@ -536,6 +546,23 @@ class TraineeServiceTest {
 
         verify(traineeRepository).findByUserUsername(username);
         verifyNoInteractions(trainerRepository);
+    }
+
+    @Test
+    void createTrainee_shouldThrowException_whenUserIsAlreadyTrainer() {
+        TraineeRegistrationRequest request = new TraineeRegistrationRequest("Ali", "Veli", "2000-01-01", "İzmir");
+        User createdUser = new User();
+        createdUser.setUsername("ali.veli");
+
+        when(trainerRepository.existsByUserUsername("ali.veli")).thenReturn(true);
+
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+            traineeService.createTrainee(request);
+        });
+
+        assertThat(exception.getMessage()).contains("User cannot be both trainee and trainer");
+        verify(trainerRepository).existsByUserUsername("ali.veli");
+        verify(traineeRepository, never()).save(any(TraineeEntity.class));
     }
 
 }

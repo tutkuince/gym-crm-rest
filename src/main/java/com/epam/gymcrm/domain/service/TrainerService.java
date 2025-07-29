@@ -1,23 +1,25 @@
 package com.epam.gymcrm.domain.service;
 
-import com.epam.gymcrm.domain.model.Trainee;
-import com.epam.gymcrm.domain.model.Trainer;
-import com.epam.gymcrm.domain.model.User;
-import com.epam.gymcrm.dto.TrainerDto;
-import com.epam.gymcrm.exception.InvalidCredentialsException;
-import com.epam.gymcrm.exception.NotFoundException;
-import com.epam.gymcrm.mapper.TrainerMapper;
+import com.epam.gymcrm.api.mapper.TrainerRegistrationResponseMapper;
+import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
+import com.epam.gymcrm.api.payload.response.TrainerRegistrationResponse;
+import com.epam.gymcrm.db.entity.TrainerEntity;
+import com.epam.gymcrm.db.entity.TrainingTypeEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
+import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import com.epam.gymcrm.db.repository.UserRepository;
+import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
+import com.epam.gymcrm.domain.mapper.TrainingTypeDomainMapper;
+import com.epam.gymcrm.domain.model.Trainer;
+import com.epam.gymcrm.domain.model.User;
+import com.epam.gymcrm.exception.BadRequestException;
+import com.epam.gymcrm.exception.NotFoundException;
 import com.epam.gymcrm.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TrainerService {
@@ -27,29 +29,46 @@ public class TrainerService {
     private final TraineeRepository traineeRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(TrainerService.class);
+    private final TrainingTypeRepository trainingTypeRepository;
 
-    public TrainerService(TrainerRepository trainerRepository, UserRepository userRepository, TraineeRepository traineeRepository) {
+    public TrainerService(TrainerRepository trainerRepository, UserRepository userRepository, TraineeRepository traineeRepository, TrainingTypeRepository trainingTypeRepository) {
         this.trainerRepository = trainerRepository;
         this.userRepository = userRepository;
         this.traineeRepository = traineeRepository;
+        this.trainingTypeRepository = trainingTypeRepository;
     }
 
-    /*@Transactional
-    public TrainerDto createTrainer(TrainerDto trainerDto) {
-        logger.info("Creating new trainer: {} {}", trainerDto.getFirstName(), trainerDto.getLastName());
-        Trainer trainer = TrainerMapper.toTrainer(trainerDto);
+    @Transactional
+    public TrainerRegistrationResponse createTrainer(TrainerRegistrationRequest request) {
+        logger.info("Registering new trainer: {} {}", request.firstName(), request.lastName());
 
-        User user = UserUtils.createUser(trainerDto.getFirstName(), trainerDto.getLastName(), userRepository);
+        TrainingTypeEntity specialization = trainingTypeRepository.findById(request.specialization())
+                .orElseThrow(() -> {
+                    logger.warn("Trainer registration failed: specialization not found. id={}", request.specialization());
+                    return new NotFoundException("Specialization (training type) not found. id=" + request.specialization());
+                });
 
+        User user = UserUtils.createUser(request.firstName(), request.lastName(), userRepository);
+
+        if (traineeRepository.existsByUserUsername(user.getUsername())) {
+            logger.warn("Registration failed: User cannot be both trainer and trainee. username={}", user.getUsername());
+            throw new BadRequestException("User cannot be both trainer and trainee.");
+        }
+
+        Trainer trainer = new Trainer();
         trainer.setUser(user);
+        trainer.setSpecialization(TrainingTypeDomainMapper.toDomain(specialization));
 
-        // Save
-        Trainer savedTrainer = trainerRepository.save(trainer);
+        TrainerEntity trainerEntity = TrainerDomainMapper.toTrainerEntity(trainer);
 
-        logger.info("Trainer created: id={}, username={}", trainer.getId(), user.getUsername());
-        return TrainerMapper.toTrainerDto(savedTrainer);
+        TrainerEntity saved = trainerRepository.save(trainerEntity);
+
+        logger.info("Trainer registered successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
+
+        return TrainerRegistrationResponseMapper.toResponse(saved);
     }
 
+    /*
     public TrainerDto findById(Long id) {
         logger.info("Finding trainer by id: {}", id);
         Trainer trainer = trainerRepository.findByIdWithTrainees(id)

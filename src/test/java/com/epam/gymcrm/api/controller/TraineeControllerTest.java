@@ -59,7 +59,7 @@ class TraineeControllerTest {
 
         when(traineeService.createTrainee(request)).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/trainees") // mapping "/trainee" ise
+        mockMvc.perform(post("/api/v1/trainees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -185,8 +185,8 @@ class TraineeControllerTest {
     @Test
     void updateTraineeTrainers_shouldReturn200AndTrainersList() throws Exception {
         List<TrainerSummaryResponse> trainers = List.of(
-                new TrainerSummaryResponse("trainer1", "Ahmet", "Yılmaz", "Cardio"),
-                new TrainerSummaryResponse("trainer2", "Ayşe", "Kara", "Fitness")
+                new TrainerSummaryResponse("trainer1", "Ahmet", "Yılmaz", 1L),
+                new TrainerSummaryResponse("trainer2", "Ayşe", "Kara", 2L)
         );
         TraineeTrainerUpdateResponse response = new TraineeTrainerUpdateResponse(trainers);
 
@@ -209,8 +209,9 @@ class TraineeControllerTest {
                 .andExpect(jsonPath("$.trainers.length()").value(2))
                 .andExpect(jsonPath("$.trainers[0].trainerUsername").value("trainer1"))
                 .andExpect(jsonPath("$.trainers[0].trainerFirstName").value("Ahmet"))
+                .andExpect(jsonPath("$.trainers[0].trainerSpecialization").value(1))
                 .andExpect(jsonPath("$.trainers[1].trainerUsername").value("trainer2"))
-                .andExpect(jsonPath("$.trainers[1].trainerFirstName").value("Ayşe"));
+                .andExpect(jsonPath("$.trainers[1].trainerSpecialization").value(2));
 
         verify(traineeService).updateTraineeTrainers(any(TraineeTrainerUpdateRequest.class));
     }
@@ -319,8 +320,8 @@ class TraineeControllerTest {
         // Arrange
         String username = "ali.veli";
         List<UnassignedActiveTrainerResponse> trainers = List.of(
-                new UnassignedActiveTrainerResponse("mehmet.kaya", "Mehmet", "Kaya", "Cardio"),
-                new UnassignedActiveTrainerResponse("ayse.dogan", "Ayşe", "Doğan", "Yoga")
+                new UnassignedActiveTrainerResponse("mehmet.kaya", "Mehmet", "Kaya", 1L),
+                new UnassignedActiveTrainerResponse("ayse.dogan", "Ayşe", "Doğan", 2L)
         );
         UnassignedActiveTrainerListResponse response = new UnassignedActiveTrainerListResponse(trainers);
 
@@ -333,8 +334,9 @@ class TraineeControllerTest {
                 .andExpect(jsonPath("$.trainers.length()").value(2))
                 .andExpect(jsonPath("$.trainers[0].username").value("mehmet.kaya"))
                 .andExpect(jsonPath("$.trainers[0].firstName").value("Mehmet"))
+                .andExpect(jsonPath("$.trainers[0].specialization").value(1))
                 .andExpect(jsonPath("$.trainers[1].username").value("ayse.dogan"))
-                .andExpect(jsonPath("$.trainers[1].specialization").value("Yoga"));
+                .andExpect(jsonPath("$.trainers[1].specialization").value(2));
 
         verify(traineeService).getUnassignedActiveTrainersForTrainee(username);
     }

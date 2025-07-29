@@ -27,7 +27,7 @@ public class TraineeProfileMapper {
                         trainerEntity.getUser().getUsername(),
                         trainerEntity.getUser().getFirstName(),
                         trainerEntity.getUser().getLastName(),
-                        trainerEntity.getSpecialization()
+                        trainerEntity.getTrainingType().getId()
                 )).collect(Collectors.toSet());
 
         return new TraineeProfileResponse(

@@ -4,6 +4,6 @@ public record TrainerInfoResponse(
         String username,
         String firstName,
         String lastName,
-        String specialization
+        Long specialization
 ) {
 }

@@ -17,7 +17,7 @@ public class TrainerSummaryMapper {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                trainerEntity.getSpecialization()
+                trainerEntity.getTrainingType().getId()
         );
     }
 }

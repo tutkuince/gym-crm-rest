@@ -8,7 +8,6 @@ public class TrainingType {
 
     private Long id;
     private String trainingTypeName;
-    private Set<Training> trainings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -24,14 +23,6 @@ public class TrainingType {
 
     public void setTrainingTypeName(String trainingTypeName) {
         this.trainingTypeName = trainingTypeName;
-    }
-
-    public Set<Training> getTrainings() {
-        return trainings;
-    }
-
-    public void setTrainings(Set<Training> trainings) {
-        this.trainings = trainings;
     }
 
     @Override
