@@ -7,6 +7,7 @@ import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.domain.mapper.UserDomainMapper;
 import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.exception.BadRequestException;
+import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class AuthService {
 
         if (!user.checkPassword(request.password())) {
             logger.warn("Login failed: invalid password. username={}", username);
-            throw new BadRequestException("Login failed: Invalid credentials.");
+            throw new InvalidCredentialsException("Login failed: Invalid credentials.");
         }
 
         if (!user.isActive()) {

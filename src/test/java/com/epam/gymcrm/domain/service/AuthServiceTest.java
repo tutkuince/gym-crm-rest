@@ -5,6 +5,7 @@ import com.epam.gymcrm.api.payload.request.LoginRequest;
 import com.epam.gymcrm.db.entity.UserEntity;
 import com.epam.gymcrm.db.repository.UserRepository;
 import com.epam.gymcrm.exception.BadRequestException;
+import com.epam.gymcrm.exception.InvalidCredentialsException;
 import com.epam.gymcrm.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,7 +61,7 @@ class AuthServiceTest {
         when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(userEntity));
 
         // act & assert
-        BadRequestException ex = assertThrows(BadRequestException.class, () ->
+        InvalidCredentialsException ex = assertThrows(InvalidCredentialsException.class, () ->
                 authService.login(new LoginRequest(USERNAME, "wrong-pass"))
         );
         assertTrue(ex.getMessage().contains("Invalid credentials"));
