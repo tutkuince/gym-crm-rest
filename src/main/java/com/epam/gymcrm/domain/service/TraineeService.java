@@ -15,7 +15,6 @@ import com.epam.gymcrm.db.repository.specification.TrainingSpecification;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.model.Trainee;
-import com.epam.gymcrm.domain.model.Trainer;
 import com.epam.gymcrm.domain.model.User;
 import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.NotFoundException;
@@ -27,10 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.epam.gymcrm.util.DateConstants.DEFAULT_DATE_FORMATTER;
 
@@ -101,62 +99,52 @@ public class TraineeService {
     }
 
     @Transactional
-    public TraineeProfileUpdateResponse update(TraineeUpdateRequest traineeUpdateRequest) {
-        String username = traineeUpdateRequest.username();
-        logger.info("Update requested for trainee. Username: {}", username);
+    public TraineeProfileUpdateResponse update(TraineeUpdateRequest request) {
+        String username = request.username();
+        logger.info("Trainee update request received. username={}", username);
 
         TraineeEntity traineeEntity = traineeRepository.findByUserUsernameWithTrainers(username)
                 .orElseThrow(() -> {
-                    logger.warn("Update failed: Trainee not found. Username: {}", username);
-                    return new NotFoundException("Trainee to update not found with Username: " + username);
+                    logger.warn("Update failed: Trainee not found. username={}", username);
+                    return new NotFoundException("Trainee not found with username: " + username);
                 });
 
         UserEntity userEntity = traineeEntity.getUser();
-        if (Objects.isNull(userEntity)) {
+        if (userEntity == null) {
             throw new IllegalStateException(
-                    String.format("User entity is null while updating Trainee (username=%s). Data integrity violation during update!", username)
+                    String.format("User entity is null while updating Trainee (username=%s). Data integrity violation!", username)
             );
         }
 
-        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
-        User user = trainee.getUser();
+        // Update user fields
+        userEntity.setFirstName(request.firstName());
+        userEntity.setLastName(request.lastName());
+        userEntity.setActive(request.isActive());
 
-        // Mandatory Fields
-        user.setFirstName(traineeUpdateRequest.firstName());
-        user.setLastName(traineeUpdateRequest.lastName());
-        user.setActive(traineeUpdateRequest.isActive());
-
-        trainee.setUser(user);
-
-
-        // Optional Fields
-        if (Objects.nonNull(traineeUpdateRequest.dateOfBirth()) && !traineeUpdateRequest.dateOfBirth().isBlank()) {
+        // Optional fields
+        if (Objects.nonNull(request.dateOfBirth()) && !request.dateOfBirth().isBlank()) {
             try {
-                trainee.setDateOfBirth(LocalDate.parse(traineeUpdateRequest.dateOfBirth(), DEFAULT_DATE_FORMATTER));
+                traineeEntity.setDateOfBirth(LocalDate.parse(request.dateOfBirth(), DEFAULT_DATE_FORMATTER));
             } catch (Exception e) {
-                logger.warn("Invalid dateOfBirth provided during updateTraineeProfile: '{}'", traineeUpdateRequest.dateOfBirth());
+                logger.warn("Invalid dateOfBirth during updateTraineeProfile: '{}'", request.dateOfBirth());
                 throw new BadRequestException(
-                        String.format("Invalid dateOfBirth format: %s. Expected format: yyyy-MM-dd", traineeUpdateRequest.dateOfBirth())
+                        String.format("Invalid dateOfBirth format: %s. Expected format: yyyy-MM-dd", request.dateOfBirth())
                 );
             }
         }
 
-        if (Objects.nonNull(traineeUpdateRequest.address()) && !traineeUpdateRequest.address().isBlank()) {
-            trainee.setAddress(traineeUpdateRequest.address());
+        if (Objects.nonNull(request.address()) && !request.address().isBlank()) {
+            traineeEntity.setAddress(request.address());
         }
 
-        TraineeEntity updatedTraineeEntity = TraineeDomainMapper.toTraineeEntity(trainee);
-        updatedTraineeEntity.setId(traineeEntity.getId());
-        updatedTraineeEntity.setTrainers(traineeEntity.getTrainers());
-        updatedTraineeEntity.setTrainings(traineeEntity.getTrainings());
-
         // Save
-        TraineeEntity saved = traineeRepository.save(updatedTraineeEntity);
+        TraineeEntity saved = traineeRepository.save(traineeEntity);
 
+        logger.info("Trainee profile updated successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
 
-        logger.info("Trainee profile updated successfully. ID: {}, Username: {}", saved.getId(), saved.getUser().getUsername());
         return TraineeProfileUpdateMapper.toTraineeProfileUpdateResponse(saved);
     }
+
 
     @Transactional
     public void deleteTraineeByUsername(String username) {
@@ -173,15 +161,13 @@ public class TraineeService {
     @Transactional
     public TraineeTrainerUpdateResponse updateTraineeTrainers(TraineeTrainerUpdateRequest request) {
         String traineeUsername = request.traineeUsername();
-        logger.info("Updating trainers for trainee: id={}, newTrainers={}", traineeUsername, request.trainers());
+        logger.info("Updating trainers for trainee. username={}, newTrainers={}", traineeUsername, request.trainers());
 
         TraineeEntity traineeEntity = traineeRepository.findByUserUsernameWithTrainers(traineeUsername)
                 .orElseThrow(() -> {
                     logger.warn("Trainee to update trainers not found: username={}", traineeUsername);
                     return new NotFoundException("Trainee not found with username: " + traineeUsername);
                 });
-
-        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
 
         List<String> trainerUsernames = request.trainers().stream()
                 .map(TrainerUsernameRequest::trainerUsername)
@@ -191,16 +177,10 @@ public class TraineeService {
                 ? List.of()
                 : trainerRepository.findAllByUserUsernameIn(trainerUsernames);
 
-        Set<Trainer> domainTrainers = trainerEntities.stream()
-                .map(TrainerDomainMapper::toTrainer)
-                .collect(Collectors.toSet());
-        trainee.setTrainers(domainTrainers);
+        traineeEntity.setTrainers(new HashSet<>(trainerEntities));
 
-        TraineeEntity updatedEntity = TraineeDomainMapper.toTraineeEntity(trainee);
-        updatedEntity.setId(traineeEntity.getId());
-        updatedEntity.setTrainings(traineeEntity.getTrainings());
-
-        TraineeEntity saved = traineeRepository.save(updatedEntity);
+        // Save et
+        TraineeEntity saved = traineeRepository.save(traineeEntity);
 
         logger.info("Updated trainers for trainee: id={}", saved.getId());
 
@@ -251,7 +231,7 @@ public class TraineeService {
                     return new NotFoundException("Trainee to activate not found. username=" + username);
                 });
 
-        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
+        Trainee trainee = TraineeDomainMapper.toTraineeShallow(traineeEntity);
 
         try {
             trainee.getUser().setActive(updateActiveStatusRequest.isActive());
@@ -259,15 +239,17 @@ public class TraineeService {
             logger.warn("Activation SKIPPED: Trainee already active. username={}", username);
             throw e;
         }
-        TraineeEntity updated = TraineeDomainMapper.toTraineeEntity(trainee);
+
+        TraineeEntity updated = TraineeDomainMapper.toTraineeEntityShallow(trainee);
         updated.setId(traineeEntity.getId());
         updated.setTrainers(traineeEntity.getTrainers());
         updated.setTrainings(traineeEntity.getTrainings());
 
-        TraineeEntity saved = traineeRepository.save(updated);
+        traineeRepository.save(updated);
 
-        logger.info("Trainee activated successfully. id={}, username={}", saved.getId(), saved.getUser().getUsername());
+        logger.info("Trainee activated successfully. id={}, username={}", updated.getId(), updated.getUser().getUsername());
     }
+
 
     public UnassignedActiveTrainerListResponse getUnassignedActiveTrainersForTrainee(String username) {
         logger.info("Fetching unassigned active trainers for trainee. username={}", username);

@@ -164,7 +164,7 @@ class TraineeServiceTest {
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> traineeService.update(request));
 
-        assertTrue(ex.getMessage().contains("Trainee to update not found"));
+        assertTrue(ex.getMessage().contains("Trainee not found"));
         verify(traineeRepository).findByUserUsernameWithTrainers("notfound");
     }
 

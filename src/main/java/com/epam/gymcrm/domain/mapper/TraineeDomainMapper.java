@@ -76,4 +76,21 @@ public class TraineeDomainMapper {
         return trainee;
     }
 
+    public static Trainee toTraineeShallow(TraineeEntity entity) {
+        return new Trainee(
+                entity.getId(),
+                UserDomainMapper.toUser(entity.getUser()),
+                entity.getDateOfBirth(),
+                entity.getAddress()
+        );
+    }
+    public static TraineeEntity toTraineeEntityShallow(Trainee trainee) {
+        TraineeEntity entity = new TraineeEntity();
+        entity.setId(trainee.getId());
+        entity.setUser(UserDomainMapper.toUserEntity(trainee.getUser()));
+        entity.setDateOfBirth(trainee.getDateOfBirth());
+        entity.setAddress(trainee.getAddress());
+        return entity;
+    }
+
 }

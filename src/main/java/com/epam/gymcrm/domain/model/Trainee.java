@@ -14,6 +14,16 @@ public class Trainee {
     private Set<Training> trainings = new HashSet<>();
     private Set<Trainer> trainers = new HashSet<>();
 
+    public Trainee() {
+    }
+
+    public Trainee(Long id, User user, LocalDate dateOfBirth, String address) {
+        this.id = id;
+        this.user = user;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+    }
+
     public Long getId() {
         return id;
     }

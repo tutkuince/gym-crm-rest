@@ -1,14 +1,14 @@
 -- USERS
 INSERT INTO users (first_name, last_name, username, password, is_active)
 VALUES ('Ali', 'Veli', 'ali.veli', '1234', true),
-       ('Ayşe', 'Yılmaz', 'ayse.yilmaz', 'abcd', true),
+       ('Ayse', 'Yilmaz', 'ayse.yilmaz', 'abcd', true),
        ('Mehmet', 'Demir', 'mehmet.demir', 'pass', true),
-       ('Deniz', 'Sarı', 'deniz.sari', '1111', true),
+       ('Deniz', 'Sari', 'deniz.sari', '1111', true),
        ('Gizem', 'Kara', 'gizem.kara', 'qwerty', true),
        ('Burak', 'Aslan', 'burak.aslan', 'burak123', true),
        ('Selin', 'Toprak', 'selin.toprak', 'selinpw', true),
        ('Emre', 'Polat', 'emre.polat', 'empw', false),
-       ('Zeynep', 'Aydın', 'zeynep.aydin', 'zeynep2024', true);
+       ('Zeynep', 'Aydin', 'zeynep.aydin', 'zeynep2024', true);
 
 -- TRAINING_TYPE
 INSERT INTO training_types (training_type_name)
@@ -25,7 +25,7 @@ VALUES ((SELECT id FROM users WHERE username = 'ali.veli'), '2000-01-01', 'Istan
        ((SELECT id FROM users WHERE username = 'deniz.sari'), '2001-03-15', 'Izmir'),
        ((SELECT id FROM users WHERE username = 'gizem.kara'), '1997-09-21', 'Bursa'),
        ((SELECT id FROM users WHERE username = 'emre.polat'), '1993-11-12', 'Antalya'),
-       ((SELECT id FROM users WHERE username = 'zeynep.aydin'), '2002-07-18', 'Eskişehir');
+       ((SELECT id FROM users WHERE username = 'zeynep.aydin'), '2002-07-18', 'Eskisehir');
 
 -- TRAINER
 INSERT INTO trainers (user_id, specialization_id)

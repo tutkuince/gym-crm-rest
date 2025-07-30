@@ -10,7 +10,7 @@ public class TraineeTrainerUpdateMapper {
 
     public static TraineeTrainerUpdateResponse toResponse(List<TrainerEntity> trainerEntities) {
         List<TrainerSummaryResponse> trainers = trainerEntities.stream()
-                .map(TrainerSummaryMapper::toTrainerSummaryResponse)
+                .map(TrainerSummaryMapper::toSummary)
                 .toList();
         return new TraineeTrainerUpdateResponse(trainers);
     }
