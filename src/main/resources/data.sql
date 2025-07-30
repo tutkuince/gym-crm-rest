@@ -28,7 +28,7 @@ VALUES ((SELECT id FROM users WHERE username = 'ali.veli'), '2000-01-01', 'Istan
        ((SELECT id FROM users WHERE username = 'zeynep.aydin'), '2002-07-18', 'Eskişehir');
 
 -- TRAINER
-INSERT INTO trainers (user_id, specialization)
+INSERT INTO trainers (user_id, specialization_id)
 VALUES ((SELECT id FROM users WHERE username = 'ayse.yilmaz'),
         (SELECT id FROM training_types WHERE training_type_name = 'Cardio')),
        ((SELECT id FROM users WHERE username = 'burak.aslan'),
