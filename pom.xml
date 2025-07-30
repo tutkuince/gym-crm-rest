@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>gym-crm</name>
+    <name>gym-crm-rest</name>
     <url>http://maven.apache.org</url>
 
     <properties>
