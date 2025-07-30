@@ -16,7 +16,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.epam.gymcrm.repository")
+@EnableJpaRepositories(basePackages = "com.epam.gymcrm.db.repository")
 @ComponentScan(basePackages = "com.epam.gymcrm")
 public class HibernateConfig {
 
@@ -35,7 +35,7 @@ public class HibernateConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.epam.gymcrm.domain");
+        em.setPackagesToScan("com.epam.gymcrm.db.entity");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(jpaProperties());
         return em;
