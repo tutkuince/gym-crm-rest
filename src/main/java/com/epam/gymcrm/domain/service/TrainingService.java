@@ -7,7 +7,6 @@ import com.epam.gymcrm.db.entity.TrainingEntity;
 import com.epam.gymcrm.db.repository.TraineeRepository;
 import com.epam.gymcrm.db.repository.TrainerRepository;
 import com.epam.gymcrm.db.repository.TrainingRepository;
-import com.epam.gymcrm.db.repository.TrainingTypeRepository;
 import com.epam.gymcrm.domain.mapper.TraineeDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainerDomainMapper;
 import com.epam.gymcrm.domain.mapper.TrainingDomainMapper;
@@ -32,18 +31,15 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
     private final TrainerRepository trainerRepository;
     private final TraineeRepository traineeRepository;
-    private final TrainingTypeRepository trainingTypeRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(TrainingService.class);
 
     public TrainingService(TrainingRepository trainingRepository,
                            TrainerRepository trainerRepository,
-                           TraineeRepository traineeRepository,
-                           TrainingTypeRepository trainingTypeRepository) {
+                           TraineeRepository traineeRepository) {
         this.trainingRepository = trainingRepository;
         this.trainerRepository = trainerRepository;
         this.traineeRepository = traineeRepository;
-        this.trainingTypeRepository = trainingTypeRepository;
     }
 
     @Transactional

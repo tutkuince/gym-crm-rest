@@ -1,7 +1,6 @@
 package com.epam.gymcrm.db.repository;
 
 import com.epam.gymcrm.db.entity.TrainerEntity;
-import com.epam.gymcrm.domain.model.Trainer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

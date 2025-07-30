@@ -233,7 +233,8 @@ class TrainerServiceTest {
         verify(trainerRepository, never()).save(any());
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void getTrainerTrainings_shouldReturnResponse_whenTrainerExists() {
         // Arrange
         String username = "ali.veli";

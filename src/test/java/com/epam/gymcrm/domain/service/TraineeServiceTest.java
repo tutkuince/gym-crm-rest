@@ -349,7 +349,8 @@ class TraineeServiceTest {
         verifyNoMoreInteractions(trainerRepository);
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void getTraineeTrainings_shouldReturnList_whenTraineeExists() {
         String username = "ali.veli";
         TraineeEntity traineeEntity = new TraineeEntity();

@@ -1,8 +1,6 @@
 package com.epam.gymcrm.domain.model;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class TrainingType {
 
