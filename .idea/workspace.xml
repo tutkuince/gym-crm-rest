@@ -4,12 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="feat: Implement transaction-level and REST call details logging">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/logging/RestLoggingInterceptorTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/logging/TransactionIdFilterTest.java" afterDir="false" />
+    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="feat: Implement transaction-level and REST call details logging unit tests">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-16x16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-32x32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/oauth2-redirect.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/openapi.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-initializer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-bundle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle-core.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-standalone-preset.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/config/WebConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +34,8 @@
       <list>
         <option value="Interface" />
         <option value="Record" />
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -69,6 +82,7 @@
     "JUnit.AuthControllerTest.login_shouldReturn400_whenInvalidCredentials.executor": "Run",
     "JUnit.AuthServiceTest.executor": "Run",
     "JUnit.GymCrmApplicationTest.executor": "Run",
+    "JUnit.RestLoggingInterceptorTest.testPreHandle_and_AfterCompletion_logWithTransactionId.executor": "Run",
     "JUnit.StorageTest.executor": "Run",
     "JUnit.TraineeControllerTest (1).executor": "Run",
     "JUnit.TraineeControllerTest.executor": "Run",
@@ -116,7 +130,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/tutku/Documents/epam-java-specialization/task_5-rest/gym-crm-rest/src/main/java/com/epam/gymcrm/db/entity",
+    "last_opened_file_path": "C:/Users/tutku/Documents/epam-java-specialization/task_5-rest/gym-crm-rest/src/main/webapp/swagger-ui",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -134,6 +148,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\src\main\webapp\swagger-ui" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\src\main\java\com\epam\gymcrm\db\entity" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_3-git\gym-crm\api-requests" />
     </key>
@@ -294,15 +309,7 @@
       <workItem from="1753880305749" duration="196000" />
       <workItem from="1753881334332" duration="10777000" />
       <workItem from="1753913111884" duration="7028000" />
-      <workItem from="1753955613679" duration="17129000" />
-    </task>
-    <task id="LOCAL-00037" summary="feat: Add authentication for Trainer endpoints, global exception handling, and update tests">
-      <option name="closed" value="true" />
-      <created>1753211730101</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1753211730101</updated>
+      <workItem from="1753955613679" duration="22390000" />
     </task>
     <task id="LOCAL-00038" summary="feat: Add authentication and username-based retrieval endpoints for Trainee">
       <option name="closed" value="true" />
@@ -688,7 +695,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753973907884</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="feat: Implement transaction-level and REST call details logging unit tests">
+      <option name="closed" value="true" />
+      <created>1753982249659</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1753982249659</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -709,7 +724,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
-    <MESSAGE value="feat: Implement update trainee profile endpoint" />
     <MESSAGE value="feat: Implement delete trainee profile endpoint" />
     <MESSAGE value="feat: Implement update trainee trainings list endpoint" />
     <MESSAGE value="feat: Implement Get Trainer Trainings List endpoint" />
@@ -734,7 +748,8 @@
     <MESSAGE value="refactor: Tainer and Training related updates" />
     <MESSAGE value="feat: Add authentication check for all Trainer/Trainee functions except profile creation" />
     <MESSAGE value="feat: Implement transaction-level and REST call details logging" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Implement transaction-level and REST call details logging" />
+    <MESSAGE value="feat: Implement transaction-level and REST call details logging unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Implement transaction-level and REST call details logging unit tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -770,7 +785,7 @@
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_controller_in_gym_crm.ic" NAME="com.epam.gymcrm.controller in gym-crm Coverage Results" MODIFIED="1752442309969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.controller.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/gym_crm_rest$java_in_gym_crm.ic" NAME="java in gym-crm Coverage Results" MODIFIED="1753969147523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/gym_crm_rest$java_in_gym_crm.ic" NAME="java in gym-crm Coverage Results" MODIFIED="1753982213038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_in_gym_crm.ic" NAME="com.epam.gymcrm in gym-crm Coverage Results" MODIFIED="1752443439165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.*</FILTER>
     </SUITE>

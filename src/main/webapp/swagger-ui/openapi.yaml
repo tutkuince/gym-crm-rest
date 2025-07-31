@@ -1,0 +1,484 @@
+openapi: 3.0.1
+info:
+  title: Gym CRM API Documentation
+  version: "1.0"
+  description: |
+    API documentation for Gym CRM:
+    - Authentication
+    - Trainee management
+    - Trainer management
+    - Training and Training Types
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /api/v1/auth/login:
+    get:
+      summary: User Login
+      description: Authenticates a user with the given credentials.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+
+  /api/v1/auth/change-password:
+    put:
+      summary: Change Password
+      description: Changes the user's password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Password changed successfully
+
+  /api/v1/trainees:
+    post:
+      summary: Register Trainee
+      description: Registers a new trainee in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraineeRegistrationRequest'
+      responses:
+        '201':
+          description: Trainee created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraineeRegistrationResponse'
+
+  /api/v1/trainees/profile:
+    get:
+      summary: Get Trainee Profile
+      description: Retrieves the profile information of a trainee by username.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the trainee profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraineeProfileResponse'
+
+    put:
+      summary: Update Trainee Profile
+      description: Updates the profile information of a trainee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraineeUpdateRequest'
+      responses:
+        '200':
+          description: Trainee profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraineeProfileUpdateResponse'
+
+  /api/v1/trainees/{username}:
+    delete:
+      summary: Delete Trainee
+      description: Deletes the trainee with the specified username.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trainee deleted successfully
+
+  /api/v1/trainees/trainers:
+    put:
+      summary: Update Trainee-Trainers
+      description: Updates the trainers assigned to a trainee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraineeTrainerUpdateRequest'
+      responses:
+        '200':
+          description: Trainers updated for trainee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraineeTrainerUpdateResponse'
+
+  /api/v1/trainees/trainings:
+    get:
+      summary: Get Trainee Trainings
+      description: Lists all trainings for a trainee, with optional filters.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: periodFrom
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: periodTo
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: trainerName
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: trainingType
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trainings listed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraineeTrainingsListResponse'
+
+  /api/v1/trainees/status:
+    patch:
+      summary: Update Trainee Active Status
+      description: Activates or deactivates a trainee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActiveStatusRequest'
+      responses:
+        '200':
+          description: Status updated
+
+  /api/v1/trainees/unassigned-trainers:
+    get:
+      summary: Get Unassigned Trainers for Trainee
+      description: Returns a list of active trainers not yet assigned to the trainee.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of unassigned trainers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnassignedActiveTrainerListResponse'
+
+  /api/v1/trainers:
+    post:
+      summary: Register Trainer
+      description: Registers a new trainer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainerRegistrationRequest'
+      responses:
+        '201':
+          description: Trainer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainerRegistrationResponse'
+
+  /api/v1/trainers/profile:
+    get:
+      summary: Get Trainer Profile
+      description: Retrieves the profile of a trainer by username.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trainer profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainerProfileResponse'
+
+    put:
+      summary: Update Trainer Profile
+      description: Updates the profile of a trainer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTrainerProfileRequest'
+      responses:
+        '200':
+          description: Trainer profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTrainerProfileResponse'
+
+  /api/v1/trainers/trainings:
+    get:
+      summary: Get Trainer Trainings
+      description: Lists all trainings conducted by a trainer.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: periodFrom
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: periodTo
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: traineeName
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trainer's trainings listed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainerTrainingsListResponse'
+
+  /api/v1/trainers/status:
+    patch:
+      summary: Update Trainer Active Status
+      description: Activates or deactivates a trainer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActiveStatusRequest'
+      responses:
+        '200':
+          description: Status updated
+
+  /api/v1/trainings:
+    post:
+      summary: Create Training
+      description: Adds a new training session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTrainingRequest'
+      responses:
+        '200':
+          description: Training created
+
+  /api/v1/training-types:
+    get:
+      summary: Get Training Types
+      description: Returns a list of all training types.
+      responses:
+        '200':
+          description: Training types listed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingTypeListResponse'
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    ChangePasswordRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+    TraineeRegistrationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    TraineeRegistrationResponse:
+      type: object
+      properties:
+        traineeId:
+          type: integer
+        message:
+          type: string
+    TraineeProfileResponse:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+    TraineeUpdateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+    TraineeProfileUpdateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    TraineeTrainerUpdateRequest:
+      type: object
+      properties:
+        traineeUsername:
+          type: string
+        trainerUsernames:
+          type: array
+          items:
+            type: string
+    TraineeTrainerUpdateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    TraineeTrainingsListResponse:
+      type: object
+      properties:
+        trainings:
+          type: array
+          items:
+            type: object
+    UpdateActiveStatusRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        active:
+          type: boolean
+    UnassignedActiveTrainerListResponse:
+      type: object
+      properties:
+        trainers:
+          type: array
+          items:
+            type: object
+    TrainerRegistrationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+    TrainerRegistrationResponse:
+      type: object
+      properties:
+        trainerId:
+          type: integer
+        message:
+          type: string
+    TrainerProfileResponse:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+    UpdateTrainerProfileRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+    UpdateTrainerProfileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    TrainerTrainingsListResponse:
+      type: object
+      properties:
+        trainings:
+          type: array
+          items:
+            type: object
+    AddTrainingRequest:
+      type: object
+      properties:
+        traineeUsername:
+          type: string
+        trainerUsername:
+          type: string
+        trainingType:
+          type: string
+        date:
+          type: string
+    TrainingTypeListResponse:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            type: string
