@@ -68,4 +68,26 @@ public class TrainerDomainMapper {
                 trainerEntity.getTrainingType().getId()
         );
     }
+
+    public static Trainer toTrainerShallow(TrainerEntity entity) {
+        if (Objects.isNull(entity.getUser())) {
+            throw new IllegalStateException(
+                    String.format(
+                            "TrainerDomainMapper: Mapping failed for TrainerEntity (id=%d): Associated User entity is null. Data integrity violation!",
+                            entity.getId()
+                    )
+            );
+        }
+
+        Trainer trainer = new Trainer();
+        trainer.setId(entity.getId());
+        trainer.setUser(UserDomainMapper.toUser(entity.getUser()));
+        trainer.setSpecialization(
+                entity.getTrainingType() != null
+                        ? TrainingTypeDomainMapper.toDomain(entity.getTrainingType())
+                        : null
+        );
+
+        return trainer;
+    }
 }

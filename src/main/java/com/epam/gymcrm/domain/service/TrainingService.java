@@ -59,8 +59,8 @@ public class TrainingService {
                     return new NotFoundException("Trainer not found: " + request.trainerUsername());
                 });
 
-        Trainee trainee = TraineeDomainMapper.toTrainee(traineeEntity);
-        Trainer trainer = TrainerDomainMapper.toTrainer(trainerEntity);
+        Trainee trainee = TraineeDomainMapper.toTraineeShallow(traineeEntity);
+        Trainer trainer = TrainerDomainMapper.toTrainerShallow(trainerEntity);
 
         Training training;
         try {

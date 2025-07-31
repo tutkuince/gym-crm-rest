@@ -172,7 +172,7 @@ public class TrainerService {
                     return new NotFoundException("Trainer to activate/de-activate not found. username=" + username);
                 });
 
-        Trainer trainer = TrainerDomainMapper.toTrainer(trainerEntity);
+        Trainer trainer = TrainerDomainMapper.toTrainerShallow(trainerEntity);
 
         try {
             trainer.getUser().setActive(updateActiveStatusRequest.isActive());
