@@ -8,6 +8,7 @@ import java.security.SecureRandom;
 public class UserUtils {
 
     private static final int PASSWORD_CHAR_LENGTH = 10;
+    private static final String ALPHANUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public static String generateUniqueUsername(String firstName, String lastName, UserRepository userRepository) {
         String baseUsername = firstName.toLowerCase() + "." + lastName.toLowerCase();
@@ -24,8 +25,8 @@ public class UserUtils {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(PASSWORD_CHAR_LENGTH);
         for (int i = 0; i < PASSWORD_CHAR_LENGTH; i++) {
-            int ascii = 33 + random.nextInt(94);
-            sb.append((char) ascii);
+            int idx = random.nextInt(ALPHANUM.length());
+            sb.append(ALPHANUM.charAt(idx));
         }
         return sb.toString();
     }

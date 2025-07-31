@@ -1,5 +1,6 @@
 package com.epam.gymcrm.domain.service;
 
+import com.epam.gymcrm.api.auth.AuthSessionManager;
 import com.epam.gymcrm.api.payload.request.ChangePasswordRequest;
 import com.epam.gymcrm.api.payload.request.LoginRequest;
 import com.epam.gymcrm.db.entity.UserEntity;
@@ -49,6 +50,7 @@ public class AuthService {
             throw new BadRequestException("Login failed: User is not active.");
         }
 
+        AuthSessionManager.login(username);
         logger.info("Login success! username={}", request.username());
     }
 

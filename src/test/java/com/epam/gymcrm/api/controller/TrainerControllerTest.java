@@ -1,5 +1,6 @@
 package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.auth.AuthSessionManager;
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;
 import com.epam.gymcrm.api.payload.request.UpdateTrainerProfileRequest;
@@ -9,6 +10,7 @@ import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +50,13 @@ class TrainerControllerTest {
                 .standaloneSetup(trainerController)
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
+    }
+
+    @AfterEach
+    void cleanup() {
+        AuthSessionManager.logout("ali.veli");
+        AuthSessionManager.logout("notfound.user");
+        AuthSessionManager.logout("unknown");
     }
 
     @Test
@@ -97,7 +106,9 @@ class TrainerControllerTest {
     }
 
     @Test
-    void getTrainerProfile_shouldReturnProfile_whenExists() throws Exception {
+    void getTrainerProfile_shouldReturnProfile_whenAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         TrainerProfileResponse response = new TrainerProfileResponse(
                 "Ali",
                 "Veli",
@@ -119,18 +130,17 @@ class TrainerControllerTest {
     }
 
     @Test
-    void getTrainerProfile_shouldReturn404_whenTrainerNotFound() throws Exception {
-        when(trainerService.getTrainerProfile("notfound"))
-                .thenThrow(new NotFoundException("Trainer not found with username: notfound"));
-
+    void getTrainerProfile_shouldReturn401_whenNotAuthenticated() throws Exception {
         mockMvc.perform(get("/api/v1/trainers/profile")
-                        .param("username", "notfound"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(containsString("Trainer not found")));
+                        .param("username", "ali.veli"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value(containsString("Trainer not authenticated")));
     }
 
     @Test
     void updateTrainerProfile_shouldReturn200AndUpdatedProfile() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
         request.setUsername("ali.veli");
         request.setFirstName("Mehmet");
@@ -159,7 +169,24 @@ class TrainerControllerTest {
     }
 
     @Test
+    void updateTrainerProfile_shouldReturn401_whenNotAuthenticated() throws Exception {
+        UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
+        request.setUsername("ali.veli");
+        request.setFirstName("Ali");
+        request.setLastName("Veli");
+        request.setSpecialization(1L);
+        request.setActive(true);
+
+        mockMvc.perform(put("/api/v1/trainers/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void updateTrainerProfile_shouldReturn404_whenTrainerNotFound() throws Exception {
+        AuthSessionManager.login("notfound");
+
         UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
         request.setUsername("notfound");
         request.setFirstName("Mehmet");
@@ -174,13 +201,15 @@ class TrainerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Trainer not found")));
+                .andExpect(jsonPath("$.message").value(containsString("Trainer not found")));
 
         verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
     }
 
     @Test
     void updateTrainerProfile_shouldReturn409_whenUserIsNull() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         UpdateTrainerProfileRequest request = new UpdateTrainerProfileRequest();
         request.setUsername("ali.veli");
         request.setFirstName("Mehmet");
@@ -195,14 +224,14 @@ class TrainerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("User is null")));
+                .andExpect(jsonPath("$.message").value(containsString("User is null")));
 
         verify(trainerService).updateTrainerProfile(any(UpdateTrainerProfileRequest.class));
     }
 
     @Test
     void getTrainerTrainings_shouldReturn200AndList_whenValidRequest() throws Exception {
-        // Arrange
+        AuthSessionManager.login("ali.veli");
         TrainerTrainingsListResponse mockResponse = new TrainerTrainingsListResponse(
                 List.of(
                         new TrainerTrainingInfo("Push Day", "2024-07-30", "Ali Veli", 60, "ali.veli")
@@ -210,7 +239,6 @@ class TrainerControllerTest {
         );
         when(trainerService.getTrainerTrainings(any())).thenReturn(mockResponse);
 
-        // Act & Assert
         mockMvc.perform(get("/api/v1/trainers/trainings")
                         .param("username", "ali.veli")
                         .param("periodFrom", "2024-07-01")
@@ -224,7 +252,20 @@ class TrainerControllerTest {
     }
 
     @Test
+    void getTrainerTrainings_shouldReturn401_whenNotAuthenticated() throws Exception {
+        mockMvc.perform(get("/api/v1/trainers/trainings")
+                        .param("username", "ali.veli")
+                        .param("periodFrom", "2024-07-01")
+                        .param("periodTo", "2024-07-31")
+                        .param("traineeName", "Ali Veli")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void getTrainerTrainings_shouldReturn404_whenTrainerNotFound() throws Exception {
+        AuthSessionManager.login("notfound");
         when(trainerService.getTrainerTrainings(any()))
                 .thenThrow(new NotFoundException("Trainer not found"));
 
@@ -240,6 +281,7 @@ class TrainerControllerTest {
 
     @Test
     void getTrainerTrainings_shouldReturn400_whenInvalidDate() throws Exception {
+        AuthSessionManager.login("ali.veli");
         when(trainerService.getTrainerTrainings(any()))
                 .thenThrow(new BadRequestException("Invalid date format"));
 
@@ -255,6 +297,7 @@ class TrainerControllerTest {
 
     @Test
     void updateTrainerActiveStatus_shouldReturnOk_whenUpdateSucceeds() throws Exception {
+        AuthSessionManager.login("ali.veli");
         String requestJson = """
                     {
                         "username": "ali.veli",
@@ -271,7 +314,23 @@ class TrainerControllerTest {
     }
 
     @Test
+    void updateTrainerActiveStatus_shouldReturn401_whenNotAuthenticated() throws Exception {
+        String requestJson = """
+                    {
+                        "username": "ali.veli",
+                        "isActive": true
+                    }
+                """;
+
+        mockMvc.perform(patch("/api/v1/trainers/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void updateTrainerActiveStatus_shouldReturn404_whenTrainerNotFound() throws Exception {
+        AuthSessionManager.login("notfound.user");
         doThrow(new NotFoundException("Trainer not found"))
                 .when(trainerService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
 
@@ -290,6 +349,7 @@ class TrainerControllerTest {
 
     @Test
     void updateTrainerActiveStatus_shouldReturn400_whenAlreadyActiveOrInactive() throws Exception {
+        AuthSessionManager.login("ali.veli");
         doThrow(new IllegalStateException("Already active"))
                 .when(trainerService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
 

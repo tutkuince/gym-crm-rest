@@ -1,5 +1,6 @@
 package com.epam.gymcrm.api.controller;
 
+import com.epam.gymcrm.api.auth.AuthSessionManager;
 import com.epam.gymcrm.api.payload.request.TraineeRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TraineeTrainerUpdateRequest;
 import com.epam.gymcrm.api.payload.request.TraineeUpdateRequest;
@@ -10,6 +11,7 @@ import com.epam.gymcrm.exception.BadRequestException;
 import com.epam.gymcrm.exception.GlobalExceptionHandler;
 import com.epam.gymcrm.exception.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +52,13 @@ class TraineeControllerTest {
                 .build();
     }
 
+    @AfterEach
+    void cleanup() {
+        AuthSessionManager.logout("ali.veli");
+        AuthSessionManager.logout("notfound.user");
+        AuthSessionManager.logout("unknown");
+    }
+
     @Test
     void createTrainee_shouldReturnCreatedStatusAndRegisterResponse() throws Exception {
         TraineeRegistrationRequest request = new TraineeRegistrationRequest(
@@ -70,6 +79,7 @@ class TraineeControllerTest {
     @Test
     void getTraineeByUsername_shouldReturnProfileResponse() throws Exception {
         String username = "ali.veli";
+        AuthSessionManager.login(username);
         TraineeProfileResponse profile = new TraineeProfileResponse(
                 "Ali", "Veli", "1999-01-01", "İstanbul", true, Set.of()
         );
@@ -87,18 +97,27 @@ class TraineeControllerTest {
     }
 
     @Test
-    void getTraineeByUsername_shouldReturnNotFound_whenTraineeDoesNotExist() throws Exception {
-        String username = "not.found";
-        when(traineeService.findByUsername(username)).thenThrow(new NotFoundException("No trainee found with username: " + username));
-
-        mockMvc.perform(get("/api/v1/trainees/profile")
-                        .param("username", username))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("No trainee found with username")));
+    void updateTrainee_shouldReturn401_whenNotAuthenticated() throws Exception {
+        mockMvc.perform(put("/api/v1/trainees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "username": "ali.veli",
+                                    "firstName": "Ali",
+                                    "lastName": "Veli",
+                                    "dateOfBirth": "1995-01-01",
+                                    "address": "Istanbul",
+                                    "isActive": true
+                                }
+                                """)
+                )
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void updateTrainee_shouldReturn200AndUpdatedProfile() throws Exception {
+    void updateTrainee_shouldReturn200AndUpdatedProfile_whenAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         TraineeProfileUpdateResponse response = new TraineeProfileUpdateResponse(
                 "ali.veli", "Ali", "Veli", "1995-01-01", "Istanbul", true, Set.of()
         );
@@ -129,7 +148,9 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateTrainee_shouldReturn404_whenTraineeNotFound() throws Exception {
+    void updateTrainee_shouldReturn404_whenTraineeNotFound_andAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         when(traineeService.update(any(TraineeUpdateRequest.class)))
                 .thenThrow(new NotFoundException("Trainee to update not found with Username: ali.veli"));
 
@@ -148,7 +169,9 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateTrainee_shouldReturn400_whenBadRequest() throws Exception {
+    void updateTrainee_shouldReturn400_whenBadRequest_andAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         when(traineeService.update(any(TraineeUpdateRequest.class)))
                 .thenThrow(new BadRequestException("Invalid dateOfBirth format"));
 
@@ -168,13 +191,21 @@ class TraineeControllerTest {
     }
 
     @Test
-    void deleteTrainee_shouldReturn200_whenDeleted() throws Exception {
+    void deleteTrainee_shouldReturn401_whenNotAuthenticated() throws Exception {
+        mockMvc.perform(delete("/api/v1/trainees/{username}", "ali.veli"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deleteTrainee_shouldReturn200_whenDeleted_andAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
         mockMvc.perform(delete("/api/v1/trainees/{username}", "ali.veli"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteTrainee_shouldReturn404_whenTraineeNotFound() throws Exception {
+    void deleteTrainee_shouldReturn404_whenTraineeNotFound_andAuthenticated() throws Exception {
+        AuthSessionManager.login("unknown");
         doThrow(new NotFoundException("not found"))
                 .when(traineeService).deleteTraineeByUsername("unknown");
 
@@ -183,7 +214,25 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateTraineeTrainers_shouldReturn200AndTrainersList() throws Exception {
+    void updateTraineeTrainers_shouldReturn401_whenNotAuthenticated() throws Exception {
+        mockMvc.perform(put("/api/v1/trainees/trainers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "traineeUsername": "ali.veli",
+                                        "trainers": [
+                                            { "trainerUsername": "trainer1" },
+                                            { "trainerUsername": "trainer2" }
+                                        ]
+                                    }
+                                """)
+                )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void updateTraineeTrainers_shouldReturn200AndTrainersList_whenAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
         List<TrainerSummaryResponse> trainers = List.of(
                 new TrainerSummaryResponse("trainer1", "Ahmet", "Yılmaz", 1L),
                 new TrainerSummaryResponse("trainer2", "Ayşe", "Kara", 2L)
@@ -217,7 +266,9 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateTraineeTrainers_shouldReturn404_whenTraineeNotFound() throws Exception {
+    void updateTraineeTrainers_shouldReturn404_whenTraineeNotFound_andAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         when(traineeService.updateTraineeTrainers(any(TraineeTrainerUpdateRequest.class)))
                 .thenThrow(new NotFoundException("Trainee not found with username: ali.veli"));
 
@@ -236,7 +287,9 @@ class TraineeControllerTest {
     }
 
     @Test
-    void getTraineeTrainings_shouldReturn200AndTrainingsList() throws Exception {
+    void getTraineeTrainings_shouldReturn200AndTrainingsList_whenAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
+
         TraineeTrainingInfo trainingInfo = new TraineeTrainingInfo(
                 "Push Day", "2024-06-20T00:00:00", "Strength", 0, null
         );
@@ -264,7 +317,8 @@ class TraineeControllerTest {
     }
 
     @Test
-    void getTraineeTrainings_shouldReturn404_whenTraineeNotFound() throws Exception {
+    void getTraineeTrainings_shouldReturn404_whenTraineeNotFound_andAuthenticated() throws Exception {
+        AuthSessionManager.login("notfound.user");
         when(traineeService.getTraineeTrainings(any()))
                 .thenThrow(new NotFoundException("Trainee not found: notfound.user"));
 
@@ -276,8 +330,20 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateActiveStatus_shouldReturn200_whenSuccess() throws Exception {
+    void updateActiveStatus_shouldReturn401_whenNotAuthenticated() throws Exception {
         UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("ali.veli", true);
+
+        mockMvc.perform(patch("/api/v1/trainees/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void updateActiveStatus_shouldReturn200_whenSuccess_andAuthenticated() throws Exception {
+        UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("ali.veli", true);
+
+        AuthSessionManager.login("ali.veli");
 
         doNothing().when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
 
@@ -290,10 +356,12 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateActiveStatus_shouldReturn404_whenNotFound() throws Exception {
+    void updateActiveStatus_shouldReturn404_whenNotFound_andAuthenticated() throws Exception {
         UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("notfound.user", true);
 
-        doThrow(new com.epam.gymcrm.exception.NotFoundException("Trainee not found"))
+        AuthSessionManager.login("notfound.user");
+
+        doThrow(new NotFoundException("Trainee not found"))
                 .when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
 
         mockMvc.perform(patch("/api/v1/trainees/status")
@@ -303,8 +371,10 @@ class TraineeControllerTest {
     }
 
     @Test
-    void updateActiveStatus_shouldReturn400_whenAlreadyActiveOrInactive() throws Exception {
+    void updateActiveStatus_shouldReturn409_whenAlreadyActiveOrInactive_andAuthenticated() throws Exception {
         UpdateActiveStatusRequest request = new UpdateActiveStatusRequest("ali.veli", false);
+
+        AuthSessionManager.login("ali.veli");
 
         doThrow(new IllegalStateException("User is already inactive."))
                 .when(traineeService).updateActivateStatus(any(UpdateActiveStatusRequest.class));
@@ -316,8 +386,15 @@ class TraineeControllerTest {
     }
 
     @Test
-    void getUnassignedActiveTrainersForTrainee_shouldReturnTrainerList() throws Exception {
-        // Arrange
+    void getUnassignedActiveTrainersForTrainee_shouldReturn401_whenNotAuthenticated() throws Exception {
+        mockMvc.perform(get("/api/v1/trainees/unassigned-trainers")
+                        .param("username", "ali.veli"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getUnassignedActiveTrainersForTrainee_shouldReturnTrainerList_whenAuthenticated() throws Exception {
+        AuthSessionManager.login("ali.veli");
         String username = "ali.veli";
         List<UnassignedActiveTrainerResponse> trainers = List.of(
                 new UnassignedActiveTrainerResponse("mehmet.kaya", "Mehmet", "Kaya", 1L),
@@ -327,7 +404,6 @@ class TraineeControllerTest {
 
         when(traineeService.getUnassignedActiveTrainersForTrainee(username)).thenReturn(response);
 
-        // Act & Assert
         mockMvc.perform(get("/api/v1/trainees/unassigned-trainers")
                         .param("username", username))
                 .andExpect(status().isOk())
@@ -342,13 +418,12 @@ class TraineeControllerTest {
     }
 
     @Test
-    void getUnassignedActiveTrainersForTrainee_shouldReturn404_whenTraineeNotFound() throws Exception {
-        // Arrange
+    void getUnassignedActiveTrainersForTrainee_shouldReturn404_whenTraineeNotFound_andAuthenticated() throws Exception {
+        AuthSessionManager.login("not.found");
         String username = "not.found";
         when(traineeService.getUnassignedActiveTrainersForTrainee(username))
                 .thenThrow(new NotFoundException("Trainee not found: " + username));
 
-        // Act & Assert
         mockMvc.perform(get("/api/v1/trainees/unassigned-trainers")
                         .param("username", username))
                 .andExpect(status().isNotFound());
