@@ -4,53 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="refactor: reorganize controllers under api.controller package for DDD compliance">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/mapper/TraineeResponseMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/payload/request/TraineeRegisterRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/payload/response/TraineeRegisterResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainerEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainingEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TrainingTypeEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/UserEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TraineeDomainMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TrainerDomainMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/TrainingDomainMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/mapper/UserDomainMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Trainee.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/DateConstants.java" afterDir="false" />
+    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="feat: Implement transaction-level and REST call details logging">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/logging/RestLoggingInterceptorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/logging/TransactionIdFilterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TraineeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TraineeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingTypeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TrainingTypeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Trainee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/entity/TraineeEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Trainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/Training.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/Training.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/TrainingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/TrainingType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TraineeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TraineeMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingTypeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/mapper/TrainingTypeMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TraineeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TraineeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainerRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/TrainingTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/TrainingTypeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TraineeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TraineeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/service/TrainingTypeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingTypeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/specification/TrainingSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/db/repository/specification/TrainingSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/UserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/util/UserUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TraineeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TraineeControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainerControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingTypeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/api/controller/TrainingTypeControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TraineeServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TraineeServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingTypeServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/epam/gymcrm/service/TrainingTypeServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,14 +20,27 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="JUnit5 Test Class" />
+        <option value="Record" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;tutkuince&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/tutkuince/gym-crm-rest.git&quot;,
+    &quot;accountId&quot;: &quot;9eb2c079-62cf-401c-8150-e77b67e1c6e7&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -92,17 +64,27 @@
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "Docker.infrastructure: Compose Deployment.executor": "Run",
     "JUnit.All in gym-crm.executor": "Coverage",
+    "JUnit.AuthControllerTest.executor": "Run",
+    "JUnit.AuthControllerTest.login_shouldReturn400_whenCredentialsInvalid.executor": "Run",
+    "JUnit.AuthControllerTest.login_shouldReturn400_whenInvalidCredentials.executor": "Run",
+    "JUnit.AuthServiceTest.executor": "Run",
     "JUnit.GymCrmApplicationTest.executor": "Run",
     "JUnit.StorageTest.executor": "Run",
+    "JUnit.TraineeControllerTest (1).executor": "Run",
     "JUnit.TraineeControllerTest.executor": "Run",
     "JUnit.TraineeControllerTest.shouldChangePasswordWhenValidRequestWithBody.executor": "Run",
     "JUnit.TraineeControllerTest.shouldCreateTrainee.executor": "Run",
     "JUnit.TraineeControllerTest.shouldReturnBadRequestWhenValidationFails.executor": "Run",
     "JUnit.TraineeControllerTest.shouldUpdateTrainee.executor": "Run",
+    "JUnit.TraineeServiceTest (1).executor": "Run",
+    "JUnit.TraineeServiceTest.createTrainee_shouldThrowException_whenUserIsAlreadyTrainer.executor": "Run",
     "JUnit.TraineeServiceTest.executor": "Run",
     "JUnit.TraineeServiceTest.shouldThrowInvalidCredentialsExceptionWhenUserNotFound.executor": "Run",
+    "JUnit.TraineeServiceTest.updateActiveStatus_shouldActivate_whenInactive.executor": "Debug",
     "JUnit.TrainerControllerTest.executor": "Run",
+    "JUnit.TrainerControllerTest.getTrainerTrainings_shouldReturn401_whenNotAuthenticated.executor": "Run",
     "JUnit.TrainerControllerTest.shouldCreateTrainer.executor": "Run",
+    "JUnit.TrainerControllerTest.updateTrainerProfile_shouldReturn401_whenNotAuthenticated.executor": "Run",
     "JUnit.TrainerServiceTest.executor": "Run",
     "JUnit.TrainerServiceTest.shouldReturnUnassignedTrainersForTrainee.executor": "Run",
     "JUnit.TrainingControllerTest.executor": "Run",
@@ -112,12 +94,13 @@
     "JUnit.TrainingSpecificationTest.executor": "Run",
     "JUnit.TrainingTypeControllerTest.executor": "Run",
     "JUnit.TrainingTypeServiceTest.executor": "Run",
+    "JUnit.TransactionIdFilterTest.executor": "Run",
     "JUnit.com.epam.gymcrm in gym-crm.executor": "Coverage",
     "JUnit.com.epam.gymcrm.controller in gym-crm.executor": "Coverage",
     "JUnit.com.epam.gymcrm.service in gym-crm.executor": "Coverage",
     "JUnit.gymcrm in gym-crm.executor": "Coverage",
     "JUnit.java in gym-crm.executor": "Coverage",
-    "JUnit.service in gym-crm.executor": "Coverage",
+    "JUnit.service in gym-crm.executor": "Run",
     "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
     "Maven.gym-crm [clean].executor": "Run",
     "Maven.gym-crm [package].executor": "Run",
@@ -165,64 +148,74 @@
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_3-git\gym-crm\api-requests" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.epam.gymcrm.api.logging" />
+      <recent name="com.epam.gymcrm.api.controller" />
+      <recent name="com.epam.gymcrm.domain.service" />
       <recent name="com.epam.gymcrm.specification" />
       <recent name="com.epam.gymcrm.storage" />
-      <recent name="com.epam.gymcrm" />
-      <recent name="com.epam.gymcrm.controller" />
-      <recent name="com.epam.gymcrm.service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.epam.gymcrm.api.payload.response" />
     </key>
   </component>
   <component name="RunManager" selected="JUnit.java in gym-crm">
+    <configuration name="RestLoggingInterceptorTest.testPreHandle_and_AfterCompletion_logWithTransactionId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="gym-crm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.epam.gymcrm.api.logging.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.epam.gymcrm.api.logging" />
+      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.api.logging.RestLoggingInterceptorTest" />
+      <option name="METHOD_NAME" value="testPreHandle_and_AfterCompletion_logWithTransactionId" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TraineeControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="gym-crm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.epam.gymcrm.controller.*" />
+          <option name="PATTERN" value="com.epam.gymcrm.api.controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.epam.gymcrm.controller" />
-      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.controller.TraineeControllerTest" />
+      <option name="PACKAGE_NAME" value="com.epam.gymcrm.api.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.api.controller.TraineeControllerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TraineeServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TrainerControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="gym-crm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.epam.gymcrm.service.*" />
+          <option name="PATTERN" value="com.epam.gymcrm.api.controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.epam.gymcrm.service" />
-      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.service.TraineeServiceTest" />
+      <option name="PACKAGE_NAME" value="com.epam.gymcrm.api.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.api.controller.TrainerControllerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TrainerServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TransactionIdFilterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="gym-crm" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.epam.gymcrm.service.*" />
+          <option name="PATTERN" value="com.epam.gymcrm.api.logging.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.epam.gymcrm.service" />
-      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.service.TrainerServiceTest" />
+      <option name="PACKAGE_NAME" value="com.epam.gymcrm.api.logging" />
+      <option name="MAIN_CLASS_NAME" value="com.epam.gymcrm.api.logging.TransactionIdFilterTest" />
       <option name="TEST_OBJECT" value="class" />
-      <dir value="$PROJECT_DIR$/src/test/java" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="gymcrm in gym-crm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="gym-crm" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java/com/epam/gymcrm" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -251,10 +244,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.java in gym-crm" />
-        <item itemvalue="JUnit.TrainerServiceTest" />
-        <item itemvalue="JUnit.gymcrm in gym-crm" />
+        <item itemvalue="JUnit.RestLoggingInterceptorTest.testPreHandle_and_AfterCompletion_logWithTransactionId" />
+        <item itemvalue="JUnit.TransactionIdFilterTest" />
         <item itemvalue="JUnit.TraineeControllerTest" />
-        <item itemvalue="JUnit.TraineeServiceTest" />
+        <item itemvalue="JUnit.TrainerControllerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -293,231 +286,15 @@
       <workItem from="1753302105459" duration="12147000" />
       <workItem from="1753354162744" duration="1792000" />
       <workItem from="1753556936193" duration="3533000" />
-      <workItem from="1753561040149" duration="6188000" />
-    </task>
-    <task id="LOCAL-00009" summary="feat: implement TrainerController for CRUD endpoints">
-      <option name="closed" value="true" />
-      <created>1752428372594</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1752428372594</updated>
-    </task>
-    <task id="LOCAL-00010" summary="test: add unit tests for TrainerService CRUD operations">
-      <option name="closed" value="true" />
-      <created>1752428712028</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1752428712028</updated>
-    </task>
-    <task id="LOCAL-00011" summary="feat: implement TrainingType domain, dto, mapper, dao, service, and controller">
-      <option name="closed" value="true" />
-      <created>1752429783850</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1752429783850</updated>
-    </task>
-    <task id="LOCAL-00012" summary="test: add unit tests for TrainingTypeService CRUD operations">
-      <option name="closed" value="true" />
-      <created>1752429916710</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1752429916710</updated>
-    </task>
-    <task id="LOCAL-00013" summary="feat: implement Training module with business rules and REST endpoints">
-      <option name="closed" value="true" />
-      <created>1752433186905</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1752433186905</updated>
-    </task>
-    <task id="LOCAL-00014" summary="refactor: use Objects.isNull for trainer existence check in update operation">
-      <option name="closed" value="true" />
-      <created>1752434091077</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1752434091077</updated>
-    </task>
-    <task id="LOCAL-00015" summary="test: add comprehensive unit tests for TrainingService including exception and branch coverage">
-      <option name="closed" value="true" />
-      <created>1752434133699</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1752434133699</updated>
-    </task>
-    <task id="LOCAL-00016" summary="test: add integration tests for TraineeController endpoints using MockMvc">
-      <option name="closed" value="true" />
-      <created>1752442381935</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1752442381935</updated>
-    </task>
-    <task id="LOCAL-00017" summary="test: add integration tests for TrainerController endpoints using MockMvc">
-      <option name="closed" value="true" />
-      <created>1752442559781</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1752442559781</updated>
-    </task>
-    <task id="LOCAL-00018" summary="test: add integration tests for TrainingController endpoints using MockMvc">
-      <option name="closed" value="true" />
-      <created>1752442707323</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1752442707323</updated>
-    </task>
-    <task id="LOCAL-00019" summary="test: add integration tests for TrainingTypeController endpoints using MockMvc">
-      <option name="closed" value="true" />
-      <created>1752443581040</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1752443581040</updated>
-    </task>
-    <task id="LOCAL-00020" summary="test: add integration tests for TraineeController endpoints using MockMvc">
-      <option name="closed" value="true" />
-      <created>1752443597401</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1752443597401</updated>
-    </task>
-    <task id="LOCAL-00021" summary="test: add unit tests for Storage">
-      <option name="closed" value="true" />
-      <created>1752443622266</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1752443622266</updated>
-    </task>
-    <task id="LOCAL-00022" summary="docs: add gym-crm Postman collection under /api-requests directory">
-      <option name="closed" value="true" />
-      <created>1752443919959</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1752443919959</updated>
-    </task>
-    <task id="LOCAL-00023" summary="feat: add validation error handling to GlobalExceptionHandler">
-      <option name="closed" value="true" />
-      <created>1752444900544</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1752444900544</updated>
-    </task>
-    <task id="LOCAL-00024" summary="feat: add validation annotations to DTOs and update controller/service tests accordingly">
-      <option name="closed" value="true" />
-      <created>1752445935090</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1752445935090</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Refactor: use composition (User field) instead of inheritance in Trainee and Trainer">
-      <option name="closed" value="true" />
-      <created>1752500560948</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1752500560948</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Refactor: unit tests for Trainer and Trainee services to use composition over inheritance (User model integration)">
-      <option name="closed" value="true" />
-      <created>1752501033547</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1752501033547</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Refactor: update">
-      <option name="closed" value="true" />
-      <created>1752528229203</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1752528229203</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Feature: Load sample data from JSON files into in-memory storage on application startup">
-      <option name="closed" value="true" />
-      <created>1752529110585</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1752529110585</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Refactor: Convert project from Spring Boot to plain Spring Core and adapt all configs, controllers, and tests">
-      <option name="closed" value="true" />
-      <created>1752543415872</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1752543415872</updated>
-    </task>
-    <task id="LOCAL-00030" summary="refactor: add serialVersionUID to custom exceptions and remove unused FORMATTER field">
-      <option name="closed" value="true" />
-      <created>1752689760696</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1752689760697</updated>
-    </task>
-    <task id="LOCAL-00031" summary="git commit -m &quot;feat: all configuration sub-tasks completed. Closes #10, #11, #12 #13&quot;">
-      <option name="closed" value="true" />
-      <created>1753101599878</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1753101599878</updated>
-    </task>
-    <task id="LOCAL-00032" summary="refactor: migrate from in-memory DAO to Spring Data JPA repositories&#10;&#10;- Remove old CrudDao interfaces and DAO implementations&#10;- Add repository interfaces for User, Trainee, Trainer, Training, and TrainingType&#10;- Prepare for service layer to use new repositories&#10;&#10;Fixes #3">
-      <option name="closed" value="true" />
-      <created>1753102290666</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1753102290666</updated>
-    </task>
-    <task id="LOCAL-00033" summary="refactor: migrate to spring data jpa and restructure project modules">
-      <option name="closed" value="true" />
-      <created>1753125945669</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1753125945669</updated>
-    </task>
-    <task id="LOCAL-00034" summary="feat: Update delete logic for Trainer and Trainee entities. Closes #5">
-      <option name="closed" value="true" />
-      <created>1753200374728</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1753200374728</updated>
-    </task>
-    <task id="LOCAL-00035" summary="chore: Update data.sql to use auto-generated IDs">
-      <option name="closed" value="true" />
-      <created>1753200415267</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1753200415267</updated>
-    </task>
-    <task id="LOCAL-00036" summary="test: Refactor and expand unit tests for Trainee, Trainer, Training, and TrainingType services and controllers. Closes #6">
-      <option name="closed" value="true" />
-      <created>1753203137192</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1753203137192</updated>
+      <workItem from="1753561040149" duration="7710000" />
+      <workItem from="1753610986905" duration="18510000" />
+      <workItem from="1753715915151" duration="12346000" />
+      <workItem from="1753781679014" duration="5084000" />
+      <workItem from="1753794681221" duration="25388000" />
+      <workItem from="1753880305749" duration="196000" />
+      <workItem from="1753881334332" duration="10777000" />
+      <workItem from="1753913111884" duration="7028000" />
+      <workItem from="1753955613679" duration="17129000" />
     </task>
     <task id="LOCAL-00037" summary="feat: Add authentication for Trainer endpoints, global exception handling, and update tests">
       <option name="closed" value="true" />
@@ -687,7 +464,231 @@
       <option name="project" value="LOCAL" />
       <updated>1753561622231</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="feat: implement trainee registration with DDD-compliant package structure">
+      <option name="closed" value="true" />
+      <created>1753567542938</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1753567542938</updated>
+    </task>
+    <task id="LOCAL-00059" summary="refactor: Get Trainee Profile (GET) endpoint improved and codebase refactored">
+      <option name="closed" value="true" />
+      <created>1753616336444</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1753616336445</updated>
+    </task>
+    <task id="LOCAL-00060" summary="feat: Implement update trainee profile endpoint">
+      <option name="closed" value="true" />
+      <created>1753630356353</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1753630356353</updated>
+    </task>
+    <task id="LOCAL-00061" summary="feat: Implement delete trainee profile endpoint">
+      <option name="closed" value="true" />
+      <created>1753631307861</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1753631307861</updated>
+    </task>
+    <task id="LOCAL-00062" summary="feat: Implement update trainee trainings list endpoint">
+      <option name="closed" value="true" />
+      <created>1753634801498</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1753634801498</updated>
+    </task>
+    <task id="LOCAL-00063" summary="feat: Implement Get Trainer Trainings List endpoint">
+      <option name="closed" value="true" />
+      <created>1753731485397</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1753731485397</updated>
+    </task>
+    <task id="LOCAL-00064" summary="feat: Add trainee activate/deactivate endpoint and unit tests">
+      <option name="closed" value="true" />
+      <created>1753735403233</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1753735403233</updated>
+    </task>
+    <task id="LOCAL-00065" summary="refactor: Simplify trainee update by updating existing User instance instead of creating new one">
+      <option name="closed" value="true" />
+      <created>1753735952126</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1753735952126</updated>
+    </task>
+    <task id="LOCAL-00066" summary="feat: add unassigned active trainer list endpoint with proper mapping and tests">
+      <option name="closed" value="true" />
+      <created>1753737430539</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1753737430539</updated>
+    </task>
+    <task id="LOCAL-00067" summary="feat: add training type list endpoint with full DDD mapping and response mappers">
+      <option name="closed" value="true" />
+      <created>1753783602658</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1753783602659</updated>
+    </task>
+    <task id="LOCAL-00068" summary="feat(auth): implement login endpoint for user authentication">
+      <option name="closed" value="true" />
+      <created>1753795645169</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1753795645170</updated>
+    </task>
+    <task id="LOCAL-00069" summary="feat(auth): implement change password endpoint (PUT)">
+      <option name="closed" value="true" />
+      <created>1753798477593</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1753798477593</updated>
+    </task>
+    <task id="LOCAL-00070" summary="feat(trainer): add Trainer registration endpoint with specialization as TrainingType reference">
+      <option name="closed" value="true" />
+      <created>1753813992475</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1753813992475</updated>
+    </task>
+    <task id="LOCAL-00071" summary="feat: Add Trainer registration and profile endpoints, refactor specialization from String to Long id">
+      <option name="closed" value="true" />
+      <created>1753815361552</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1753815361552</updated>
+    </task>
+    <task id="LOCAL-00072" summary="feat: Implement Update Trainer Profile API (PUT)">
+      <option name="closed" value="true" />
+      <created>1753820519966</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1753820519966</updated>
+    </task>
+    <task id="LOCAL-00073" summary="feat: Implement trainer trainings endpoint with service, response mapping, and tests">
+      <option name="closed" value="true" />
+      <created>1753824434564</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1753824434564</updated>
+    </task>
+    <task id="LOCAL-00074" summary="feat: Implement Trainer activation/de-activation (PATCH), refactor mapping &amp; add tests">
+      <option name="closed" value="true" />
+      <created>1753825116529</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1753825116529</updated>
+    </task>
+    <task id="LOCAL-00075" summary="feat: Add comprehensive initial data for users, trainees, trainers, training types, and related relations">
+      <option name="closed" value="true" />
+      <created>1753825255409</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1753825255409</updated>
+    </task>
+    <task id="LOCAL-00076" summary="feat: Update initial SQL seed data with more users, trainees, trainers, and trainings for improved test coverage">
+      <option name="closed" value="true" />
+      <created>1753887447939</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887447939</updated>
+    </task>
+    <task id="LOCAL-00077" summary="refactor(auth): Use InvalidCredentialsException for invalid password in AuthService and update corresponding unit test">
+      <option name="closed" value="true" />
+      <created>1753887455380</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887455380</updated>
+    </task>
+    <task id="LOCAL-00078" summary="chore: Update HibernateConfig to match new package structure">
+      <option name="closed" value="true" />
+      <created>1753887467332</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887467332</updated>
+    </task>
+    <task id="LOCAL-00079" summary="chore: Remove unused imports across project files">
+      <option name="closed" value="true" />
+      <created>1753887492261</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887492261</updated>
+    </task>
+    <task id="LOCAL-00080" summary="chore: Remove unused imports across project files">
+      <option name="closed" value="true" />
+      <created>1753887499742</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887499742</updated>
+    </task>
+    <task id="LOCAL-00081" summary=": name has been changed gym-crm to gym-crm-rest">
+      <option name="closed" value="true" />
+      <created>1753887540249</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1753887540249</updated>
+    </task>
+    <task id="LOCAL-00082" summary="refactor: trainee related updates">
+      <option name="closed" value="true" />
+      <created>1753918741231</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1753918741231</updated>
+    </task>
+    <task id="LOCAL-00083" summary="refactor: Tainer and Training related updates">
+      <option name="closed" value="true" />
+      <created>1753920163484</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1753920163484</updated>
+    </task>
+    <task id="LOCAL-00084" summary="feat: Add authentication check for all Trainer/Trainee functions except profile creation">
+      <option name="closed" value="true" />
+      <created>1753969232044</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1753969232044</updated>
+    </task>
+    <task id="LOCAL-00085" summary="feat: Implement transaction-level and REST call details logging">
+      <option name="closed" value="true" />
+      <created>1753973907884</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1753973907884</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -708,40 +709,55 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
-    <MESSAGE value="refactor: migrate to spring data jpa and restructure project modules" />
-    <MESSAGE value="feat: Update delete logic for Trainer and Trainee entities. Closes #5" />
-    <MESSAGE value="chore: Update data.sql to use auto-generated IDs" />
-    <MESSAGE value="test: Refactor and expand unit tests for Trainee, Trainer, Training, and TrainingType services and controllers. Closes #6" />
-    <MESSAGE value="feat: Add authentication for Trainer endpoints, global exception handling, and update tests" />
-    <MESSAGE value="feat: Add authentication and username-based retrieval endpoints for Trainee" />
-    <MESSAGE value="feat: Add authentication and username-based retrieval endpoints for Trainer" />
-    <MESSAGE value="feat: Add Integration test for TraineeControllerTest" />
-    <MESSAGE value="feat: Add trainee password change functionality with PATCH, validation, logging, and comprehensive unit/controller tests" />
-    <MESSAGE value="feat: Add trainer password change functionality via PATCH, with full tests and exception handling" />
-    <MESSAGE value="feat: Add activate/deactivate endpoints and error handling for Trainee" />
-    <MESSAGE value="feat: Add activate/deactivate endpoints and error handling for Trainer" />
-    <MESSAGE value="feat: Delete trainee by username with cascade &amp; unit tests" />
-    <MESSAGE value="feat: Add training search endpoint" />
-    <MESSAGE value="feat: Add filtering endpoints for trainer trainings with criteria" />
-    <MESSAGE value="feat: Implement get unassigned trainers for trainee (with unit &amp; controller tests)" />
-    <MESSAGE value="feat: Add updateTraineeTrainers endpoint and tests" />
-    <MESSAGE value="refactor: deleted unused objects and imports and" />
-    <MESSAGE value="refactor: Update TraineeService, TraineeController, PasswordChangeRequest, and TraineeServiceTest for code improvements" />
-    <MESSAGE value="refactor: Refactor Trainer service and controller" />
-    <MESSAGE value="refactor: Update Training controller, service, tests, and specification for relationship handling" />
-    <MESSAGE value="refactor: postman collection has been updated" />
-    <MESSAGE value="feat: optimize unassigned trainers query for trainee profile" />
-    <MESSAGE value="refactor: unify not found exceptions into generic NotFoundException" />
-    <MESSAGE value="refactor: reorganize controllers under api.controller package for DDD compliance" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: reorganize controllers under api.controller package for DDD compliance" />
+    <MESSAGE value="feat: Implement update trainee profile endpoint" />
+    <MESSAGE value="feat: Implement delete trainee profile endpoint" />
+    <MESSAGE value="feat: Implement update trainee trainings list endpoint" />
+    <MESSAGE value="feat: Implement Get Trainer Trainings List endpoint" />
+    <MESSAGE value="feat: Add trainee activate/deactivate endpoint and unit tests" />
+    <MESSAGE value="refactor: Simplify trainee update by updating existing User instance instead of creating new one" />
+    <MESSAGE value="feat: add unassigned active trainer list endpoint with proper mapping and tests" />
+    <MESSAGE value="feat: add training type list endpoint with full DDD mapping and response mappers" />
+    <MESSAGE value="feat(auth): implement login endpoint for user authentication" />
+    <MESSAGE value="feat(auth): implement change password endpoint (PUT)" />
+    <MESSAGE value="feat(trainer): add Trainer registration endpoint with specialization as TrainingType reference" />
+    <MESSAGE value="feat: Add Trainer registration and profile endpoints, refactor specialization from String to Long id" />
+    <MESSAGE value="feat: Implement Update Trainer Profile API (PUT)" />
+    <MESSAGE value="feat: Implement trainer trainings endpoint with service, response mapping, and tests" />
+    <MESSAGE value="feat: Implement Trainer activation/de-activation (PATCH), refactor mapping &amp; add tests" />
+    <MESSAGE value="feat: Add comprehensive initial data for users, trainees, trainers, training types, and related relations" />
+    <MESSAGE value="feat: Update initial SQL seed data with more users, trainees, trainers, and trainings for improved test coverage" />
+    <MESSAGE value="refactor(auth): Use InvalidCredentialsException for invalid password in AuthService and update corresponding unit test" />
+    <MESSAGE value="chore: Update HibernateConfig to match new package structure" />
+    <MESSAGE value="chore: Remove unused imports across project files" />
+    <MESSAGE value=": name has been changed gym-crm to gym-crm-rest" />
+    <MESSAGE value="refactor: trainee related updates" />
+    <MESSAGE value="refactor: Tainer and Training related updates" />
+    <MESSAGE value="feat: Add authentication check for all Trainer/Trainee functions except profile creation" />
+    <MESSAGE value="feat: Implement transaction-level and REST call details logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Implement transaction-level and REST call details logging" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/TrainingTypeService.java</url>
-          <line>23</line>
+          <line>34</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/mapper/UpdateTrainerProfileResponseMapper.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/api/controller/TraineeController.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/epam/gymcrm/domain/service/AuthService.java</url>
+          <line>90</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -754,6 +770,7 @@
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_controller_in_gym_crm.ic" NAME="com.epam.gymcrm.controller in gym-crm Coverage Results" MODIFIED="1752442309969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.controller.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/gym_crm_rest$java_in_gym_crm.ic" NAME="java in gym-crm Coverage Results" MODIFIED="1753969147523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_in_gym_crm.ic" NAME="com.epam.gymcrm in gym-crm Coverage Results" MODIFIED="1752443439165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.*</FILTER>
     </SUITE>
