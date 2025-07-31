@@ -1,6 +1,5 @@
 package com.epam.gymcrm.api.controller;
 
-import com.epam.gymcrm.api.auth.AuthSessionManager;
 import com.epam.gymcrm.api.payload.request.TrainerRegistrationRequest;
 import com.epam.gymcrm.api.payload.request.TrainerTrainingsFilter;
 import com.epam.gymcrm.api.payload.request.UpdateActiveStatusRequest;

@@ -1,5 +1,7 @@
 package com.epam.gymcrm.config;
 
+import com.epam.gymcrm.api.logging.TransactionIdFilter;
+import jakarta.servlet.FilterRegistration;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
@@ -21,5 +23,9 @@ public class GymCrmApplicationInitializer implements WebApplicationInitializer {
         ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", dispatcherServlet);
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
+
+        FilterRegistration.Dynamic transactionIdFilter = servletContext.addFilter(
+                "transactionIdFilter", TransactionIdFilter.class);
+        transactionIdFilter.addMappingForUrlPatterns(null, false, "/*");
     }
 }
