@@ -4,25 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="feat: Implement transaction-level and REST call details logging unit tests">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-16x16.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-32x32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/oauth2-redirect.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/openapi.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-initializer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-bundle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle-core.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-standalone-preset.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bde4f622-d731-49c2-a39c-9f8672174310.xml" afterDir="false" />
+    <list default="true" id="13102274-7f3e-4ae3-b397-80962da4df28" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/config/SwaggerConfiguration.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/epam/gymcrm/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/oauth2-redirect.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/openapi.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-initializer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle-core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-es-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui-standalone-preset.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/swagger-ui/swagger-ui.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,84 +69,85 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.GymCrmApplication.executor": "Debug",
-    "Docker.docker-compose.yml.postgres: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "Docker.infrastructure: Compose Deployment.executor": "Run",
-    "JUnit.All in gym-crm.executor": "Coverage",
-    "JUnit.AuthControllerTest.executor": "Run",
-    "JUnit.AuthControllerTest.login_shouldReturn400_whenCredentialsInvalid.executor": "Run",
-    "JUnit.AuthControllerTest.login_shouldReturn400_whenInvalidCredentials.executor": "Run",
-    "JUnit.AuthServiceTest.executor": "Run",
-    "JUnit.GymCrmApplicationTest.executor": "Run",
-    "JUnit.RestLoggingInterceptorTest.testPreHandle_and_AfterCompletion_logWithTransactionId.executor": "Run",
-    "JUnit.StorageTest.executor": "Run",
-    "JUnit.TraineeControllerTest (1).executor": "Run",
-    "JUnit.TraineeControllerTest.executor": "Run",
-    "JUnit.TraineeControllerTest.shouldChangePasswordWhenValidRequestWithBody.executor": "Run",
-    "JUnit.TraineeControllerTest.shouldCreateTrainee.executor": "Run",
-    "JUnit.TraineeControllerTest.shouldReturnBadRequestWhenValidationFails.executor": "Run",
-    "JUnit.TraineeControllerTest.shouldUpdateTrainee.executor": "Run",
-    "JUnit.TraineeServiceTest (1).executor": "Run",
-    "JUnit.TraineeServiceTest.createTrainee_shouldThrowException_whenUserIsAlreadyTrainer.executor": "Run",
-    "JUnit.TraineeServiceTest.executor": "Run",
-    "JUnit.TraineeServiceTest.shouldThrowInvalidCredentialsExceptionWhenUserNotFound.executor": "Run",
-    "JUnit.TraineeServiceTest.updateActiveStatus_shouldActivate_whenInactive.executor": "Debug",
-    "JUnit.TrainerControllerTest.executor": "Run",
-    "JUnit.TrainerControllerTest.getTrainerTrainings_shouldReturn401_whenNotAuthenticated.executor": "Run",
-    "JUnit.TrainerControllerTest.shouldCreateTrainer.executor": "Run",
-    "JUnit.TrainerControllerTest.updateTrainerProfile_shouldReturn401_whenNotAuthenticated.executor": "Run",
-    "JUnit.TrainerServiceTest.executor": "Run",
-    "JUnit.TrainerServiceTest.shouldReturnUnassignedTrainersForTrainee.executor": "Run",
-    "JUnit.TrainingControllerTest.executor": "Run",
-    "JUnit.TrainingControllerTest.shouldReturnTrainerTrainingsByCriteria.executor": "Run",
-    "JUnit.TrainingControllerTest.shouldUpdateTraining.executor": "Run",
-    "JUnit.TrainingServiceTest.executor": "Run",
-    "JUnit.TrainingSpecificationTest.executor": "Run",
-    "JUnit.TrainingTypeControllerTest.executor": "Run",
-    "JUnit.TrainingTypeServiceTest.executor": "Run",
-    "JUnit.TransactionIdFilterTest.executor": "Run",
-    "JUnit.com.epam.gymcrm in gym-crm.executor": "Coverage",
-    "JUnit.com.epam.gymcrm.controller in gym-crm.executor": "Coverage",
-    "JUnit.com.epam.gymcrm.service in gym-crm.executor": "Coverage",
-    "JUnit.gymcrm in gym-crm.executor": "Coverage",
-    "JUnit.java in gym-crm.executor": "Coverage",
-    "JUnit.service in gym-crm.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.gym-crm [clean].executor": "Run",
-    "Maven.gym-crm [package].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.GymCrmApplication.executor": "Run",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/tutku/Documents/epam-java-specialization/task_5-rest/gym-crm-rest/src/main/webapp/swagger-ui",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.GymCrmApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Docker.docker-compose.yml.postgres: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.infrastructure: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.AuthControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthControllerTest.login_shouldReturn400_whenCredentialsInvalid.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthControllerTest.login_shouldReturn400_whenInvalidCredentials.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GymCrmApplicationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RestLoggingInterceptorTest.testPreHandle_and_AfterCompletion_logWithTransactionId.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.StorageTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest.shouldChangePasswordWhenValidRequestWithBody.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest.shouldCreateTrainee.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest.shouldReturnBadRequestWhenValidationFails.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeControllerTest.shouldUpdateTrainee.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeServiceTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeServiceTest.createTrainee_shouldThrowException_whenUserIsAlreadyTrainer.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeServiceTest.shouldThrowInvalidCredentialsExceptionWhenUserNotFound.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TraineeServiceTest.updateActiveStatus_shouldActivate_whenInactive.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.TrainerControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainerControllerTest.getTrainerTrainings_shouldReturn401_whenNotAuthenticated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainerControllerTest.shouldCreateTrainer.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainerControllerTest.updateTrainerProfile_shouldReturn401_whenNotAuthenticated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainerServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainerServiceTest.shouldReturnUnassignedTrainersForTrainee.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingControllerTest.shouldReturnTrainerTrainingsByCriteria.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingControllerTest.shouldUpdateTraining.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingSpecificationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingTypeControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TrainingTypeServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TransactionIdFilterTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.com.epam.gymcrm in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.com.epam.gymcrm.controller in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.com.epam.gymcrm.service in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.gymcrm in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.java in gym-crm.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.service in gym-crm.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.gym-crm [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.gym-crm [package].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.GymCrmApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tutku/Documents/epam-java-specialization/task_5-rest/gym-crm-rest/api-requests&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\api-requests" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\src\main\webapp\swagger-ui" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_5-rest\gym-crm-rest\src\main\java\com\epam\gymcrm\db\entity" />
       <recent name="C:\Users\tutku\Documents\epam-java-specialization\task_3-git\gym-crm\api-requests" />
@@ -309,31 +309,9 @@
       <workItem from="1753880305749" duration="196000" />
       <workItem from="1753881334332" duration="10777000" />
       <workItem from="1753913111884" duration="7028000" />
-      <workItem from="1753955613679" duration="22390000" />
-    </task>
-    <task id="LOCAL-00038" summary="feat: Add authentication and username-based retrieval endpoints for Trainee">
-      <option name="closed" value="true" />
-      <created>1753213099575</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1753213099575</updated>
-    </task>
-    <task id="LOCAL-00039" summary="feat: Add authentication and username-based retrieval endpoints for Trainer">
-      <option name="closed" value="true" />
-      <created>1753214020673</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1753214020673</updated>
-    </task>
-    <task id="LOCAL-00040" summary="feat: Add Integration test for TraineeControllerTest">
-      <option name="closed" value="true" />
-      <created>1753214241730</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1753214241730</updated>
+      <workItem from="1753955613679" duration="23072000" />
+      <workItem from="1753988384124" duration="356000" />
+      <workItem from="1754248218606" duration="1160000" />
     </task>
     <task id="LOCAL-00041" summary="feat: Add trainee password change functionality with PATCH, validation, logging, and comprehensive unit/controller tests">
       <option name="closed" value="true" />
@@ -703,7 +681,31 @@
       <option name="project" value="LOCAL" />
       <updated>1753982249659</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="docs: Add manual Swagger UI integration and OpenAPI documentation">
+      <option name="closed" value="true" />
+      <created>1753987525031</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1753987525031</updated>
+    </task>
+    <task id="LOCAL-00088" summary="chore: Update Postman requests according to latest API changes">
+      <option name="closed" value="true" />
+      <created>1753988185570</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1753988185570</updated>
+    </task>
+    <task id="LOCAL-00089" summary="update">
+      <option name="closed" value="true" />
+      <created>1753988696279</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1753988696280</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,9 +726,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
-    <MESSAGE value="feat: Implement delete trainee profile endpoint" />
-    <MESSAGE value="feat: Implement update trainee trainings list endpoint" />
-    <MESSAGE value="feat: Implement Get Trainer Trainings List endpoint" />
     <MESSAGE value="feat: Add trainee activate/deactivate endpoint and unit tests" />
     <MESSAGE value="refactor: Simplify trainee update by updating existing User instance instead of creating new one" />
     <MESSAGE value="feat: add unassigned active trainer list endpoint with proper mapping and tests" />
@@ -749,7 +748,10 @@
     <MESSAGE value="feat: Add authentication check for all Trainer/Trainee functions except profile creation" />
     <MESSAGE value="feat: Implement transaction-level and REST call details logging" />
     <MESSAGE value="feat: Implement transaction-level and REST call details logging unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Implement transaction-level and REST call details logging unit tests" />
+    <MESSAGE value="docs: Add manual Swagger UI integration and OpenAPI documentation" />
+    <MESSAGE value="chore: Update Postman requests according to latest API changes" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -785,7 +787,7 @@
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_controller_in_gym_crm.ic" NAME="com.epam.gymcrm.controller in gym-crm Coverage Results" MODIFIED="1752442309969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.controller.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/gym_crm_rest$java_in_gym_crm.ic" NAME="java in gym-crm Coverage Results" MODIFIED="1753982213038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/gym_crm_rest$java_in_gym_crm.ic" NAME="java in gym-crm Coverage Results" MODIFIED="1754249162485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/gym_crm$com_epam_gymcrm_in_gym_crm.ic" NAME="com.epam.gymcrm in gym-crm Coverage Results" MODIFIED="1752443439165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.epam.gymcrm.*</FILTER>
     </SUITE>
